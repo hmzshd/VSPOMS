@@ -1,5 +1,5 @@
 class Patch:
-    def __int__(self, status):
+    def __int__(self, status, area):
         self.status = status
         self.probability = 0
 
