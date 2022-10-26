@@ -1,6 +1,7 @@
 class Patch:
     def __int__(self, status):
         self.status = status
+        self.probability = 0
 
     def event(self):
         match self.status:
