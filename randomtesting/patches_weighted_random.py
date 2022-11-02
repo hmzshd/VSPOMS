@@ -23,7 +23,7 @@ def patches_weighted_random(patches):
 
 total = 0
 patch_list = generatePatchListRandom(5)
-for i in patch_list:
+# for i in patch_list:
 
 
 selected_list =[]
