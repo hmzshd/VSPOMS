@@ -21,13 +21,11 @@ def patches_weighted_random(patches):
     return patches[bisect(cum_weights, random.random() * total, 0, hi)]
 
 
-total = 0
+# vvv TESTING vvv
 patch_list = generatePatchListRandom(5)
-# for i in patch_list:
-
 
 selected_list =[]
-for i in range(100):
+for i in range(10000):
     selected_list.append(patches_weighted_random(patch_list))
 
 counts = []
