@@ -46,6 +46,4 @@ lint:
     - docker
   allow_failure: true
   script:
-    - pylint VSPOMs/*.py
-    - pylint VSPOMs/VSPOMs/*.py
-    - pylint VSPOMs/VSPOMsApp/*.py
+    - pylint VSPOMs --recursive=true
