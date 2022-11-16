@@ -1,0 +1,36 @@
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+default:
+  image: python3.10
+
+  cache:
+    paths:
+      - .cache/pip/
+      - venv/
+  before_script:
+    - python --version  # For debugging
+    - pip install virtualenv
+    - virtualenv venv
+    - source venv/bin/activate
+    - pip install -r requirements.txt
+
+migrations:
+  stage: build
+  script:
+    - cd VSPOMs
+    - python3 manage.py makemigrations
+    # - python3 manage.py makemigrations myapp
+    - python3 manage.py migrate
+    - python3 manage.py check
+
+
+django-tests:
+  stage: test
+  script:
+    - python3 manage.py test
+
+deploy:
+  stage: deploy
+  script: echo "Define your deployment script!"
+  environment: production
