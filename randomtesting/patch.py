@@ -47,4 +47,4 @@ class Patch:
         return self.area
 
     def __str__(self):
-        return f"Status: {self.status}, event probability: {self.probability}\n coordinates: {self.x_coord}, {self.y_coord}, radius: {self.radius} area: {self.area}\n"
+        return f"Status: {self.status}, event probability: {self.probability}\n coordinates: {self.x_coord}, {self.y_coord}, radius: {self.radius} area: {self.area}\n "

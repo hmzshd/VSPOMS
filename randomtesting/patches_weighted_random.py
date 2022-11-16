@@ -2,7 +2,7 @@
 import random
 from itertools import accumulate
 from bisect import bisect
-from patchGenerate import generatePatchListRandom
+from patch_generate import generate_patch_list_random
 
 
 def patches_weighted_random(patches):
@@ -22,7 +22,7 @@ def patches_weighted_random(patches):
 
 
 # vvv TESTING vvv
-patch_list = generatePatchListRandom(5)
+patch_list = generate_patch_list_random(5)
 
 selected_list =[]
 for i in range(10000):

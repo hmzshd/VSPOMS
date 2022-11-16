@@ -1,7 +1,10 @@
-from patch import Patch
+"""
+basic testing file
+"""
+
 import time
 import random
-from patchGenerate import generatePatchListRandom
+from patch_generate import generate_patch_list_random
 
 n = 5000
 probabilityList = [0.8, 0.2, 0.4, 0.64]
@@ -13,5 +16,5 @@ for i in range(n):
 randomTime = time.time() - start_time
 print(f"inbuilt: {randomTime}")
 
-for patch in generatePatchListRandom(25):
+for patch in generate_patch_list_random(25):
     print(patch)
