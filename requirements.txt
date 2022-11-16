@@ -3,3 +3,4 @@ Django>=4.1.2
 sqlparse>=0.4.3
 tzdata>=2022.5
 numpy>=1.21.5
+pylint>=2.15.5

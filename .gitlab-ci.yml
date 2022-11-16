@@ -4,7 +4,7 @@ variables:
 stages:
     - build
     - test
-    - deploy
+    - lint
 
 default:
   image: "python:latest"
@@ -40,9 +40,10 @@ django-tests:
   script:
     - python3 ./VSPOMs/manage.py test
 
-deploy:
-  stage: deploy
-  tags:
-      - docker
-  script: echo "Define your deployment script!"
-  environment: production
+lint:
+  stage: lint
+  tags: 
+    - docker
+  allow_failure: true
+  script:
+    - pylint VSPOMs/
