@@ -1,8 +1,13 @@
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 
+stages:
+    - build
+    - test
+    - deploy
+
 default:
-  image: python3.10
+  image: "python:latest"
 
   cache:
     paths:
@@ -10,6 +15,7 @@ default:
       - venv/
   before_script:
     - python --version  # For debugging
+    - python -m pip install --upgrade pip
     - pip install virtualenv
     - virtualenv venv
     - source venv/bin/activate
@@ -17,6 +23,8 @@ default:
 
 migrations:
   stage: build
+  tags:
+      - docker
   script:
     - cd VSPOMs
     - python3 manage.py makemigrations
@@ -27,10 +35,14 @@ migrations:
 
 django-tests:
   stage: test
+  tags:
+      - docker
   script:
-    - python3 manage.py test
+    - python3 ./VSPOMs/manage.py test
 
 deploy:
   stage: deploy
+  tags:
+      - docker
   script: echo "Define your deployment script!"
   environment: production
