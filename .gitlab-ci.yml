@@ -38,7 +38,7 @@ django-tests:
   tags:
       - docker
   script:
-    - python3 manage.py test
+    - python3 ./VSPOMs/manage.py test
 
 deploy:
   stage: deploy
