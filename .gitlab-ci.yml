@@ -15,6 +15,7 @@ default:
       - venv/
   before_script:
     - python --version  # For debugging
+    - python -m pip install --upgrade pip
     - pip install virtualenv
     - virtualenv venv
     - source venv/bin/activate
