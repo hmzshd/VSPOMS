@@ -1,0 +1,49 @@
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+stages:
+    - build
+    - test
+    - lint
+
+default:
+  image: "python:latest"
+
+  cache:
+    paths:
+      - .cache/pip/
+      - venv/
+  before_script:
+    - python --version  # For debugging
+    - python -m pip install --upgrade pip
+    - pip install virtualenv
+    - virtualenv venv
+    - source venv/bin/activate
+    - pip install -r requirements.txt
+
+migrations:
+  stage: build
+  tags:
+      - docker
+  script:
+    - cd VSPOMs
+    - python3 manage.py makemigrations
+    # - python3 manage.py makemigrations myapp
+    - python3 manage.py migrate
+    - python3 manage.py check
+
+
+django-tests:
+  stage: test
+  tags:
+      - docker
+  script:
+    - python3 ./VSPOMs/manage.py test
+
+lint:
+  stage: lint
+  tags: 
+    - docker
+  allow_failure: true
+  script:
+    - pylint VSPOMs --recursive=true
