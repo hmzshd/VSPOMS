@@ -19,7 +19,11 @@ body, html {
 
 header {
     background-color: lightgray;
-    height: 80px; 
+    height: 80px;
+    background-image: url("grog.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 2%;
 }
 .button-container {
     text-align: justify;
@@ -32,10 +36,10 @@ header {
     display: inline-block;
 }
 header button {
-    margin-top: 50px;
+    margin-top: 60px;
     font-size: 20px;
     display: inline-block;
-    background-color: #EEE;
+    background-color: #E5E5E5;
     border-radius: 20px;
     border: 1px solid black;
     padding: 10px 50px;
@@ -57,4 +61,21 @@ header button#button-graphs:hover {
 header button#button-settings:hover {
     background-color: #ffd9b6;
 }
+header img {
+    width: 50px;
+    margin-bottom: -40px;
+    margin-left: 20px;
+}
 
+/* Section/panels */
+section.panel {
+    background-color: #E5E5E5;
+    width: 80%;
+    margin: 60px auto;
+    height: 80%;
+    border-radius: 20px;
+    padding: 16px 30px;
+}
+section.panel h1 {
+    font-weight: normal;
+}
