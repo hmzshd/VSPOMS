@@ -5,3 +5,6 @@
 # 3) Use the sum of all the rates to calculate the time increment.
 # 4) Update time and state of the system given the event that occurred.
 # 5) Return to 1.
+
+def gillespie_process():
+    pass
