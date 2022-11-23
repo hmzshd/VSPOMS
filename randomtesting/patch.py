@@ -1,4 +1,5 @@
 from math import pi
+import math
 
 
 class Patch:
@@ -14,8 +15,18 @@ class Patch:
         match self.status:
             case 1:
                 self.status = 0
-            case 2:
+            case 0:
                 self.status = 1
+
+    def distance(self, patch_j):
+        # think about making this a Patch class method
+        # think about storing adjacency matrix in each Patch, for distances to each other patch
+
+        i_coords = self.get_coords()
+        j_coords = patch_j.get_coords()
+
+        return math.sqrt((i_coords[0] - j_coords[0]) ** 2 + (i_coords[1] - j_coords[1]) ** 2)
+
 
     def set_probability(self, prob):
         self.probability = prob

@@ -19,7 +19,7 @@ class Simulator:
     def dispersal_kernel(self, patch_i, patch_j):
         # parameter a is the species-specific dispersal constant.
 
-        return math.exp((-self.species_specific_dispersal_constant_a) * self.distance(patch_i, patch_j))
+        return math.exp((-self.species_specific_dispersal_constant_a) * patch_i.distance(patch_j))
 
     def connectivity(self, patch_i):
         # MUST CLARIFY EXPONENT ON AREA FACTOR
@@ -46,12 +46,3 @@ class Simulator:
             return 1.0
 
         return extinction_value
-
-    def distance(self, patch_i, patch_j):
-        # think about making this a Patch class method
-        # think about storing adjacency matrix in each Patch, for distances to each other patch
-
-        i_coords = patch_i.get_coords()
-        j_coords = patch_j.get_coords()
-
-        return math.sqrt((i_coords[0] - j_coords[0]) ** 2 + (i_coords[1] - j_coords[1]) ** 2)
