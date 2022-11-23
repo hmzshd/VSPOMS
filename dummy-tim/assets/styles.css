@@ -1,0 +1,60 @@
+/* Global Styles */
+
+body, html {
+    height: 100%;
+	width: 100%;
+	margin: 0;
+    padding: 0;
+	font-size: 18px;
+    font-family: 'Open Sans', sans-serif;
+    color: black;
+    background-color: #EEE;
+}
+* {
+    box-sizing: border-box;
+}
+
+
+/* Header, navigation buttons */
+
+header {
+    background-color: lightgray;
+    height: 80px; 
+}
+.button-container {
+    text-align: justify;
+    width: 60%;
+    margin-left: 20%;
+}
+.button-container:after {
+    content: '';
+    width: 100%;
+    display: inline-block;
+}
+header button {
+    margin-top: 50px;
+    font-size: 20px;
+    display: inline-block;
+    background-color: #EEE;
+    border-radius: 20px;
+    border: 1px solid black;
+    padding: 10px 50px;
+    cursor: pointer;
+    transition: all 0.1s ease-in-out;
+}
+header button:hover {
+    letter-spacing: 2px;
+}
+header button#button-create:hover {
+    background-color: #cdffbb;
+}
+header button#button-simulate:hover {
+    background-color: #ffc6e1;
+}
+header button#button-graphs:hover {
+    background-color: #bce7ff;
+}
+header button#button-settings:hover {
+    background-color: #ffd9b6;
+}
+
