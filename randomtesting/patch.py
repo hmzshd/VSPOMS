@@ -60,5 +60,23 @@ class Patch:
     def get_area(self):
         return self.area
 
+    def set_connectivity(self, connectivity):
+        self.connectivity = connectivity
+
+    def get_connectivity(self):
+        return self.connectivity
+
+    def set_colonisation_value(self, colonisation):
+        self.colonisation_value = colonisation
+
+    def get_colonisation_value(self):
+        return self.colonisation_value
+
+    def set_extinction_value(self, extinction):
+        self.extinction_value = extinction
+
+    def get_extinction_value(self):
+        return self.extinction_value
+
     def __str__(self):
         return f"Status: {self.status}, event probability: {self.probability}\n coordinates: {self.x_coord}, {self.y_coord}, radius: {self.radius} area: {self.area}\n "
