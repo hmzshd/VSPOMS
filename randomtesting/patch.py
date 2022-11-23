@@ -10,13 +10,16 @@ class Patch:
         self.y_coord = y
         self.radius = r
         self.area = pi * (r**2)
+        self.connectivity = 1
+        self.colonisation_value = 1
+        self.extinction_value = 1
 
     def event(self):
         match self.status:
-            case 1:
-                self.status = 0
-            case 0:
-                self.status = 1
+            case True: # if patch is occupied,
+                self.status = False # patch becomes unoccupied.
+            case False: # if patch is unoccupied,
+                self.status = True # patch becomes occupied.
 
     def distance(self, patch_j):
         # think about making this a Patch class method
@@ -37,7 +40,7 @@ class Patch:
     def set_status(self, status):
         self.status = status
 
-    def get_status(self):
+    def is_occupied(self):
         return self.status
 
     def set_coords(self, x, y):
