@@ -6,6 +6,6 @@ def generatePatchListRandom(num):
     patchList = []
     for i in range(num):
         patchList.append(Patch(random.randint(0, 3), random.uniform(0, 25), random.uniform(0, 25), random.uniform(0, 5)))
-        patchList[i].calculateProbability(random.uniform(0, 1))
+        #patchList[i].calculateProbability(random.uniform(0, 1))
     return patchList
 
