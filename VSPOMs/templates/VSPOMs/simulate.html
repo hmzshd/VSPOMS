@@ -24,5 +24,6 @@
 <a href="{% url 'VSPOMs:settings' %}">Settings</a>
 <a href="{% url 'VSPOMs:create' %}">Create</a>
 <div>{{bokeh_div | safe}}</div>
+<div>{{table.to_html | safe}}</div>
 </body>
 </html>

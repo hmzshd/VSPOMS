@@ -55,5 +55,5 @@ def simulate(request):
     context_dict = {}
     context_dict['script'] = script
     context_dict['bokeh_div'] = div
-    
+    context_dict['table'] = table
     return render(request, 'VSPOMs/simulate.html', context=context_dict)
