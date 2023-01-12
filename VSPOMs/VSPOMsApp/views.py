@@ -27,5 +27,33 @@ def settings(request):
     return render(request, 'VSPOMs/settings.html', context=context_dict)
 
 def simulate(request):
+    from bokeh.plotting import figure, output_file, show, Column
+    from bokeh.models import DataTable, TableColumn, PointDrawTool, ColumnDataSource
+
+    output_file("tools_point_draw.html")
+
+    p = figure(x_range=(0, 10), y_range=(0, 10), tools=[],
+           title='Point Draw Tool')
+
+    source = ColumnDataSource({
+    'x': [1, 5, 9], 'y': [1, 5, 9], 'color': ['red', 'green', 'yellow'],'size':[20,10,40]
+    })
+
+    renderer = p.scatter(x='x', y='y', source=source, color='color', size='size')
+    columns = [TableColumn(field="x", title="x"),
+               TableColumn(field="y", title="y"),
+               TableColumn(field='color', title='color'),
+               TableColumn(field='size', title='size')
+              ]
+    table = DataTable(source=source, columns=columns, editable=True, height=200)
+
+    draw_tool = PointDrawTool(renderers=[renderer], empty_value=50)
+    p.add_tools(draw_tool)
+    p.toolbar.active_tap = draw_tool
+    script, div = components(p) 
+
     context_dict = {}
+    context_dict['script'] = script
+    context_dict['bokeh_div'] = div
+    
     return render(request, 'VSPOMs/simulate.html', context=context_dict)
