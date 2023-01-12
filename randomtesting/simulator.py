@@ -90,6 +90,9 @@ class Simulator:
         self.update_proportion_occupied()
 
     # returns event weighted-randomly, according to their probability.
+    # cum_weights maintains an array of cumulated probabilities. Is therefore sorted.
+    # generates random probability in this range.
+    # probability is then used to bisect cum_weights, finding the event corresponding.
     def select_event(self):
         # based on random.choices()
         length = len(self.events)
