@@ -16,8 +16,11 @@ class Simulator:
     # Initialises Simulator.
     def __init__(self, patches):
         # list of patches, list of events.
-        self.patches = patches
+        self.patches = list(patches)
         self.events = []
+
+        # patch list backup for reset during setup.
+        self.patches_backup = list(patches)
 
         # simulation constants
         self.dispersal_alpha = 1  # Species specific dispersal constant, for kernel.
@@ -37,6 +40,7 @@ class Simulator:
 
     def simulate(self, steps, replicates):
         for replicate in range(replicates):
+            self.setup()
             print(f'Replicate {replicate + 1}:')
             for step in range(steps):
                 self.gillespie_process()
@@ -78,6 +82,8 @@ class Simulator:
 
     # sets up initial correct conditions for simulation.
     def setup(self):
+        self.patches = list(self.patches_backup)
+
         for patch_i in self.patches:
             patch_i.set_colonisation_value(self.colonization(patch_i))
             patch_i.set_extinction_value(self.extinction(patch_i))
