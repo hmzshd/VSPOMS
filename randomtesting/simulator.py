@@ -11,8 +11,9 @@ from events import ColonisationEvent, ExtinctionEvent
 
 
 class Simulator:
+    # pylint: disable=too-many-instance-attributes
 
-    # Initialises empty Simulator.
+    # Initialises Simulator.
     def __init__(self, patches):
         # list of patches, list of events.
         self.patches = patches
@@ -89,10 +90,10 @@ class Simulator:
         self.update_total_extinction_rate()
         self.update_proportion_occupied()
 
-    # returns event weighted-randomly, according to their probability.
-    # cum_weights maintains an array of cumulated probabilities. Is therefore sorted.
-    # generates random probability in this range.
-    # probability is then used to bisect cum_weights, finding the event corresponding.
+    # returns event randomly, weighted by their probability.
+    # cum_weights maintains an array of cumulative probabilities. Is therefore sorted ascending.
+    # generates random float in the range of 0 to the sum of probabilities.
+    # bisect is used to find the first index of cum_weights whose value is greater than this float.
     def select_event(self):
         # based on random.choices()
         length = len(self.events)
