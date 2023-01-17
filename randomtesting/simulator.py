@@ -30,26 +30,31 @@ class Simulator:
     patches_backup: list
         maintains initial list of patches for the purpose of resetting the simulation for multiple replicates.
 
-    dispersal_alpha: int
-    area_exponent_b: int
-    species_specific_constant_y: int
-    species_specific_constant_u: int
-    patch_area_effect_x: int
+    steps (int): number of steps to perform in each simulation.
+    replicates (int): number of replicates to perform of the simulation.
+
+    dispersal_alpha: float
+    area_exponent_b: float
+    species_specific_constant_y: float
+    species_specific_constant_u: float
+    patch_area_effect_x: float
         Above are simulation constants.
 
-    total_colonisation_rate: int
-    total_extinction_rate: int
-    proportion_occupied: int
-    time: int
+    total_colonisation_rate: float
+    total_extinction_rate: float
+    proportion_occupied: float
+    time: float
         Above are simulation variables.
     """
 
     # pylint: disable=too-many-instance-attributes
 
     # Initialises Simulator.
-    def __init__(self, patches):
+    def __init__(self, patches, steps, replicates):
         """
         Initialises Simulator object.
+
+        For now, uses default SPOM definition from diamina.par.
 
         Parameters:
             patches (list): a list of patch.py Patch objects.
@@ -62,42 +67,66 @@ class Simulator:
         # patch list backup for reset during setup.
         self.patches_backup = list(patches)
 
+        # number of steps and replicates.
+        self.steps = steps
+        self.replicates = replicates - 1
+        self.completed_steps = 0
+        self.completed_replicates = 0
+
+        # true if a full simulation has been completed.
+        self.done = False
+
         # simulation constants
-        self.dispersal_alpha = 1  # Species specific dispersal constant, for kernel.
-        self.area_exponent_b = 1  # for connectivity.
-        self.species_specific_constant_y = 1  # for colonisation.
-        self.species_specific_constant_u = 1  # for extinction.
-        self.patch_area_effect_x = 1  # for extinction.
+        self.dispersal_alpha = 0.71  # Species specific dispersal constant, for dispersal kernel.
+        self.area_exponent_b = 0.5  # for connectivity.
+        self.species_specific_constant_y = 5.22  # for colonisation.
+        self.species_specific_constant_u = 0.0593  # for extinction.
+        self.patch_area_effect_x = 1.08  # for extinction.
 
         # simulation variables
-        self.total_colonisation_rate = 1
-        self.total_extinction_rate = 1
+        self.total_colonisation_rate = 0
+        self.total_extinction_rate = 0
         self.proportion_occupied = 0
         self.time = 0
 
         # set all interacting simulation variables
         self.setup()
 
-    def simulate(self, steps, replicates):
+    def simulate(self):
         """
-        Performs specified amount of simulation replicates with specified steps.
-
-        Parameters:
-            steps (int): number of steps to perform in each simulation.
-            replicates (int): number of replicates to perform of the simulation.
+        Performs self.replicates full simulations with self.steps steps.
         """
 
-        for replicate in range(replicates):
+        while not self.done:
+            self.step()
+
+    def step(self):
+        """
+        Performs Gillespie process once.
+
+        Increments self.step, or self.replicate if the current replicate ends.
+
+        Calls self.end() if the simulation is done.
+        """
+
+        if self.completed_steps == 0:
+            print(f'Replicate {self.completed_replicates + 1}:')
+        elif self.completed_steps % 20 == 0:
+            print(f'    Completed {self.completed_steps} steps.')
+            # self.print_status()
+        if self.completed_steps < self.steps:  # sim does not need to start new replicate. does one step.
+            self.gillespie_process()
+            self.completed_steps += 1
+        elif self.completed_replicates < self.replicates:  # starts new replicate.
+            self.completed_steps = 0
+            self.completed_replicates += 1
             self.setup()
-            print(f'Replicate {replicate + 1}:')
-            for step in range(steps):
-                self.gillespie_process()
-                if (step + 1) % 20 == 0:
-                    print(f'    Completed {step+1} steps.')
+        else:  # all replicates have been completed.
+            self.end()
 
     def gillespie_process(self):
         """
-        Performs gillespie process using object attributes.
+        Performs Gillespie process using object attributes.
 
         Gillespie process:
             1) Given the state of the system we calculate the rates for every possible event that can occur;
@@ -106,12 +135,12 @@ class Simulator:
             4) we update time and the state of the system given the event that occurred;
         """
 
-        self.update_rates()
+        self.update_rates()  # step 1
 
-        selected_event = self.select_event()
+        selected_event = self.select_event()  # step 2
         selected_event.do_event()
 
-        self.increment_time(selected_event)
+        self.increment_time(selected_event)  # step 4
 
     def increment_time(self, selected_event):
         """
@@ -123,10 +152,14 @@ class Simulator:
             selected_event (Event): event selected to happen by select_event().
         """
 
+        # if total rates are 0, skips time increment.
+        # not ideal, must find out what should happen in this case.
         if isinstance(selected_event, ColonisationEvent):
-            self.time += exponential(1 / self.total_colonisation_rate)
+            if self.total_colonisation_rate > 0:
+                self.time += exponential(1 / self.total_colonisation_rate)
         elif isinstance(selected_event, ExtinctionEvent):
-            self.time += exponential(1 / self.total_extinction_rate)
+            if self.total_extinction_rate > 0:
+                self.time += exponential(1 / self.total_extinction_rate)
 
     def update_rates(self):
         """
@@ -146,7 +179,7 @@ class Simulator:
 
     def setup(self):
         """
-        sets up initial correct conditions for simulation.
+        sets up initial correct conditions for a replicate.
 
         Steps:
             Resets self.patches to self.patches_backup.
@@ -158,6 +191,7 @@ class Simulator:
         """
 
         self.patches = list(self.patches_backup)
+        self.time = 0
 
         for patch_i in self.patches:
             patch_i.set_colonisation_value(self.colonization(patch_i))
@@ -170,6 +204,23 @@ class Simulator:
         self.update_total_colonisation_rate()
         self.update_total_extinction_rate()
         self.update_proportion_occupied()
+
+    def reset(self):
+        """
+        Reset simulation status.
+        Use after simulation is completed to start a fresh simulation.
+        """
+
+        self.setup()
+        self.done = False
+        self.completed_steps = 0
+        self.completed_replicates = 0
+
+    def end(self):
+        """Ends current simulation run"""
+
+        self.done = True
+        print('donezo')
 
     def select_event(self):
         """
@@ -299,3 +350,8 @@ class Simulator:
 
         # proportion of patches that are occupied.
         self.proportion_occupied = occupied_total / patch_total
+
+    def print_status(self):
+        """Temp debug function to observe changes."""
+
+        print(f'      Time: {self.time}, Proportion occupied: {self.proportion_occupied}')
