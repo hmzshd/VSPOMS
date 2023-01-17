@@ -73,17 +73,19 @@ section.panel {
     width: 80%;
     margin: 40px auto;
     height: 85%;
-    border-radius: 20px;
-    padding: 16px 30px;
+    border-radius: 10px;
+    padding: 16px 20px;
 }
 section.panel h1 {
     font-weight: normal;
 }
 
+/* Start on Create panel, hide rest */
 section.panel#simulate-panel, section.panel#graphs-panel, section.panel#settings-panel {
     display: none;
 }
 
+/* Graph panel styles */
 section.panel .graph-grid {
     display: grid;
     grid-template-columns: calc(50% - 10px) calc(50% - 10px);
@@ -100,4 +102,16 @@ section.panel .graph-container {
     justify-content: center;
     background-color: white;
     border-radius: 5px;
+}
+
+/* Simulate panel styles */
+section.panel .patch-container {
+    background-color: white;
+    height: 82vh;
+    width: 82vh;
+    margin: 0 auto;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
