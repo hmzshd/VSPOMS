@@ -1,20 +1,54 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from bokeh.plotting import figure
 from bokeh.embed import components
+from bokeh.sampledata.stocks import MSFT
+from bokeh.models import Button, Slider, DatetimeTickFormatter, Legend
+from bokeh.plotting import figure, column, row
+from bokeh.models.ranges import FactorRange
+from bokeh.io import curdoc
+from bokeh.client import pull_session
+from bokeh.embed import server_session
+import time
+from functools import partial
+import pandas as pd
 
 def create(request):
     context_dict = {}
     return render(request, 'VSPOMs/create.html', context=context_dict)
 
 def graphs(request):
-    graph_size = 500 
+
+    ## Prepare Data
+    msft_df = pd.DataFrame(MSFT)
+    msft_df["date"] = pd.to_datetime(msft_df["date"])
+
     graphs = {'graph1':'','graph2':'','graph3':'','graph4':''}
-    colours = {'graph1':'green','graph2':'red','graph3':'blue','graph4':'green'}
     for graph in graphs:
-        graphs[graph] = figure(width=graph_size,height=graph_size,title=graph,x_axis_label='time',y_axis_label='y')
-        graphs[graph].line([1,2,3,4,5,6,7,8],[6,2,9,14,16,19,11,16], legend_label="Something", line_width=1,color=colours[graph])
-    script, div = components(graphs)  
+        days = 90
+
+        graphs[graph] = figure(x_axis_type="datetime", width=500, height=500,
+                     title = "Microsoft Candlestick Chart")
+
+        line1 = graphs[graph].line(x="date", y="open", color="dodgerblue", source=msft_df[:days])
+        line2 = graphs[graph].line(x="date", y="high", color="lime", source=msft_df[:days])
+        line3 = graphs[graph].line(x="date", y="low", color="tomato", source=msft_df[:days])
+        line4 = graphs[graph].line(x="date", y="close", color="orange", source=msft_df[:days])
+
+        graphs[graph].xaxis.axis_label="Date"
+        graphs[graph].yaxis.axis_label="Price ($)"
+
+        graphs[graph].xaxis.formatter = DatetimeTickFormatter(days="%m-%d-%Y")
+
+        legend = Legend(items=[
+            ("Open",   [line1]),
+            ("High",   [line2]),
+            ("Low",   [line3]),
+            ("Close",   [line4]),
+        ], location=(0, 100))
+
+        graphs[graph].add_layout(legend, 'right')
+
+    script, div = components(graphs)
 
     context_dict = {}
     context_dict['script'] = script
