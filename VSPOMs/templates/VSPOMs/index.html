@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<!-- Tim's amazing dummy site page thank for visiting :) -->
+{% load staticfiles %}
+<!-- VSPOMs Team Project - JH04 2023 -->
 
 <html lang="en" dir="ltr">
 
@@ -9,12 +10,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="assets/styles.css">
-  <link rel="shortcut icon" type="image/x-icon" href="assets/icon.ico">
+  <link rel="stylesheet" href="{% static 'assets/styles.css' %}">
+  <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/icon.ico' %}">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="assets/scripts.js"></script>
+  <script src="{% static 'assets/scripts.js' %}"></script>
 
 </head>
 
