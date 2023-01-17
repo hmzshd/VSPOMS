@@ -1,6 +1,17 @@
 """
 VSPOM Simulator.
 
+Should output:
+
+    proportion of occupied patches (p) per time
+        plot average if multiple replicates
+    proportion of occupied area (pA) per time
+        plot average if multiple replicates
+    log10(P[extinction]) per time (?)
+    turnover events (ext. + col. events) per time
+    proportion of surviving replicates per time
+
+
 Classes:
     Simulator
 """
@@ -11,6 +22,7 @@ import math
 import random
 from itertools import accumulate
 from bisect import bisect
+import pandas
 from numpy.random import exponential
 from events import ColonisationEvent, ExtinctionEvent
 
@@ -42,7 +54,7 @@ class Simulator:
 
     total_colonisation_rate: float
     total_extinction_rate: float
-    proportion_occupied: float
+    proportion_occupied_patches: float
     time: float
         Above are simulation variables.
     """
@@ -86,8 +98,14 @@ class Simulator:
         # simulation variables
         self.total_colonisation_rate = 0
         self.total_extinction_rate = 0
-        self.proportion_occupied = 0
+        self.proportion_occupied_patches = 0
+        self.proportion_occupied_area = 0
         self.time = 0
+
+        # pandas dataframe to store results
+        self.data = pandas.DataFrame(columns=[
+            "time", "proportion occupied patches",
+            "proportion occupied area", "extinction"])
 
         # set all interacting simulation variables
         self.setup()
@@ -109,11 +127,14 @@ class Simulator:
         Calls self.end() if the simulation is done.
         """
 
+        self.update_frame()
+
         if self.completed_steps == 0:
             print(f'Replicate {self.completed_replicates + 1}:')
         elif self.completed_steps % 20 == 0:
             print(f'    Completed {self.completed_steps} steps.')
             # self.print_status()
+
         if self.completed_steps < self.steps:  # sim does not need to start new replicate. does one step.
             self.gillespie_process()
             self.completed_steps += 1
@@ -175,7 +196,8 @@ class Simulator:
 
         self.update_total_colonisation_rate()
         self.update_total_extinction_rate()
-        self.update_proportion_occupied()
+        self.update_proportion_occupied_patches()
+        self.update_proportion_occupied_area()
 
     def setup(self):
         """
@@ -191,6 +213,7 @@ class Simulator:
         """
 
         self.patches = list(self.patches_backup)
+        self.turnover_events = 0
         self.time = 0
 
         for patch_i in self.patches:
@@ -203,7 +226,8 @@ class Simulator:
 
         self.update_total_colonisation_rate()
         self.update_total_extinction_rate()
-        self.update_proportion_occupied()
+        self.update_proportion_occupied_patches()
+        self.update_proportion_occupied_area()
 
     def reset(self):
         """
@@ -220,7 +244,7 @@ class Simulator:
         """Ends current simulation run"""
 
         self.done = True
-        print('donezo')
+        print('End.')
 
     def select_event(self):
         """
@@ -336,9 +360,9 @@ class Simulator:
             rate += patch_i.get_extinction_value()
         self.total_extinction_rate = rate
 
-    def update_proportion_occupied(self):
+    def update_proportion_occupied_patches(self):
         """
-        Updates self.proportion_occupied.
+        Updates self.proportion_occupied_patches.
         """
 
         patch_total = len(self.patches)
@@ -349,9 +373,42 @@ class Simulator:
                 occupied_total += 1
 
         # proportion of patches that are occupied.
-        self.proportion_occupied = occupied_total / patch_total
+        self.proportion_occupied_patches = occupied_total / patch_total
+
+    def update_proportion_occupied_area(self):
+        """
+        Updates self.proportion_occupied_area.
+        """
+
+        area_total = 0
+        area_occupied = 0
+
+        for patch_i in self.patches:
+            area_total += patch_i.get_area()
+            if patch_i.is_occupied():
+                area_occupied += patch_i.get_area()
+
+        # proportion of area that is occupied.
+        self.proportion_occupied_area = area_occupied / area_total
 
     def print_status(self):
         """Temp debug function to observe changes."""
 
-        print(f'      Time: {self.time}, Proportion occupied: {self.proportion_occupied}')
+        print(f'      Time: {self.time}, Proportion occupied: {self.proportion_occupied_patches}')
+
+    def get_frame(self):
+        """TEMP returns internal dataframe as a nice pretty lil stringy wingy."""
+        return self.data.to_string()
+
+    def update_frame(self):
+        """
+        Concats new row onto DataFrame self.data containing current data.
+        """
+        new_frame = pandas.DataFrame({
+            "time": [self.time],
+            "proportion occupied patches": [self.proportion_occupied_patches],
+            "proportion occupied area": [self.proportion_occupied_area],
+            "extinction": [self.total_extinction_rate]
+        })
+
+        self.data = pandas.concat([self.data, new_frame], ignore_index=True)
