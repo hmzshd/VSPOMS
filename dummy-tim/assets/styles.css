@@ -71,8 +71,8 @@ header img {
 section.panel {
     background-color: #E5E5E5;
     width: 80%;
-    margin: 60px auto;
-    height: 80%;
+    margin: 40px auto;
+    height: 85%;
     border-radius: 20px;
     padding: 16px 30px;
 }
@@ -82,4 +82,22 @@ section.panel h1 {
 
 section.panel#simulate-panel, section.panel#graphs-panel, section.panel#settings-panel {
     display: none;
+}
+
+section.panel .graph-grid {
+    display: grid;
+    grid-template-columns: calc(50% - 10px) calc(50% - 10px);
+    grid-row: auto auto;
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+section.panel .graph-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border-radius: 5px;
 }
