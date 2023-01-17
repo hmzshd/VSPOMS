@@ -46,7 +46,7 @@ def index(request):
 
         graphs[graph].add_layout(legend, 'right')
 
-    output_file("tools_point_draw.html")
+    """output_file("tools_point_draw.html")
 
     p = figure(x_range=(0, 10), y_range=(0, 10), tools=[],
            title='Point Draw Tool')
@@ -67,14 +67,14 @@ def index(request):
     p.add_tools(draw_tool)
     p.toolbar.active_tap = draw_tool
 
-    graphs['map'] = p
+    graphs['map'] = p """
 
     script, div = components(graphs)
 
     context_dict = {}
     context_dict['script'] = script
     context_dict['bokeh_div'] = div
-    context_dict['table'] = table
+    ##context_dict['table'] = table
 
     return render(request, 'VSPOMs/index.html', context=context_dict)
 
@@ -110,13 +110,35 @@ def graphs(request):
 
         graphs[graph].add_layout(legend, 'right')
 
+    """output_file("tools_point_draw.html")
 
+    p = figure(x_range=(0, 10), y_range=(0, 10), tools=[],
+           title='Point Draw Tool')
+
+    source = ColumnDataSource({
+    'x': [1, 5, 9], 'y': [1, 5, 9], 'color': ['red', 'green', 'yellow'],'size':[20,10,40]
+    })
+
+    renderer = p.scatter(x='x', y='y', source=source, color='color', size='size')
+    columns = [TableColumn(field="x", title="x"),
+               TableColumn(field="y", title="y"),
+               TableColumn(field='color', title='color'),
+               TableColumn(field='size', title='size')
+              ]
+    table = DataTable(source=source, columns=columns, editable=True, height=200)
+
+    draw_tool = PointDrawTool(renderers=[renderer], empty_value=50)
+    p.add_tools(draw_tool)
+    p.toolbar.active_tap = draw_tool
+
+    graphs['map'] = p"""
 
     script, div = components(graphs)
 
     context_dict = {}
     context_dict['script'] = script
     context_dict['bokeh_div'] = div
+    ##context_dict['table'] = table
 
     return render(request, 'VSPOMs/graphs.html', context=context_dict)
 
