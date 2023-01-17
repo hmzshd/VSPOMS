@@ -20,10 +20,10 @@ body, html {
 header {
     background-color: lightgray;
     height: 80px;
-    background-image: url("grog.png");
+    background-image: url("banner.png");
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 2%;
+    background-size: 20%;
 }
 .button-container {
     text-align: justify;
@@ -46,19 +46,19 @@ header button {
     cursor: pointer;
     transition: all 0.1s ease-in-out;
 }
-header button:hover {
+header button:hover, .active-page {
     letter-spacing: 2px;
 }
-header button#button-create:hover {
+header button#button-create:hover, header button#button-create.active-page {
     background-color: #cdffbb;
 }
-header button#button-simulate:hover {
+header button#button-simulate:hover, header button#button-simulate.active-page {
     background-color: #ffc6e1;
 }
-header button#button-graphs:hover {
+header button#button-graphs:hover, header button#button-graphs.active-page {
     background-color: #bce7ff;
 }
-header button#button-settings:hover {
+header button#button-settings:hover, header button#button-settings.active-page {
     background-color: #ffd9b6;
 }
 header img {
@@ -78,4 +78,8 @@ section.panel {
 }
 section.panel h1 {
     font-weight: normal;
+}
+
+section.panel#simulate-panel, section.panel#graphs-panel, section.panel#settings-panel {
+    display: none;
 }
