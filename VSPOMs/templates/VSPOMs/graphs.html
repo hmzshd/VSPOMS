@@ -29,7 +29,6 @@
             <div id="graphs" style="float: center; padding-left:20%">
                 {{bokeh_div.graph1 | safe}}
                 {{bokeh_div.graph2 | safe}}
-                {{bokeh_div.button | safe}}
             </div>
         </div>
         <div id="div_right" style="width:50%; float: left;">
@@ -38,6 +37,12 @@
                 {{bokeh_div.graph4 | safe}}
             </div>
         </div>
+        <div id="div_under" style="width:100%;">
+            <div id="graphs" style="float: middle;">
+                {{bokeh_div.map | safe}}
+            </div>
+        </div>
+
 
     </body>
 </html>

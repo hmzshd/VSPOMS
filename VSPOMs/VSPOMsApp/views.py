@@ -46,8 +46,6 @@ def index(request):
 
         graphs[graph].add_layout(legend, 'right')
 
-    """output_file("tools_point_draw.html")
-
     p = figure(x_range=(0, 10), y_range=(0, 10), tools=[],
            title='Point Draw Tool')
 
@@ -67,14 +65,14 @@ def index(request):
     p.add_tools(draw_tool)
     p.toolbar.active_tap = draw_tool
 
-    graphs['map'] = p """
+    graphs['map'] = p
 
     script, div = components(graphs)
 
     context_dict = {}
     context_dict['script'] = script
     context_dict['bokeh_div'] = div
-    ##context_dict['table'] = table
+    context_dict['table'] = table
 
     return render(request, 'VSPOMs/index.html', context=context_dict)
 
@@ -110,7 +108,6 @@ def graphs(request):
 
         graphs[graph].add_layout(legend, 'right')
 
-    """output_file("tools_point_draw.html")
 
     p = figure(x_range=(0, 10), y_range=(0, 10), tools=[],
            title='Point Draw Tool')
@@ -131,14 +128,14 @@ def graphs(request):
     p.add_tools(draw_tool)
     p.toolbar.active_tap = draw_tool
 
-    graphs['map'] = p"""
+    graphs['map'] = p
 
     script, div = components(graphs)
 
     context_dict = {}
     context_dict['script'] = script
     context_dict['bokeh_div'] = div
-    ##context_dict['table'] = table
+    context_dict['table'] = table
 
     return render(request, 'VSPOMs/graphs.html', context=context_dict)
 
