@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <link href=”http://cdn.pydata.org/bokeh/release/bokeh-3.0.0.min.css
+            " rel=”stylesheet” type=”text/css”>
+        <link href=”http://cdn.pydata.org/bokeh/release/bokeh-widgets-3.0.0.min.css"
+            rel=”stylesheet” type=”text/css”>
+        <script src="https://cdn.bokeh.org/bokeh/release/bokeh-3.0.0.min.js"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-3.0.0.min.js"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-3.0.0.min.js"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.bokeh.org/bokeh/release/bokeh-gl-3.0.0.min.js"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-3.0.0.min.js"
+            crossorigin="anonymous"></script>
+        {{script| safe}}
+    </head>
+    <body>
+        <div>
+        <a href="{% url 'VSPOMs:simulate' %}">Simulate</a>
+        <a href="{% url 'VSPOMs:settings' %}">Settings</a>
+        <a href="{% url 'VSPOMs:create' %}">Create</a>
+        </div>
+        <div id="div_left" style="width:50%; float: left; ">
+            <div id="graphs" style="float: center; padding-left:20%">
+                {{bokeh_div.graph1 | safe}}
+                {{bokeh_div.graph2 | safe}}
+                {{bokeh_div.button | safe}}
+            </div>
+        </div>
+        <div id="div_right" style="width:50%; float: left;">
+            <div id="graphs" style="float: middle;">
+                {{bokeh_div.graph3 | safe}}
+                {{bokeh_div.graph4 | safe}}
+            </div>
+        </div>
+
+    </body>
+</html>
