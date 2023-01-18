@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-    // Load page
+    // Initial page load
     $(".button-container").hide().delay(4000).fadeIn(500);
     $("#loading-panel").delay(3000).fadeOut(500);
     $("#create-panel").hide(1000).delay(3000).show(500);
