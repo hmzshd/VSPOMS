@@ -114,16 +114,28 @@ class Simulator:
         self.y_coords = []
         self.statuses = []
 
+        # dict for storing the data the frontend needs, in the format
+        # the frontend needs, to display the patches getting
+        # colonised or going extinct.
+
+        self.patch_dict = None
+
         # set all interacting simulation variables
         self.setup()
 
     def simulate(self):
         """
         Performs self.replicates full simulations with self.steps steps.
+        When done returns the dict generated
         """
 
         while not self.done:
             self.step()
+
+        if self.patch_dict == None:
+            raise ValueError
+        else:
+            return self.patch_dict
 
     def step(self):
         """
@@ -151,6 +163,7 @@ class Simulator:
             self.completed_replicates += 1
             self.setup()
         else:  # all replicates have been completed.
+            self.generate_dict()
             self.end()
 
     def gillespie_process(self):
@@ -314,7 +327,7 @@ class Simulator:
         for patch_j in self.patches:
             if patch_j != patch_i:
                 connectivity_total += int(patch_j.is_occupied()) * self.dispersal_kernel(patch_i, patch_j) * (
-                            patch_j.get_area() ** self.area_exponent_b)
+                        patch_j.get_area() ** self.area_exponent_b)
         return connectivity_total
 
     def colonization(self, patch_i):
@@ -429,4 +442,7 @@ class Simulator:
         """
         self.x_coords.append(patch.x_coord)
         self.y_coords.append(patch.y_coord)
-        self.statuses.append(patch.statuses)
+        self.statuses.append(patch.status)
+
+    def generate_dict(self):
+        self.patch_dict = {"x_coords": self.x_coords, "y_coords": self.y_coords, "statuses": self.statuses}
