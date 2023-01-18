@@ -107,16 +107,35 @@ class Simulator:
             "time", "proportion occupied patches",
             "proportion occupied area", "extinction"])
 
+        # lists for storing x,y coords of patches that
+        # have had events happen to them, and the status of said patches
+        # used to create a CDS for communication with the backend
+        self.x_coords = []
+        self.y_coords = []
+        self.statuses = []
+
+        # dict for storing the data the frontend needs, in the format
+        # the frontend needs, to display the patches getting
+        # colonised or going extinct.
+
+        self.patch_dict = None
+
         # set all interacting simulation variables
         self.setup()
 
     def simulate(self):
         """
         Performs self.replicates full simulations with self.steps steps.
+        When done returns the dict generated
         """
 
         while not self.done:
             self.step()
+
+        if self.patch_dict == None:
+            raise ValueError
+        else:
+            return self.patch_dict
 
     def step(self):
         """
@@ -136,13 +155,15 @@ class Simulator:
             # self.print_status()
 
         if self.completed_steps < self.steps:  # sim does not need to start new replicate. does one step.
-            self.gillespie_process()
+            selected_patch = self.gillespie_process()
+            self.update_patch_lists(selected_patch)
             self.completed_steps += 1
         elif self.completed_replicates < self.replicates:  # starts new replicate.
             self.completed_steps = 0
             self.completed_replicates += 1
             self.setup()
         else:  # all replicates have been completed.
+            self.generate_dict()
             self.end()
 
     def gillespie_process(self):
@@ -154,6 +175,7 @@ class Simulator:
             2) we use a random number to determine which event does occur;
             3) we use the sum of all the rates to calculate the time increment;
             4) we update time and the state of the system given the event that occurred;
+            returns the patch that has been selected on completion
         """
 
         self.update_rates()  # step 1
@@ -162,6 +184,8 @@ class Simulator:
         selected_event.do_event()
 
         self.increment_time(selected_event)  # step 4
+
+        return selected_event.patch
 
     def increment_time(self, selected_event):
         """
@@ -304,7 +328,7 @@ class Simulator:
         for patch_j in self.patches:
             if patch_j != patch_i:
                 connectivity_total += int(patch_j.is_occupied()) * self.dispersal_kernel(patch_i, patch_j) * (
-                            patch_j.get_area() ** self.area_exponent_b)
+                        patch_j.get_area() ** self.area_exponent_b)
         return connectivity_total
 
     def colonization(self, patch_i):
@@ -412,3 +436,14 @@ class Simulator:
         })
 
         self.data = pandas.concat([self.data, new_frame], ignore_index=True)
+
+    def update_patch_lists(self, patch):
+        """
+        function to update the patch lists, needed for backend
+        """
+        self.x_coords.append(patch.x_coord)
+        self.y_coords.append(patch.y_coord)
+        self.statuses.append(patch.status)
+
+    def generate_dict(self):
+        self.patch_dict = {"x_coords": self.x_coords, "y_coords": self.y_coords, "statuses": self.statuses}
