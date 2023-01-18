@@ -16,20 +16,15 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{% static 'assets/scripts.js' %}"></script>
-    <link href=”http://cdn.pydata.org/bokeh/release/bokeh-3.0.0.min.css
-    " rel=”stylesheet” type=”text/css”>
-    <link href=”http://cdn.pydata.org/bokeh/release/bokeh-widgets-3.0.0.min.css"
-          rel=”stylesheet” type=”text/css”>
-    <script src="https://cdn.bokeh.org/bokeh/release/bokeh-3.0.0.min.js"
-            crossorigin="anonymous"></script>
-    <script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-3.0.0.min.js"
-            crossorigin="anonymous"></script>
-    <script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-3.0.0.min.js"
-            crossorigin="anonymous"></script>
-    <script src="https://cdn.bokeh.org/bokeh/release/bokeh-gl-3.0.0.min.js"
-            crossorigin="anonymous"></script>
-    <script src="https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-3.0.0.min.js"
-            crossorigin="anonymous"></script>
+
+    <!-- Bokeh Links -->
+    <link href=”http://cdn.pydata.org/bokeh/release/bokeh-3.0.0.min.css" rel=”stylesheet” type=”text/css”>
+    <link href=”http://cdn.pydata.org/bokeh/release/bokeh-widgets-3.0.0.min.css" rel=”stylesheet” type=”text/css”>
+    <script src="https://cdn.bokeh.org/bokeh/release/bokeh-3.0.0.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-3.0.0.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-3.0.0.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.bokeh.org/bokeh/release/bokeh-gl-3.0.0.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-3.0.0.min.js" crossorigin="anonymous"></script>
     {{script| safe}}
 </head>
 
@@ -44,6 +39,12 @@
     </div>
 </header>
 
+<!-- Loading Screen -->
+<section id="loading-panel" class="panel">
+    <h1>Loading...</h1>
+    <img src="{% static 'assets/loading.gif' %}">
+</section>
+
 <!-- Create panel -->
 <section id="create-panel" class="panel">
     <h1>Create Simulation</h1>
@@ -53,18 +54,28 @@
 <!-- Simulate panel -->
 <section id="simulate-panel" class="panel">
 
-    <div class="patch-container">{{bokeh_div.map | safe}}</div>
+    <div class="patch-container">
+        {{bokeh_div.map | safe}}
+    </div>
 
 </section>
 
 <!-- Graphs panel -->
 <section id="graphs-panel" class="panel">
-
+    
     <div class="graph-grid">
-        <div class="graph-container">{{bokeh_div.graph1 | safe}}</div>
-        <div class="graph-container">{{bokeh_div.graph2 | safe}}</div>
-        <div class="graph-container">{{bokeh_div.graph3 | safe}}</div>
-        <div class="graph-container">{{bokeh_div.graph4 | safe}}</div>
+        <div class="graph-container">
+            {{bokeh_div.graph1 | safe}}
+        </div>
+        <div class="graph-container">
+            {{bokeh_div.graph2 | safe}}
+        </div>
+        <div class="graph-container">
+            {{bokeh_div.graph3 | safe}}
+        </div>
+        <div class="graph-container">
+            {{bokeh_div.graph4 | safe}}
+        </div>
     </div>
 
 </section>

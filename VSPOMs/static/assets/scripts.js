@@ -1,5 +1,13 @@
 $(document).ready(function(){
 
+    // Load page
+    $(".button-container").hide().delay(4000).fadeIn(500);
+    $("#loading-panel").delay(3000).fadeOut(500);
+    $("#create-panel").hide(1000).delay(3000).show(500);
+    $("#simulate-panel").hide(1000);
+    $("#graphs-panel").hide(1000);
+    $("#settings-panel").hide(1000);
+
     // Navigation buttons
     $("#button-create").click(function(){
         $("#button-create").addClass("active-page"); $("#create-panel").show(500);

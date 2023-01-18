@@ -80,9 +80,18 @@ section.panel h1 {
     font-weight: normal;
 }
 
-/* Start on Create panel, hide rest */
-section.panel#simulate-panel, section.panel#graphs-panel, section.panel#settings-panel {
-    display: none;
+/* Loading panel styles */
+section.panel#loading-panel {
+    background-color: #EEE;
+}
+section.panel#loading-panel h1 {
+    text-align: center;
+    margin-top: 26vh;
+}
+section.panel#loading-panel img {
+    display: block;
+    margin: 0 auto;
+    width: 30px;
 }
 
 /* Graph panel styles */
@@ -114,4 +123,12 @@ section.panel .patch-container {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+
+
+
+
+#test-graph {
+    display: block;
 }

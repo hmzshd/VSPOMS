@@ -42,6 +42,7 @@ def index(request):
 
         graphs[graph].add_layout(legend, 'right')
 
+
     p = figure(x_range=(0, 10), y_range=(0, 10), tools=[],
            title='Point Draw Tool')
 

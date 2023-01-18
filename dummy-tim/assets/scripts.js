@@ -1,5 +1,10 @@
 $(document).ready(function(){
 
+    $("#test-button").click(function(){
+        $("#test-graph").show(500);
+        $("#test-button").css("background-color", "red");
+    });
+
     // Navigation buttons
     $("#button-create").click(function(){
         $("#button-create").addClass("active-page"); $("#create-panel").show(500);
