@@ -9,31 +9,28 @@ $(document).ready(function(){
     $("#settings-panel").hide(1000);
 
     // Navigation buttons
+    function resetNav() {
+        $("#button-create, #button-simulate, #button-graphs, #button-settings").removeClass("active-page");
+        $("#create-panel, #simulate-panel, #graphs-panel, #settings-panel").hide(500);
+    };
+    // Show create page
     $("#button-create").click(function(){
+        resetNav();
         $("#button-create").addClass("active-page"); $("#create-panel").show(500);
-        $("#button-simulate").removeClass("active-page"); $("#simulate-panel").hide(500);
-        $("#button-graphs").removeClass("active-page"); $("#graphs-panel").hide(500);
-        $("#button-settings").removeClass("active-page"); $("#settings-panel").hide(500);
     });
-    
+    // Show simulate page
     $("#button-simulate").click(function(){
-        $("#button-create").removeClass("active-page"); $("#create-panel").hide(500);
+        resetNav();
         $("#button-simulate").addClass("active-page"); $("#simulate-panel").show(500);
-        $("#button-graphs").removeClass("active-page"); $("#graphs-panel").hide(500);
-        $("#button-settings").removeClass("active-page"); $("#settings-panel").hide(500);
     });
-
+    // Show graphs page
     $("#button-graphs").click(function(){
-        $("#button-create").removeClass("active-page"); $("#create-panel").hide(500);
-        $("#button-simulate").removeClass("active-page"); $("#simulate-panel").hide(500);
+        resetNav();
         $("#button-graphs").addClass("active-page"); $("#graphs-panel").show(500);
-        $("#button-settings").removeClass("active-page"); $("#settings-panel").hide(500);
     });
-
+    // Show settings page
     $("#button-settings").click(function(){
-        $("#button-create").removeClass("active-page"); $("#create-panel").hide(500);
-        $("#button-simulate").removeClass("active-page"); $("#simulate-panel").hide(500);
-        $("#button-graphs").removeClass("active-page"); $("#graphs-panel").hide(500);
+        resetNav();
         $("#button-settings").addClass("active-page"); $("#settings-panel").show(500);
     });
 
