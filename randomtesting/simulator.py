@@ -107,6 +107,13 @@ class Simulator:
             "time", "proportion occupied patches",
             "proportion occupied area", "extinction"])
 
+        # lists for storing x,y coords of patches that
+        # have had events happen to them, and the status of said patches
+        # used to create a CDS for communication with the backend
+        self.x_coords = []
+        self.y_coords = []
+        self.statuses = []
+
         # set all interacting simulation variables
         self.setup()
 
@@ -136,7 +143,8 @@ class Simulator:
             # self.print_status()
 
         if self.completed_steps < self.steps:  # sim does not need to start new replicate. does one step.
-            self.gillespie_process()
+            selected_patch = self.gillespie_process()
+            self.update_patch_lists(selected_patch)
             self.completed_steps += 1
         elif self.completed_replicates < self.replicates:  # starts new replicate.
             self.completed_steps = 0
@@ -162,6 +170,8 @@ class Simulator:
         selected_event.do_event()
 
         self.increment_time(selected_event)  # step 4
+
+        return selected_event.patch
 
     def increment_time(self, selected_event):
         """
@@ -412,3 +422,11 @@ class Simulator:
         })
 
         self.data = pandas.concat([self.data, new_frame], ignore_index=True)
+
+    def update_patch_lists(self, patch):
+        """
+        function to update the patch lists, needed for backend
+        """
+        self.x_coords.append(patch.x_coord)
+        self.y_coords.append(patch.y_coord)
+        self.statuses.append(patch.statuses)

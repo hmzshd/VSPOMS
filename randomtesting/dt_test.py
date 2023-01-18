@@ -20,7 +20,7 @@ def event_list_to_datatable(event_list):
         current_patch = event.patch
         x_coords.append(current_patch.x_coord)
         y_coords.append(current_patch.y_coord)
-        statuses.append(current_patch.status)
+        statuses.append(current_patch.statuses)
 
     dict_source = {"x_coords": x_coords, "y_coords": y_coords, "statuses": statuses}
     source = ColumnDataSource(dict_source)
