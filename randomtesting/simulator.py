@@ -175,6 +175,7 @@ class Simulator:
             2) we use a random number to determine which event does occur;
             3) we use the sum of all the rates to calculate the time increment;
             4) we update time and the state of the system given the event that occurred;
+            returns the patch that has been selected on completion
         """
 
         self.update_rates()  # step 1
