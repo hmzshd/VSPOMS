@@ -26,6 +26,7 @@
     <script src="https://cdn.bokeh.org/bokeh/release/bokeh-gl-3.0.0.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-3.0.0.min.js" crossorigin="anonymous"></script>
     {{script| safe}}
+
 </head>
 
 <body>
@@ -39,17 +40,21 @@
     </div>
 </header>
 
+
 <!-- Loading Screen -->
 <section id="loading-panel" class="panel">
     <h1>Loading...</h1>
-    <img src="{% static 'assets/loading.gif' %}">
+    <img src="{% static 'assets/grog.png' %}">
+    <!--<img src="{% static 'assets/loading.gif' %}" alt="">-->
 </section>
+
 
 <!-- Create panel -->
 <section id="create-panel" class="panel">
     <h1>Create Simulation</h1>
     <hr>
 </section>
+
 
 <!-- Simulate panel -->
 <section id="simulate-panel" class="panel">
@@ -59,6 +64,7 @@
     </div>
 
 </section>
+
 
 <!-- Graphs panel -->
 <section id="graphs-panel" class="panel">
@@ -80,11 +86,13 @@
 
 </section>
 
+
 <!-- Simulation panel -->
 <section id="settings-panel" class="panel">
     <h1>Simulation Settings</h1>
     <hr>
 </section>
+
 
 </body>
 
