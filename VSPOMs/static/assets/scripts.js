@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
     // Initial page load
-    $(".button-container").hide().delay(4000).fadeIn(500);
+    $(".button-container").delay(4000).fadeIn(500);
     $("#loading-panel").delay(3000).fadeOut(500);
     $("#create-panel").hide(1000).delay(3000).show(500);
     $("#simulate-panel").hide(1000);
@@ -15,23 +15,27 @@ $(document).ready(function(){
     };
     // Show create page
     $("#button-create").click(function(){
-        resetNav();
-        $("#button-create").addClass("active-page"); $("#create-panel").show(500);
+        if (!$(this).hasClass("active-page")) {
+            resetNav(); $("#button-create").addClass("active-page"); $("#create-panel").show(500);
+        };
     });
     // Show simulate page
     $("#button-simulate").click(function(){
-        resetNav();
-        $("#button-simulate").addClass("active-page"); $("#simulate-panel").show(500);
+        if (!$(this).hasClass("active-page")) {
+            resetNav(); $("#button-simulate").addClass("active-page"); $("#simulate-panel").show(500);
+        };
     });
     // Show graphs page
     $("#button-graphs").click(function(){
-        resetNav();
-        $("#button-graphs").addClass("active-page"); $("#graphs-panel").show(500);
+        if (!$(this).hasClass("active-page")) {
+            resetNav(); $("#button-graphs").addClass("active-page"); $("#graphs-panel").show(500);
+        };
     });
     // Show settings page
     $("#button-settings").click(function(){
-        resetNav();
-        $("#button-settings").addClass("active-page"); $("#settings-panel").show(500);
+        if (!$(this).hasClass("active-page")) {
+            resetNav(); $("#button-settings").addClass("active-page"); $("#settings-panel").show(500);
+        };
     });
 
 });

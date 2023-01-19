@@ -29,6 +29,7 @@ header {
     text-align: justify;
     width: 60%;
     margin-left: 20%;
+    display: none;
 }
 .button-container:after {
     content: '';
@@ -75,6 +76,8 @@ section.panel {
     height: 85%;
     border-radius: 10px;
     padding: 16px 20px;
+    box-shadow: 0 0 10px lightgray;
+;
 }
 section.panel h1 {
     font-weight: normal;
@@ -83,6 +86,7 @@ section.panel h1 {
 /* Loading panel styles */
 section.panel#loading-panel {
     background-color: #EEE;
+    box-shadow: none;
 }
 section.panel#loading-panel h1 {
     text-align: center;
