@@ -128,3 +128,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Run script (ask tim)
+VSPOMs/VSPOMS.ps1
+VSPOMs/IloveVSPOMS.bat
