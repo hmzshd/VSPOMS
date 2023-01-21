@@ -3,33 +3,39 @@ import math
 # SPOM quantity functions
 
 
-def dispersal_kernal(a, patch_i, patch_j):
+def dispersal_kernel(a, patch_i, patch_j):
     # parameter a is the species-specific dispersal constant.
 
     return math.exp((-a) * distance(patch_i, patch_j))
 
 
-def connectivity(patches, patch_i, a):
+def connectivity(patches, patch_i, a, b):
     # MUST CLARIFY EXPONENT ON AREA FACTOR
+    # b is area factor exponent ??? clarify!
 
-    connec = 0
+    connectivity_total = 0
     for patch in patches:
         if patch != patch_i:
-            connec += patch.get_probability() * dispersal_kernal(a, patch_i, patch) * patch.get_area()
+            connectivity_total += patch.get_probability() * dispersal_kernel(a, patch_i, patch) * patch.get_area()
 
-    return connec
+    return connectivity_total
 
 
-def colonization(patches, patch_i, a, y):
+def colonization(patches, patch_i, a, y, b):
     # y is species-specific constant
     # MUST CLARIFY WHETHER y=a
 
-    return 1 - math.exp(-y * connectivity(patches, patch_i, a))
+    return 1 - math.exp(-y * connectivity(patches, patch_i, a, b))
 
 
-def extinction():
-    pass
+def extinction(u, patch, x):
+    # clarify x - as patch area factor exponent
 
+    e = u / (patch.get_area)**x
+    if e > 1:
+        return 1.0
+    else:
+        return e
 
 def distance(patch_i, patch_j):
     i_coords = patch_i.get_coords()
