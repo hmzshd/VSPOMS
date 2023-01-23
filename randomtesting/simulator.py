@@ -59,7 +59,7 @@ class Simulator:
         Above are simulation variables.
     """
 
-    # pylint: disable=too-many-instance-attributes
+    # pylint: disable=too-many-instance-attributes,too-many-public-methods
 
     # Initialises Simulator.
     def __init__(self, patches, steps, replicates):
@@ -103,9 +103,15 @@ class Simulator:
         self.time = 0
 
         # pandas dataframe to store results
-        self.data = pandas.DataFrame(columns=[
+        index_array = []
+        for i in range(replicates):
+            for j in range(steps + 1):
+                index_array.append((i, j))
+
+        self.data = pandas.DataFrame(0, columns=[
             "time", "proportion occupied patches",
-            "proportion occupied area", "extinction"])
+            "proportion occupied area", "extinction"],
+            index=pandas.MultiIndex.from_tuples(index_array, names=('replicates', 'steps')))
 
         # lists for storing x,y coords of patches that
         # have had events happen to them, and the status of said patches
@@ -134,8 +140,6 @@ class Simulator:
 
         if self.patch_dict is None:
             raise ValueError
-        else:
-            return self.patch_dict
 
     def step(self, debug):
         """
@@ -249,8 +253,9 @@ class Simulator:
         """
 
         self.patches = list(self.patches_backup)
-        self.turnover_events = 0
         self.time = 0
+
+        self.events = []
 
         for patch_i in self.patches:
             patch_i.set_colonisation_value(self.colonization(patch_i))
@@ -432,22 +437,25 @@ class Simulator:
 
         print(f'      Time: {self.time}, Proportion occupied: {self.proportion_occupied_patches}')
 
-    def get_frame(self):
-        """TEMP returns internal dataframe as a nice pretty lil stringy wingy."""
-        return self.data.to_string()
+    def print_frame(self):
+        """Prints self.data"""
+        print(self.data.to_string())
+
+    def get_data(self):
+        """Returns self.data"""
+        return self.data
+
+    def get_turnovers(self):
+        """Returns self.patch_dict containing turnover event data."""
+        return self.patch_dict
 
     def update_frame(self):
         """
-        Concats new row onto DataFrame self.data containing current data.
+        Adds current data to frame self.data.
         """
-        new_frame = pandas.DataFrame({
-            "time": [self.time],
-            "proportion occupied patches": [self.proportion_occupied_patches],
-            "proportion occupied area": [self.proportion_occupied_area],
-            "extinction": [self.total_extinction_rate]
-        })
 
-        self.data = pandas.concat([self.data, new_frame], ignore_index=True)
+        self.data.loc[(self.completed_replicates, self.completed_steps)] = \
+            (self.time, self.proportion_occupied_patches, self.proportion_occupied_area, self.total_extinction_rate)
 
     def update_patch_lists(self, patch):
         """
@@ -458,4 +466,5 @@ class Simulator:
         self.statuses.append(patch.status)
 
     def generate_dict(self):
+        """Generates patch coord, status dict."""
         self.patch_dict = {"x_coords": self.x_coords, "y_coords": self.y_coords, "statuses": self.statuses}
