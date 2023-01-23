@@ -123,21 +123,21 @@ class Simulator:
         # set all interacting simulation variables
         self.setup()
 
-    def simulate(self):
+    def simulate(self, debug=False):
         """
         Performs self.replicates full simulations with self.steps steps.
         When done returns the dict generated
         """
 
         while not self.done:
-            self.step()
+            self.step(debug)
 
-        if self.patch_dict == None:
+        if self.patch_dict is None:
             raise ValueError
         else:
             return self.patch_dict
 
-    def step(self):
+    def step(self, debug):
         """
         Performs Gillespie process once.
 
@@ -155,7 +155,7 @@ class Simulator:
             # self.print_status()
 
         if self.completed_steps < self.steps:  # sim does not need to start new replicate. does one step.
-            selected_patch = self.gillespie_process()
+            selected_patch = self.gillespie_process(debug)
             self.update_patch_lists(selected_patch)
             self.completed_steps += 1
         elif self.completed_replicates < self.replicates:  # starts new replicate.
@@ -166,7 +166,7 @@ class Simulator:
             self.generate_dict()
             self.end()
 
-    def gillespie_process(self):
+    def gillespie_process(self, debug):
         """
         Performs Gillespie process using object attributes.
 
@@ -184,6 +184,14 @@ class Simulator:
         selected_event.do_event()
 
         self.increment_time(selected_event)  # step 4
+
+        if debug:
+            event_type = "colonisation"
+            if  selected_event.patch.status:
+                event_type = "extinction"
+            x_coord = selected_event.patch.x_coord
+            y_coord = selected_event.patch.y_coord
+            print(f"Event of type {event_type} happened to patch at {x_coord}, {y_coord} at time {self.time}")
 
         return selected_event.patch
 
