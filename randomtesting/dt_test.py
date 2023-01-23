@@ -29,7 +29,7 @@ from patch_generate import generate_patch_list_random
 #
 # event_list_to_datatable(event_list)
 patch_list = generate_patch_list_random(15)
-sim = Simulator(patch_list, 50, 5)
+sim = Simulator(patch_list, 1000, 5)
 dict = sim.simulate(debug=True)
 # for key in dict.keys():
 #     print(key)

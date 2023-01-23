@@ -186,9 +186,13 @@ class Simulator:
         self.increment_time(selected_event)  # step 4
 
         if debug:
-            event_type = "colonisation"
-            if  selected_event.patch.status:
+            # status is true if occupied, false if unoccupied, so we simply use the status
+            # of the patch to figure out the event type
+            if selected_event.patch.status:
                 event_type = "extinction"
+            else:
+                event_type = "colonisation"
+
             x_coord = selected_event.patch.x_coord
             y_coord = selected_event.patch.y_coord
             print(f"Event of type {event_type} happened to patch at {x_coord}, {y_coord} at time {self.time}")
