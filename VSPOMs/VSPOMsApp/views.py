@@ -35,33 +35,45 @@ def index(request):
     spom_sim = Simulator(patch_list, 60, 5)
     spom_sim.simulate()
     patches = spom_sim.get_turnovers()
+
+    
+    graph_data = spom_sim.get_data().loc[0,:]
+    graph_df = pd.DataFrame()
+    for i in range(len(graph_data.index)):
+        dfa = graph_data.head(i).copy()
+        dfa['step'] = i
+        graph_df = pd.concat([graph_df,dfa])
     
     msft_df = pd.DataFrame(MSFT)
     msft_df["date"] = pd.to_datetime(msft_df["date"])
 
     # input data and start of first graph template
-    dfi = px.data.stocks().head(50)
-    dfi['date'] = pd.to_datetime(dfi['date'])
-    start = 12
-    obs = len(dfi)
+    # dfi = px.data.stocks().head(50)
+    # dfi['date'] = pd.to_datetime(dfi['date'])
+    # start = 12
+    # obs = len(dfi)
     graphs = {'graph1':'','graph2':'','graph3':'','graph4':''}
+    graph_labels = ["time", "proportion occupied patches","proportion occupied area", "extinction"]
 
-    for graph in graphs.keys():
+    for index,graph in enumerate(graphs.keys()):
             # new datastructure for animation
-        df = pd.DataFrame()  # container for df with new datastructure
-        for i in np.arange(start, obs):
-            dfa = dfi.head(i).copy()
-            dfa['ix'] = i
-            df = pd.concat([df, dfa])
-
+        # df = pd.DataFrame()  # container for df with new datastructure
+        # for i in np.arange(start, obs):
+        #     dfa = dfi.head(i).copy()
+        #     dfa['ix'] = i
+        #     df = pd.concat([df, dfa])
         # plotly figure
-        fig = px.line(df, x='date', y=['GOOG', 'AAPL', 'AMZN', 'FB', 'NFLX', 'MSFT'],
-                    animation_frame='ix',
+
+        fig = px.line(graph_df, x='time', y=graph_labels[index],
+                    animation_frame='step',
                     # template = 'plotly_dark',
-                    width=1000, height=600)
+                    width=1000, height=600,
+                    )
 
         # attribute adjusments
         fig.layout.updatemenus[0].buttons[0]['args'][1]['frame']['redraw'] = True
+
+        fig.update_traces( line_width=3)
 
         fig.update_layout(
             autosize=False,
@@ -69,6 +81,8 @@ def index(request):
             height=400,
         )
         graphs[graph] = fig.to_html(full_html=False)
+
+
 
     patch_map = {'map':''}
 
