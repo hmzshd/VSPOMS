@@ -37,7 +37,12 @@ def index(request):
     # attribute adjusments
     fig1.layout.updatemenus[0].buttons[0]['args'][1]['frame']['redraw'] = True
 
-    graph1 = fig1.to_html(full_html=False, default_height=500, default_width=700)
+    fig1.update_layout(
+        autosize=False,
+        width=500,
+        height=400,
+    )
+    graph1 = fig1.to_html(full_html=False)
 
     # input data and start of third graph template
     dfi = px.data.stocks().head(50)
@@ -61,7 +66,12 @@ def index(request):
     # attribute adjusments
     fig2.layout.updatemenus[0].buttons[0]['args'][1]['frame']['redraw'] = True
 
-    graph2 = fig2.to_html(full_html=False, default_height=500, default_width=700)
+    fig2.update_layout(
+        autosize=False,
+        width=500,
+        height=400,
+    )
+    graph2 = fig2.to_html(full_html=False)
 
     # input data and start of first graph template
     dfi = px.data.stocks().head(50)
@@ -85,7 +95,12 @@ def index(request):
     # attribute adjusments
     fig3.layout.updatemenus[0].buttons[0]['args'][1]['frame']['redraw'] = True
 
-    graph3 = fig3.to_html(full_html=False, default_height=500, default_width=700)
+    fig3.update_layout(
+        autosize=False,
+        width=500,
+        height=400,
+    )
+    graph3 = fig3.to_html(full_html=False)
 
     # input data and start of fourth graph template
     dfi = px.data.stocks().head(50)
@@ -109,7 +124,12 @@ def index(request):
     # attribute adjusments
     fig4.layout.updatemenus[0].buttons[0]['args'][1]['frame']['redraw'] = True
 
-    graph4 = fig4.to_html(full_html=False, default_height=500, default_width=700)
+    fig4.update_layout(
+        autosize=False,
+        width=500,
+        height=400,
+    )
+    graph4 = fig4.to_html(full_html=False)
 
     graphs = {'map':''}
 
