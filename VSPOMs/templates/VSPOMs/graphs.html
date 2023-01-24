@@ -21,12 +21,11 @@
     </head>
     <body>
         
-        {{bokeh_div.graph1 | safe}}
-        {{bokeh_div.graph2 | safe}}
-        {{bokeh_div.graph3 | safe}}
-        {{bokeh_div.graph4 | safe}}
-
-        {{bokeh_div.map | safe}}
+        {% if graph %}
+        {{ graph|safe }}
+        {% else %}
+        <p>No graph was provided.</p>
+        {% endif %}
 
     </body>
 </html>
