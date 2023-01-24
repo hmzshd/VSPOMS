@@ -507,3 +507,7 @@ class Simulator:
     def generate_dict(self):
         """Generates patch coord, status dict."""
         self.patch_dict = {"x_coords": self.x_coords, "y_coords": self.y_coords, "statuses": self.statuses}
+
+    def return_patch_list(self):
+        """returns patch list"""
+        return self.patches
