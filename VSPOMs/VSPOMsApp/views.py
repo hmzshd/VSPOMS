@@ -140,7 +140,7 @@ def index(request):
     context_dict['script'] = script
     context_dict['bokeh_div'] = div
     context_dict['table'] = table
-    context_dict = {'graph1': graph1, 'graph2': graph2, 'graph3': graph3, 'graph4': graph4}
+    context_dict ['graphs'] = {'graph1': graph1, 'graph2': graph2, 'graph3': graph3, 'graph4': graph4}
 
     return render(request, 'VSPOMs/index.html', context=context_dict)
 
