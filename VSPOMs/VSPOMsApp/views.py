@@ -12,36 +12,106 @@ from bokeh.plotting import figure, output_file, show, Column
 from bokeh.models import DataTable, TableColumn, PointDrawTool, ColumnDataSource
 
 def index(request):
-    ## Prepare Data
-    msft_df = pd.DataFrame(MSFT)
-    msft_df["date"] = pd.to_datetime(msft_df["date"])
+    import pandas as pd
+    import numpy as np
+    import plotly.express as px
+    # input data and start of first graph template
+    dfi = px.data.stocks().head(50)
+    dfi['date'] = pd.to_datetime(dfi['date'])
+    start = 12
+    obs = len(dfi)
 
-    graphs = {'graph1':'','graph2':'','graph3':'','graph4':''}
-    for graph in graphs:
-        days = 90
+    # new datastructure for animation
+    df = pd.DataFrame()  # container for df with new datastructure
+    for i in np.arange(start, obs):
+        dfa = dfi.head(i).copy()
+        dfa['ix'] = i
+        df = pd.concat([df, dfa])
 
-        graphs[graph] = figure(x_axis_type="datetime", width=500, height=500,
-                     title = "Microsoft Candlestick Chart")
+    # plotly figure
+    fig1 = px.line(df, x='date', y=['GOOG', 'AAPL', 'AMZN', 'FB', 'NFLX', 'MSFT'],
+                  animation_frame='ix',
+                  # template = 'plotly_dark',
+                  width=1000, height=600)
 
-        line1 = graphs[graph].line(x="date", y="open", color="dodgerblue", source=msft_df[:days])
-        line2 = graphs[graph].line(x="date", y="high", color="lime", source=msft_df[:days])
-        line3 = graphs[graph].line(x="date", y="low", color="tomato", source=msft_df[:days])
-        line4 = graphs[graph].line(x="date", y="close", color="orange", source=msft_df[:days])
+    # attribute adjusments
+    fig1.layout.updatemenus[0].buttons[0]['args'][1]['frame']['redraw'] = True
 
-        graphs[graph].xaxis.axis_label="Date"
-        graphs[graph].yaxis.axis_label="Price ($)"
+    graph1 = fig1.to_html(full_html=False, default_height=500, default_width=700)
 
-        graphs[graph].xaxis.formatter = DatetimeTickFormatter(days="%m-%d-%Y")
+    # input data and start of third graph template
+    dfi = px.data.stocks().head(50)
+    dfi['date'] = pd.to_datetime(dfi['date'])
+    start = 12
+    obs = len(dfi)
 
-        legend = Legend(items=[
-            ("Open",   [line1]),
-            ("High",   [line2]),
-            ("Low",   [line3]),
-            ("Close",   [line4]),
-        ], location=(0, 100))
+    # new datastructure for animation
+    df = pd.DataFrame()  # container for df with new datastructure
+    for i in np.arange(start, obs):
+        dfa = dfi.head(i).copy()
+        dfa['ix'] = i
+        df = pd.concat([df, dfa])
 
-        graphs[graph].add_layout(legend, 'right')
+    # plotly figure
+    fig2 = px.line(df, x='date', y=['GOOG', 'AAPL', 'AMZN', 'FB', 'NFLX', 'MSFT'],
+                  animation_frame='ix',
+                  # template = 'plotly_dark',
+                  width=1000, height=600)
 
+    # attribute adjusments
+    fig2.layout.updatemenus[0].buttons[0]['args'][1]['frame']['redraw'] = True
+
+    graph2 = fig2.to_html(full_html=False, default_height=500, default_width=700)
+
+    # input data and start of first graph template
+    dfi = px.data.stocks().head(50)
+    dfi['date'] = pd.to_datetime(dfi['date'])
+    start = 12
+    obs = len(dfi)
+
+    # new datastructure for animation
+    df = pd.DataFrame()  # container for df with new datastructure
+    for i in np.arange(start, obs):
+        dfa = dfi.head(i).copy()
+        dfa['ix'] = i
+        df = pd.concat([df, dfa])
+
+    # plotly figure
+    fig3 = px.line(df, x='date', y=['GOOG', 'AAPL', 'AMZN', 'FB', 'NFLX', 'MSFT'],
+                  animation_frame='ix',
+                  # template = 'plotly_dark',
+                  width=1000, height=600)
+
+    # attribute adjusments
+    fig3.layout.updatemenus[0].buttons[0]['args'][1]['frame']['redraw'] = True
+
+    graph3 = fig3.to_html(full_html=False, default_height=500, default_width=700)
+
+    # input data and start of fourth graph template
+    dfi = px.data.stocks().head(50)
+    dfi['date'] = pd.to_datetime(dfi['date'])
+    start = 12
+    obs = len(dfi)
+
+    # new datastructure for animation
+    df = pd.DataFrame()  # container for df with new datastructure
+    for i in np.arange(start, obs):
+        dfa = dfi.head(i).copy()
+        dfa['ix'] = i
+        df = pd.concat([df, dfa])
+
+    # plotly figure
+    fig4 = px.line(df, x='date', y=['GOOG', 'AAPL', 'AMZN', 'FB', 'NFLX', 'MSFT'],
+                  animation_frame='ix',
+                  # template = 'plotly_dark',
+                  width=1000, height=600)
+
+    # attribute adjusments
+    fig4.layout.updatemenus[0].buttons[0]['args'][1]['frame']['redraw'] = True
+
+    graph4 = fig4.to_html(full_html=False, default_height=500, default_width=700)
+
+    graphs = {'map':''}
 
     p = figure(x_range=(0, 10), y_range=(0, 10), tools=[],
            title='Point Draw Tool')
@@ -70,6 +140,7 @@ def index(request):
     context_dict['script'] = script
     context_dict['bokeh_div'] = div
     context_dict['table'] = table
+    context_dict = {'graph1': graph1, 'graph2': graph2, 'graph3': graph3, 'graph4': graph4}
 
     return render(request, 'VSPOMs/index.html', context=context_dict)
 
