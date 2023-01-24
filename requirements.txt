@@ -20,4 +20,5 @@ xyzservices==2022.9.0
 sqlparse>=0.4.3
 numpy<1.24, >=1.22
 pylint>=2.15.5
-
+plotly >= 5.13.0
+tenacity>=6.2.0
