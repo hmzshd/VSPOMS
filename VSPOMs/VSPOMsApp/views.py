@@ -74,64 +74,33 @@ def index(request):
     return render(request, 'VSPOMs/index.html', context=context_dict)
 
 def graphs(request):
+    import pandas as pd
+    import numpy as np
+    import plotly.express as px
 
-    ## Prepare Data
-    msft_df = pd.DataFrame(MSFT)
-    msft_df["date"] = pd.to_datetime(msft_df["date"])
+    # input data
+    dfi = px.data.stocks().head(50)
+    dfi['date'] = pd.to_datetime(dfi['date'])
+    start = 12
+    obs = len(dfi)
 
-    graphs = {'graph1':'','graph2':'','graph3':'','graph4':''}
-    for graph in graphs:
-        days = 90
+    # new datastructure for animation
+    df = pd.DataFrame()  # container for df with new datastructure
+    for i in np.arange(start, obs):
+        dfa = dfi.head(i).copy()
+        dfa['ix'] = i
+        df = pd.concat([df, dfa])
 
-        graphs[graph] = figure(x_axis_type="datetime", width=500, height=500,
-                     title = "Microsoft Candlestick Chart")
+    # plotly figure
+    fig = px.line(df, x='date', y=['GOOG', 'AAPL', 'AMZN', 'FB', 'NFLX', 'MSFT'],
+                  animation_frame='ix',
+                  # template = 'plotly_dark',
+                  width=1000, height=600)
 
-        line1 = graphs[graph].line(x="date", y="open", color="dodgerblue", source=msft_df[:days])
-        line2 = graphs[graph].line(x="date", y="high", color="lime", source=msft_df[:days])
-        line3 = graphs[graph].line(x="date", y="low", color="tomato", source=msft_df[:days])
-        line4 = graphs[graph].line(x="date", y="close", color="orange", source=msft_df[:days])
+    # attribute adjusments
+    fig.layout.updatemenus[0].buttons[0]['args'][1]['frame']['redraw'] = True
 
-        graphs[graph].xaxis.axis_label="Date"
-        graphs[graph].yaxis.axis_label="Price ($)"
-
-        graphs[graph].xaxis.formatter = DatetimeTickFormatter(days="%m-%d-%Y")
-
-        legend = Legend(items=[
-            ("Open",   [line1]),
-            ("High",   [line2]),
-            ("Low",   [line3]),
-            ("Close",   [line4]),
-        ], location=(0, 100))
-
-        graphs[graph].add_layout(legend, 'right')
-
-
-    p = figure(x_range=(0, 10), y_range=(0, 10), tools=[],
-           title='Point Draw Tool')
-
-    source = ColumnDataSource({
-    'x': [1, 5, 9], 'y': [1, 5, 9], 'color': ['red', 'green', 'yellow'],'size':[20,10,40]
-    })
-
-    renderer = p.scatter(x='x', y='y', source=source, color='color', size='size')
-    columns = [TableColumn(field="x", title="x"),
-               TableColumn(field="y", title="y"),
-               TableColumn(field='color', title='color'),
-               TableColumn(field='size', title='size')
-              ]
-    table = DataTable(source=source, columns=columns, editable=True, height=200)
-
-    draw_tool = PointDrawTool(renderers=[renderer], empty_value=50)
-    p.add_tools(draw_tool)
-    p.toolbar.active_tap = draw_tool
-
-    graphs['map'] = p
-
-    script, div = components(graphs)
-
-    context_dict = {}
-    context_dict['script'] = script
-    context_dict['bokeh_div'] = div
-    context_dict['table'] = table
+    graph = fig.to_html(full_html=False, default_height=500, default_width=700)
+    context_dict = {'graph': graph}
 
     return render(request, 'VSPOMs/graphs.html', context=context_dict)
