@@ -96,15 +96,6 @@ section.panel#loading-panel img {
     display: block;
     margin: 0 auto;
     width: 30px;
-    animation: 1s infinite linear rotation;
-}
-@keyframes rotation {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(359deg);
-    }
 }
 
 /* Graph panel styles */
