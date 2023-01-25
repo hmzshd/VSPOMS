@@ -27,6 +27,7 @@ migrations:
       - docker
   script:
     - cd VSPOMs
+    - bokeh sampledata
     - python3 manage.py makemigrations
     # - python3 manage.py makemigrations myapp
     - python3 manage.py migrate
