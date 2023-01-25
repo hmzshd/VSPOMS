@@ -39,6 +39,7 @@ django-tests:
   tags:
       - docker
   script:
+    - bokeh sampledata
     - python3 ./VSPOMs/manage.py test
 
 lint:
