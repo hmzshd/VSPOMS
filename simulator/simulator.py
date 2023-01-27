@@ -185,11 +185,12 @@ class Simulator:
 
         self.update_frame()
 
-        if self.completed_steps == 0:
-            print(f'Replicate {self.completed_replicates + 1}:')
-        elif self.completed_steps % 20 == 0:
-            print(f'    Completed {self.completed_steps} steps.')
-            # self.print_status()
+        if debug:
+            if self.completed_steps == 0:
+                print(f'Replicate {self.completed_replicates + 1}:')
+            elif self.completed_steps % 20 == 0:
+                print(f'    Completed {self.completed_steps} steps.')
+                # self.print_status()
 
         if self.completed_steps < self.steps:  # sim does not need to start new replicate. does one step.
             selected_patch = self.gillespie_process(debug)
