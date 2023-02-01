@@ -70,16 +70,32 @@
     
     <div class="graph-grid">
         <div class="graph-container">
-            {{bokeh_div.graph1 | safe}}
+            {% if graphs.graph1 %}
+            {{ graphs.graph1|safe }}
+            {% else %}
+            <p>No graph was provided.</p>
+            {% endif %}
         </div>
         <div class="graph-container">
-            {{bokeh_div.graph2 | safe}}
+            {% if graphs.graph2 %}
+            {{ graphs.graph2|safe }}
+            {% else %}
+            <p>No graph was provided.</p>
+            {% endif %}
         </div>
         <div class="graph-container">
-            {{bokeh_div.graph3 | safe}}
+            {% if graphs.graph3 %}
+            {{ graphs.graph3|safe }}
+            {% else %}
+            <p>No graph was provided.</p>
+            {% endif %}
         </div>
         <div class="graph-container">
-            {{bokeh_div.graph4 | safe}}
+            {% if graphs.graph4 %}
+            {{ graphs.graph4|safe }}
+            {% else %}
+            <p>No graph was provided.</p>
+            {% endif %}
         </div>
     </div>
 
