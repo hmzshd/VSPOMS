@@ -17,6 +17,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{% static 'assets/scripts.js' %}"></script>
 
+    <!-- MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
     <!-- Bokeh Links -->
     <link href="http://cdn.pydata.org/bokeh/release/bokeh-3.0.0.min.css" rel="stylesheet" type="text/css">
     <link href="http://cdn.pydata.org/bokeh/release/bokeh-widgets-3.0.0.min.css" rel="stylesheet" type="text/css">
@@ -106,6 +110,13 @@
 <section id="settings-panel" class="panel">
     <h1>Simulation Settings</h1>
     <hr>
+    $$ K_{ij} = \text{exp}(-\colorbox{Apricot}{A} \times D_{ij}) $$
+    <br>
+    $$ S_{i}(t) = \sum_{j=1,j \neq i}^{n}(p_{j}(t) \times k_{j}(d_{ij}) \times A_{j}^{\colorbox{Pink}{b}}) $$
+    <br>
+    $$ C_{i}(t) = 1 - \text{exp}(-\colorbox{lightblue}{y} \times S_{i}(t)) $$
+    <br>
+    $$ E_{i} = \text{min}(1, {\colorbox{coral}{u} \over A_{i}^{\colorbox{lightgreen}{x}}}) $$
 </section>
 
 
