@@ -95,13 +95,11 @@ def index(request):
     source = ColumnDataSource({'x': patches["x_coords"], 'y': patches["y_coords"], 'color': status_to_colour(patches["statuses"]), 'size':patches["x_coords"]
     })
 
+    size_source = ColumnDataSource(data={'size':[]})
+
     renderer = p.scatter(x="x", y="y", source=source,color='color', size="size")
-    columns = [TableColumn(field="x", title="x"),
-               TableColumn(field="y", title="y"),
-               TableColumn(field='color', title='color'),
-               TableColumn(field='size', title='size')
-              ]
-    table = DataTable(source=source, columns=columns, editable=True, height=200)
+    columns = [TableColumn(field='size', title='size')]
+    table = DataTable(source=size_source, columns=columns, editable=True, height=200, visible = False)
 
     draw_tool = PointDrawTool(renderers=[renderer], empty_value=50)
     p.add_tools(draw_tool)
@@ -112,27 +110,54 @@ def index(request):
     callback_select = """
     if(source.selected.indices.length > 0){
         radio_button_group.visible = true;
+        table.visible = true;
+        if (source.data.color[source.selected.indices[0]] == 'green'){
+            radio_button_group.active = 0;
+        }
+        if (source.data.color[source.selected.indices[0]] == 'red'){
+            radio_button_group.active = 1;
+        }
+        const size = []
+        for(let i = 0; i < source.selected.indices.length; i++) {
+            size[i] = source.data.size[source.selected.indices[i]];
+        }
+        size_source.data.size = size;
     }
     if (source.selected.indices.length == 0){
         radio_button_group.visible = false;  
-        radio_button_group.active = null; 
+        radio_button_group.active = null;
+        size_source.data.size = [];
+        table.visible = false;
+         
     }
-    console.log(radio_button_group.active);
+    source.change.emit();
+    size_source.change.emit();
+    """
+
+    callback_button = """
+    if(radio_button_group.active == 0){
+        for(const index of source.selected.indices) {
+            source.data.color[index] = 'green';
+        }
+    }
+    if(radio_button_group.active == 1){
+        for(const index of source.selected.indices) {
+            source.data.color[index] = 'red';
+        }
+    }
     source.change.emit();
     """
 
-    callback_button = """radio_button_group.visible = true;
-    console.log(radio_button_group.visible);
-    if(radio_button_group.active == null){
-        for(const index of source.selected.indices) {
-            source.data.color[index] = 'purple';
-        }
+    callback_resize = """
+    for(const index of source.selected.indices) {
+        source.data.size[index] = size_source.data.size[0];
     }
-    console.log(radio_button_group.active);
-    console.log(source.selected.indices);
     source.change.emit();
     """
-    source.selected.js_on_change('indices', CustomJS(args = dict(source = source, radio_button_group = radio_button_group), code = callback_select))
+
+    source.selected.js_on_change('indices', CustomJS(args = dict(source = source, radio_button_group = radio_button_group, size_source = size_source, table = table), code = callback_select))
+    radio_button_group.js_on_event("button_click", CustomJS(args = dict(source = source, radio_button_group = radio_button_group), code = callback_button))
+    size_source.js_on_change('patching', CustomJS(args = dict(source = source, size_source = size_source, table = table), code = callback_resize))
 
     patch_map['map'] = p
     patch_map['display'] = table
