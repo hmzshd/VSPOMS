@@ -9,7 +9,7 @@ Classes:
 
 from math import pi
 import math
-# from events import ColonisationEvent, ExtinctionEvent
+from events import ColonisationEvent, ExtinctionEvent
 
 
 class Patch:
