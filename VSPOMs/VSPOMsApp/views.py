@@ -17,33 +17,36 @@ from simulator.simulator import Simulator
 from simulator.patch import Patch
 import random
 
+
 def generate_patch_list_random(num):
     patch_list = []
     for i in range(num):
-        patch_list.append(Patch(bool(random.randint(0, 1)), random.uniform(0, 25), random.uniform(0, 25), random.uniform(0, 5)))
+        patch_list.append(Patch(bool(random.randint(0, 1)),
+                                random.uniform(0, 25),
+                                random.uniform(0, 25),
+                                random.uniform(0, 5)))
     return patch_list
+
 
 def status_to_colour(statuses):
     return ["green" if status else "red" for status in statuses]
 
 
 def index(request):
-
-    ## Prepare Data
+    # Prepare Data
     map_size = 30
     patch_list = generate_patch_list_random(map_size)
     spom_sim = Simulator(patch_list, 60, 5)
     spom_sim.simulate()
     patches = spom_sim.get_turnovers()
-
-    
-    graph_data = spom_sim.get_data().loc[0,:]
+    graph_data = spom_sim.get_data().loc[0, :]
     graph_df = pd.DataFrame()
+
     for i in range(len(graph_data.index)):
         dfa = graph_data.head(i).copy()
         dfa['step'] = i
-        graph_df = pd.concat([graph_df,dfa])
-    
+        graph_df = pd.concat([graph_df, dfa])
+
     msft_df = pd.DataFrame(MSFT)
     msft_df["date"] = pd.to_datetime(msft_df["date"])
 
@@ -52,11 +55,11 @@ def index(request):
     # dfi['date'] = pd.to_datetime(dfi['date'])
     # start = 12
     # obs = len(dfi)
-    graphs = {'graph1':'','graph2':'','graph3':'','graph4':''}
-    graph_labels = ["time", "proportion occupied patches","proportion occupied area", "extinction"]
+    graphs = {'graph1': '', 'graph2': '', 'graph3': '', 'graph4': ''}
+    graph_labels = ["time", "proportion occupied patches", "proportion occupied area", "extinction"]
 
-    for index,graph in enumerate(graphs.keys()):
-            # new datastructure for animation
+    for index, graph in enumerate(graphs.keys()):
+        # new datastructure for animation
         # df = pd.DataFrame()  # container for df with new datastructure
         # for i in np.arange(start, obs):
         #     dfa = dfi.head(i).copy()
@@ -65,15 +68,15 @@ def index(request):
         # plotly figure
 
         fig = px.line(graph_df, x='time', y=graph_labels[index],
-                    animation_frame='step',
-                    # template = 'plotly_dark',
-                    width=1000, height=600,
-                    )
+                      animation_frame='step',
+                      # template = 'plotly_dark',
+                      width=1000, height=600,
+                      )
 
         # attribute adjusments
         fig.layout.updatemenus[0].buttons[0]['args'][1]['frame']['redraw'] = True
 
-        fig.update_traces( line_width=3)
+        fig.update_traces(line_width=3)
 
         fig.update_layout(
             autosize=False,
@@ -82,23 +85,22 @@ def index(request):
         )
         graphs[graph] = fig.to_html(full_html=False)
 
+    patch_map = {'map': ''}
 
-
-    patch_map = {'map':''}
-
-    p = figure(x_range=(-map_size//10, map_size*1.1), y_range=(0, map_size*1.1), tools=[],
-           title='Point Draw Tool')
+    p = figure(x_range=(-map_size // 10, map_size * 1.1), y_range=(0, map_size * 1.1), tools=[],
+               title='Point Draw Tool')
 
     source = ColumnDataSource({
-    'x': patches["x_coords"], 'y': patches["y_coords"], 'color': status_to_colour(patches["statuses"]), 'size':patches["x_coords"]
+        'x': patches["x_coords"], 'y': patches["y_coords"], 'color': status_to_colour(patches["statuses"]),
+        'size': patches["x_coords"]
     })
 
-    renderer = p.scatter(x="x", y="y", source=source,color='color', size="size")
+    renderer = p.scatter(x="x", y="y", source=source, color='color', size="size")
     columns = [TableColumn(field="x", title="x"),
                TableColumn(field="y", title="y"),
                TableColumn(field='color', title='color'),
                TableColumn(field='size', title='size')
-              ]
+               ]
     table = DataTable(source=source, columns=columns, editable=True, height=200)
 
     draw_tool = PointDrawTool(renderers=[renderer], empty_value=50)
@@ -113,9 +115,10 @@ def index(request):
     context_dict['script'] = script
     context_dict['bokeh_div'] = div
     context_dict['table'] = table
-    context_dict ['graphs'] = graphs
+    context_dict['graphs'] = graphs
 
     return render(request, 'VSPOMs/index.html', context=context_dict)
+
 
 def graphs(request):
     import pandas as pd
