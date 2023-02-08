@@ -12,6 +12,9 @@ import numpy as np
 import plotly.express as px
 from bokeh.plotting import figure, output_file, show, Column
 from bokeh.models import DataTable, TableColumn, PointDrawTool, ColumnDataSource
+from bokeh.models import CustomJS
+from bokeh.models.widgets import RadioButtonGroup
+
 
 from simulator.simulator import Simulator
 from simulator.patch import Patch
@@ -34,7 +37,7 @@ def index(request):
     patch_list = generate_patch_list_random(map_size)
     spom_sim = Simulator(patch_list, 60, 5)
     spom_sim.simulate()
-    patches = spom_sim.get_turnovers()
+    patches = pd.DataFrame.from_dict(spom_sim.get_turnovers())
 
     
     graph_data = spom_sim.get_data().loc[0,:]
@@ -89,8 +92,7 @@ def index(request):
     p = figure(x_range=(-map_size//10, map_size*1.1), y_range=(0, map_size*1.1), tools=[],
            title='Point Draw Tool')
 
-    source = ColumnDataSource({
-    'x': patches["x_coords"], 'y': patches["y_coords"], 'color': status_to_colour(patches["statuses"]), 'size':patches["x_coords"]
+    source = ColumnDataSource({'x': patches["x_coords"], 'y': patches["y_coords"], 'color': status_to_colour(patches["statuses"]), 'size':patches["x_coords"]
     })
 
     renderer = p.scatter(x="x", y="y", source=source,color='color', size="size")
@@ -105,7 +107,36 @@ def index(request):
     p.add_tools(draw_tool)
     p.toolbar.active_tap = draw_tool
 
+    radio_button_group = RadioButtonGroup(labels = ['Colonised', 'Extinct'], active = None, visible = False)
+
+    callback_select = """
+    if(source.selected.indices.length > 0){
+        radio_button_group.visible = true;
+    }
+    if (source.selected.indices.length == 0){
+        radio_button_group.visible = false;  
+        radio_button_group.active = null; 
+    }
+    console.log(radio_button_group.active);
+    source.change.emit();
+    """
+
+    callback_button = """radio_button_group.visible = true;
+    console.log(radio_button_group.visible);
+    if(radio_button_group.active == null){
+        for(const index of source.selected.indices) {
+            source.data.color[index] = 'purple';
+        }
+    }
+    console.log(radio_button_group.active);
+    console.log(source.selected.indices);
+    source.change.emit();
+    """
+    source.selected.js_on_change('indices', CustomJS(args = dict(source = source, radio_button_group = radio_button_group), code = callback_select))
+
     patch_map['map'] = p
+    patch_map['display'] = table
+    patch_map['button'] = radio_button_group
 
     script, div = components(patch_map)
 
