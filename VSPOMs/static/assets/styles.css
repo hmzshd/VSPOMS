@@ -79,7 +79,7 @@ section.panel {
     box-shadow: 0 0 10px lightgray;
 ;
 }
-section.panel h1 {
+section.panel h1, section.panel h2, section.panel h3, section.panel h4, section.panel h5, section.panel h6 {
     font-weight: normal;
 }
 
@@ -127,4 +127,70 @@ section.panel .patch-container {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+/* Settings panel styles */
+section.panel#settings-panel {
+    height: 165%;
+}
+section.panel h2.parameter_heading {
+    font-size: 18px;
+}
+section.panel .function_box {
+    border: 1px solid black;
+    margin: 20px auto;
+    padding: 6px 12px;
+    width: 40vw;
+    margin-left: 0;
+    float: left;
+    overflow: auto;
+}
+section.panel .visualise_box {
+    border: 1px solid black;
+    margin: 20px auto;
+    padding: 6px 12px;
+    width: 36vw;
+    height: 8vw;
+    margin-left: 0;
+    float: right;
+    overflow: auto;
+}
+section.panel .function_box .parameter_label {
+    padding: 0 6px;
+    font-family:'Times New Roman', Times, serif;
+}
+section.panel .function_box .equation {
+    font-size: 16px;
+}
+section.panel .function_box input {
+    width: 8vw;
+    font-size: 18px;
+    font-family: monospace;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* Remove default arrows on number input fields */
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type=number] {
+    -moz-appearance: textfield;
+}
+section.panel button[type="submit"] {
+    margin: 20px 0;
+    padding: 20px;
+    width: 40vw;
+    border: none;
+    border-radius: 5px;
+    background-color: cornflowerblue;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    transition: 0.1s ease-in-out;
+}
+section.panel button[type="submit"]:hover {
+    transform: scale(1.02);
+    filter: brightness(1.2);
+    cursor: pointer;
 }
