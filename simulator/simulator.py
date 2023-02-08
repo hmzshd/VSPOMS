@@ -24,7 +24,6 @@ from itertools import accumulate
 from bisect import bisect
 import pandas
 from numpy.random import exponential
-from events import ColonisationEvent, ExtinctionEvent
 
 
 class Simulator:
