@@ -131,7 +131,7 @@ section.panel .patch-container {
 
 /* Settings panel styles */
 section.panel#settings-panel {
-    height: 165%;
+    height: 190%;
 }
 section.panel h2.parameter_heading {
     font-size: 18px;
@@ -160,7 +160,7 @@ section.panel .function_box .parameter_label {
     font-family:'Times New Roman', Times, serif;
 }
 section.panel .function_box .equation {
-    font-size: 16px;
+    font-size: 26px;
 }
 section.panel .function_box input {
     width: 8vw;
