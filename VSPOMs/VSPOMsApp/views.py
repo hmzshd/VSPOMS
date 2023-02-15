@@ -1,4 +1,7 @@
 # pylint: disable=no-member, too-many-locals
+"""
+Disables no-member and too-many-locals warnings.
+"""
 
 import random
 import pandas as pd
