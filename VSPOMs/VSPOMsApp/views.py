@@ -200,13 +200,17 @@ def index(request):
     patch_map['display'] = table
     patch_map['button'] = radio_button_group
 
+    retract_source = source.data
+
     script, div = components(patch_map)
 
     context_dict = {
         'script': script,
         'bokeh_div': div,
         'table': table,
-        'graphs': graphs
+        'graphs': graphs,
+        'retract_source':retract_source,
     }
+
 
     return render(request, 'VSPOMs/index.html', context=context_dict)
