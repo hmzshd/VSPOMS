@@ -25,12 +25,13 @@ def parse_csv(filename):
     with open(filename, encoding="utf-8") as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
         line_count = 0
-        patch_list = []
-        settings = []
+        patch_list = list()
+        settings = list()
+        heading_line_indexes_set = set((0,4))
         for row in reader:
 
             # 0th and 4th row just contain headings
-            if line_count == 0 or line_count == 4:
+            if line_count in heading_line_indexes_set:
                 pass
 
             elif line_count == 2:
