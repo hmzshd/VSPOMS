@@ -1,7 +1,9 @@
-import random
+# pylint: disable=no-member
 
+import random
 import pandas as pd
 import plotly.express as px
+
 from bokeh.embed import components
 from bokeh.models import CustomJS
 from bokeh.models import DataTable, TableColumn, PointDrawTool, ColumnDataSource
@@ -15,23 +17,47 @@ from simulator.simulator import Simulator
 
 
 def generate_patch_list_random(num):
+    """
+    Generates a list of patches.
+    The patches with random parameters  for [status, x, y, radius]
+
+    Args:
+        num (int): The number of patches to be generated
+
+    Returns:
+        patch_list (list): A list of the generated patches
+    """
     patch_list = []
-    for i in range(num):
+    for _ in range(num):
         patch_list.append(
             Patch(
                 bool(random.randint(0, 1)),
                 random.uniform(0, 25),
                 random.uniform(0, 25),
-                random.uniform(0, 5))
+                random.uniform(0, 5)
             )
+        )
     return patch_list
 
 
 def status_to_colour(statuses):
+    """
+    Maps statuses to colours to display on frontend graphs.
+
+    Args:
+        statuses (_type_): A list of statuses
+
+    Returns:
+        :(string): Returns "green" or "red" depending on status
+    """
     return ["green" if status else "red" for status in statuses]
 
 
 def index(request):
+    """
+    Returns a request to serve index page.
+    """
+
     # Prepare Data
     map_size = 30
     patch_list = generate_patch_list_random(map_size)
@@ -104,15 +130,34 @@ def index(request):
 
     size_source = ColumnDataSource(data={'size': []})
 
-    renderer = plot.scatter(x="x", y="y", source=source, color='color', size="size")
+    renderer = plot.scatter(
+        x="x",
+        y="y",
+        source=source,
+        color='color',
+        size="size"
+    )
     columns = [TableColumn(field='size', title='size')]
-    table = DataTable(source=size_source, columns=columns, editable=True, height=200, visible=False)
+    table = DataTable(
+        source=size_source,
+        columns=columns,
+        editable=True,
+        height=200,
+        visible=False
+    )
 
-    draw_tool = PointDrawTool(renderers=[renderer], empty_value=50)
+    draw_tool = PointDrawTool(
+        renderers=[renderer],
+        empty_value=50
+    )
     plot.add_tools(draw_tool)
     plot.toolbar.active_tap = draw_tool
 
-    radio_button_group = RadioButtonGroup(labels=['Colonised', 'Extinct'], active=None, visible=False)
+    radio_button_group = RadioButtonGroup(
+        labels=['Colonised', 'Extinct'],
+        active=None,
+        visible=False
+    )
 
     callback_select = """
     if(source.selected.indices.length > 0){
