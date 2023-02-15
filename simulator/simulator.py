@@ -24,7 +24,6 @@ from itertools import accumulate
 from bisect import bisect
 import pandas
 from numpy.random import exponential
-from events import ColonisationEvent, ExtinctionEvent
 
 
 class Simulator:
@@ -253,14 +252,8 @@ class Simulator:
                 event selected to happen by select_event().
         """
 
-        # if total rates are 0, a divide by zero error occurs, so this skips time increment as a bodge fix.
-        # not ideal, must find out what should happen in this case.
-        if isinstance(selected_event, ColonisationEvent):
-            if self.total_colonisation_rate > 0:
-                self.time += exponential(1 / self.total_colonisation_rate)
-        elif isinstance(selected_event, ExtinctionEvent):
-            if self.total_extinction_rate > 0:
-                self.time += exponential(1 / self.total_extinction_rate)
+        self.time += exponential(1/(self.total_extinction_rate + self.total_colonisation_rate))
+
 
     def update_rates(self):
         """

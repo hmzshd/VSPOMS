@@ -79,7 +79,7 @@ section.panel {
     box-shadow: 0 0 10px lightgray;
 ;
 }
-section.panel h1 {
+section.panel h1, section.panel h2, section.panel h3, section.panel h4, section.panel h5, section.panel h6 {
     font-weight: normal;
 }
 
@@ -99,6 +99,9 @@ section.panel#loading-panel img {
 }
 
 /* Graph panel styles */
+section.panel#graphs-panel {
+    height: auto;
+}
 section.panel .graph-grid {
     display: grid;
     grid-template-columns: calc(50% - 10px) calc(50% - 10px);
@@ -115,6 +118,7 @@ section.panel .graph-container {
     justify-content: center;
     background-color: white;
     border-radius: 5px;
+    height: 500px;
 }
 
 /* Simulate panel styles */
@@ -127,4 +131,81 @@ section.panel .patch-container {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+/* Settings panel styles */
+section.panel#settings-panel {
+    height: auto;
+}
+section.panel h2.parameter_heading {
+    font-size: 18px;
+}
+/* Box positioning */
+section.panel .box_row::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+section.panel .function_box, section.panel .visualise_box {
+    border: 1px solid black;
+    margin: 20px auto;
+    padding: 6px 12px;
+    width: 49%;
+    margin-left: 0;
+    float: left
+}
+section.panel .visualise_box {
+    height: 100%;
+}
+#box_dispersal-kernel-function, #box_colonization-probability-function, #box_patch-extinction-probability-function, #box_connectivity-function,
+#box_stochasticity {
+    margin-right: 1%;
+}
+#box_dispersal-kernel-graph, #box_colonization-probability-graph, #box_patch-extinction-probability-graph, #box_rescue-effect-function {
+    margin-left: 1%;
+}
+/* Box styles */
+section.panel .function_box .parameter_label {
+    padding: 0 6px;
+    font-family:'Times New Roman', Times, serif;
+}
+section.panel .function_box .equation {
+    font-size: 26px;
+}
+section.panel .function_box input {
+    width: 8vw;
+    font-size: 18px;
+    font-family: monospace;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* Remove default arrows on number input fields */
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type=number] {
+    -moz-appearance: textfield;
+}
+/* "Save Changes" button */
+section.panel .button_submit-settings {
+    margin: 20px auto;
+    width: 400px;
+}
+section.panel button[type="submit"] {
+    margin: 0;
+    width: 100%;
+    padding: 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: cornflowerblue;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    transition: 0.1s ease-in-out;
+}
+section.panel button[type="submit"]:hover {
+    transform: scale(1.02);
+    filter: brightness(1.2);
+    cursor: pointer;
 }
