@@ -1,4 +1,7 @@
-# pylint: disable=no-member
+# pylint: disable=no-member, too-many-locals
+"""
+Disables no-member and too-many-locals warnings.
+"""
 
 import random
 import pandas as pd
@@ -210,33 +213,33 @@ def index(request):
     source.selected.js_on_change(
         'indices',
         CustomJS(
-            args=dict(
-                source=source,
-                radio_button_group=radio_button_group,
-                size_source=size_source,
-                table=table
-            ),
+            args = {
+                "source": source,
+                "radio_button_group": radio_button_group,
+                "size_source": size_source,
+                "table": table
+            },
             code=callback_select
         )
     )
     radio_button_group.js_on_event(
         "button_click",
         CustomJS(
-            args=dict(
-                source=source,
-                radio_button_group=radio_button_group
-            ),
+            args = {
+                "source": source,
+                "radio_button_group": radio_button_group
+            },
             code=callback_button
         )
     )
     size_source.js_on_change(
         'patching',
         CustomJS(
-            args=dict(
-                source=source,
-                size_source=size_source,
-                table=table
-            ),
+            args = {
+                "source": source,
+                "size_source": size_source,
+                "table": table
+            },
             code=callback_resize
         )
     )
