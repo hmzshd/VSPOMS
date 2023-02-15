@@ -1,7 +1,7 @@
 """
 Parser.
 
-Simple module with one function parse, which parses a csv file.
+Simple module with one function parse_csv, which parses a csv file.
 And returns the setting for the simulation, and the patch objects
 """
 
@@ -10,9 +10,9 @@ import csv
 from patch import Patch
 
 
-def parse(filename):
+def parse_csv(filename):
     """
-    Function to parse a CSV file.
+    Function to parse_csv a CSV file.
 
     Returns two lists, one containing the sim settings.
     And one containing patch objects, created from the data given in the CSV file.
@@ -20,7 +20,7 @@ def parse(filename):
     Parameters
         ---
             filename: string
-                filename of csv file to parse
+                filename of csv file to parse_csv
     """
     with open(filename, encoding="utf-8") as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
