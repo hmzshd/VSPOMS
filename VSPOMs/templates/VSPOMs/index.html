@@ -17,6 +17,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{% static 'assets/scripts.js' %}"></script>
 
+     <!-- MathJax -->
+     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+     <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
     <!-- Bokeh Links -->
     <link href="http://cdn.pydata.org/bokeh/release/bokeh-3.0.0.min.css" rel="stylesheet" type="text/css">
     <link href="http://cdn.pydata.org/bokeh/release/bokeh-widgets-3.0.0.min.css" rel="stylesheet" type="text/css">
@@ -110,8 +114,77 @@
 
 <!-- Simulation panel -->
 <section id="settings-panel" class="panel">
-    <h1>Simulation Settings</h1>
+    <h1>Define SPOM</h1>
     <hr>
+
+    <form action="">
+
+        <div class="button_submit-settings">
+            <button type="submit">Save Changes</button>
+        </div>
+    
+        <div class="box_row">
+            <div class="function_box" id="box_dispersal-kernel-function">
+                <h2 class="parameter_heading">Dispersal Kernel</h2>
+                <div class="equation">$$K_{ij} = \text{exp}(-\colorbox{#F5A9AD}{a} \times d_{ij})$$</div>
+                <p><a class="parameter_label" style="background-color: #F5A9AD;">a</a> = <input type="number" id="" name="" placeholder="Enter value..."></p>
+            </div>
+            <div class="visualise_box" id="box_dispersal-kernel-graph">
+                <p>Graph or something</p>
+            </div>
+        </div>
+    
+        <div class="box_row">
+            <div class="function_box" id="box_colonization-probability-function">
+                <h2 class="parameter_heading">Colonization Probability</h2>
+                <div class="equation">$$C_{i}(t) = 1 - \text{exp}(-\colorbox{#90F5AA}{y} \times S_{i}(t))$$</div>
+                <p><a class="parameter_label" style="background-color: #90F5AA;">y</a> = <input type="number" id="" name="" placeholder="Enter value..."></p>
+            </div>
+            <div class="visualise_box" id="box_colonization-probability-graph">
+                <p>Graph or something</p>
+            </div>
+        </div>
+        
+        <div class="box_row">
+            <div class="function_box" id="box_patch-extinction-probability-function">
+                <h2 class="parameter_heading">Patch Extinction Probability</h2>
+                <div class="equation">$$E_{i} = \text{min}(1, {\colorbox{#9DD1F5}{u} \over A_{i}^{\colorbox{#F5E0C1}{x}}})$$</div>
+                <p>
+                    <a class="parameter_label" style="background-color: #9DD1F5;">u</a> = <input type="number" id="" name="" placeholder="Enter value...">, 
+                    <a class="parameter_label" style="background-color: #F5E0C1;">x</a> = <input type="number" id="" name="" placeholder="Enter value...">
+                </p>
+            </div>
+            <div class="visualise_box" id="box_patch-extinction-probability-graph">
+                <p>Graph or something</p>
+            </div>
+        </div>
+    
+        <div class="box_row">
+            <div class="function_box" id="box_connectivity-function">
+                <h2 class="parameter_heading">Connectivity Function</h2>
+                <div class="equation">$$S_{i}(t) = \sum_{j=1,j \neq i}^{n}(p_{j}(t) \times k_{j}(d_{ij}) \times A_{j}^{\colorbox{#CBA9F5}{b}})$$</div>
+                <p><a class="parameter_label" style="background-color: #CBA9F5;">b</a> = <input type="number" id="" name="" placeholder="Enter value..."></p>
+            </div>
+            <div class="function_box" id="box_rescue-effect-function">
+                <h2 class="parameter_heading">Extinction Probability with Rescue Effect</h2>
+                <div class="equation">$$E_{i}(t) = E_{i}(1-C_{i}(t))^{\colorbox{#DEF5A4}{r}}$$</div>
+                <p><a class="parameter_label" style="background-color: #DEF5A4;">r</a> = <input type="number" id="" name="" placeholder="Enter value..."></p>
+            </div>
+        </div>
+    
+        <div class="box_row">
+            <div class="function_box" id="box_stochasticity-function">
+                <h2 class="parameter_heading">Stochasticity</h2>
+                <p><a class="parameter_label" style="background-color: #F5A69E;">ss</a> = <input type="number" id="" name="" placeholder="Enter value..."></p>
+            </div>
+        </div>
+    
+        <div class="button_submit-settings">
+            <button type="submit">Save Changes</button>
+        </div>
+
+    </form>
+
 </section>
 
 
