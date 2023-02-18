@@ -15,8 +15,7 @@ body, html {
 }
 
 
-/* Header, navigation buttons */
-
+/* Header, navigation */
 header {
     display: none;
     background-color: #1C2A3A;
@@ -80,7 +79,7 @@ header:hover button#button-graphs span.navigation-button-text:before {
     content: "Graphs"
 }
 header:hover button#button-settings span.navigation-button-text:before {
-    content: "Settings"
+    content: "Parameters"
 }
 header button span.navigation-button-icon {
     background-position: center;
