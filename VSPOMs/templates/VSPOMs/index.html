@@ -12,7 +12,10 @@
 
     <link rel="stylesheet" href="{% static 'assets/styles.css' %}">
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/icon.ico' %}">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{% static 'assets/scripts.js' %}"></script>
@@ -37,10 +40,22 @@
 
 <header>
     <div class="button-container">
-        <button id="button-create" class="active-page">Create</button>
-        <button id="button-simulate">Simulate</button>
-        <button id="button-graphs">Graphs</button>
-        <button id="button-settings">Settings</button>
+        <button id="button-create" class="active-page">
+            <span id="create-icon" class="navigation-button-icon"></span>
+            <span class="navigation-button-text"></span>
+        </button>
+        <button id="button-simulate">
+            <span id="simulate-icon" class="navigation-button-icon"></span>
+            <span class="navigation-button-text"></span>
+        </button>
+        <button id="button-graphs">
+            <span id="graphs-icon" class="navigation-button-icon"></span>
+            <span class="navigation-button-text"></span>
+        </button>
+        <button id="button-settings">
+            <span id="settings-icon" class="navigation-button-icon"></span>
+            <span class="navigation-button-text"></span>
+        </button>
     </div>
 </header>
 
