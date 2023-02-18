@@ -9,6 +9,7 @@ from bokeh.models.widgets import RadioButtonGroup
 from bokeh.plotting import figure
 from bokeh.sampledata.stocks import MSFT
 from django.shortcuts import render
+from django.http import JsonResponse
 
 from simulator.patch import Patch
 from simulator.simulator import Simulator
@@ -99,8 +100,10 @@ def index(request):
         'x': patches["x_coords"],
         'y': patches["y_coords"],
         'color': status_to_colour(patches["statuses"]),
-        'size': patches["x_coords"]
-    })
+        ## this needs to be changed into actual size rather than using the x right now!
+        'size': patches["x_coords"]},
+        name='patch_data_source'
+    )
 
     size_source = ColumnDataSource(data={'size': []})
 
@@ -200,7 +203,6 @@ def index(request):
     patch_map['display'] = table
     patch_map['button'] = radio_button_group
 
-    retract_source = source.data
 
     script, div = components(patch_map)
 
@@ -209,8 +211,39 @@ def index(request):
         'bokeh_div': div,
         'table': table,
         'graphs': graphs,
-        'retract_source':retract_source,
     }
 
 
     return render(request, 'VSPOMs/index.html', context=context_dict)
+
+def colourToStatus(colours):
+    return [True if "green" else False for colour in colours]
+
+def postPatches(request):
+    if (request.is_ajax and request.method == "POST"):
+        source = request.POST
+        data = source.data
+        patch_data = dict(
+            x=data["x"],
+            y=data["y"],
+            size=data["size"],
+            status=colourToStatus(data["color"])
+        )
+        patch_list = []
+        for patch in patch_data:
+            patch_list.add( Patch(
+                patch_data["x"],
+                patch_data["y"],
+                patch_data['color'],
+                patch_data["size"]
+            ))
+        
+        simulation = Simulator(patch_list,60,5)
+        simulation.simulate()
+        
+        return JsonResponse({"message": "ALL GOOD"}, status=200)
+    else:
+        return JsonResponse({"error": "error"}, status=400)
+    
+    return JsonResponse({"error": "error"}, status=400)
+
