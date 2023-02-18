@@ -230,12 +230,12 @@ def postPatches(request):
             status=colourToStatus(data["color"])
         )
         patch_list = []
-        for patch in patch_data:
+        for item in patch_data:
             patch_list.add( Patch(
-                patch_data["x"],
-                patch_data["y"],
-                patch_data['color'],
-                patch_data["size"]
+                item["x"],
+                item["y"],
+                item["status"],
+                item["size"]
             ))
         
         simulation = Simulator(patch_list,60,5)
