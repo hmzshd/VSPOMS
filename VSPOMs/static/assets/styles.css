@@ -1,5 +1,16 @@
-/* Global Styles */
+/* VSPOMs Stylesheet, JH04 2023 */
 
+/*
+Colours:
+    Primary - #1C2A3A
+    Primary (hover) - #26394F
+    Highlighted - #1DB099
+    Background - #E4E7EB
+    Panel - DFE2E6
+*/
+
+
+/* Global Styles */
 body, html {
     height: calc(100% - 50px);
 	width: 100%;
@@ -150,6 +161,11 @@ section.panel#loading-panel img {
     margin: 0 auto;
     width: 30px;
 }
+section.panel#loading-panel p {
+    text-align: center;
+    margin-top: 40px;
+    color: gray;
+}
 
 /* Graph panel styles */
 section.panel#graphs-panel {
@@ -200,7 +216,7 @@ section.panel .box_row::after {
     clear: both;
 }
 section.panel .function_box, section.panel .visualise_box {
-    border: 1px solid black;
+    border: 1px solid #1C2A3A;
     margin: 20px auto;
     padding: 6px 12px;
     width: 49%;

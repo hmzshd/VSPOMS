@@ -1,3 +1,5 @@
+// VSPOMs Frontend Scripts, JH04 2023
+
 $(document).ready(function(){
 
     // Initial page load
