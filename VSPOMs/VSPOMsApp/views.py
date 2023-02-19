@@ -1,3 +1,4 @@
+import json
 import random
 
 import pandas as pd
@@ -220,8 +221,10 @@ def colourToStatus(colours):
     return [True if "green" else False for colour in colours]
 
 def postPatches(request):
-    if (request.is_ajax and request.method == "POST"):
+    print("kill")
+    if (request.headers.get('x-requested-with') == 'XMLHttpRequest'):
         source = request.POST
+        print(type(source))
         data = source.data
         patch_data = dict(
             x=data["x"],
