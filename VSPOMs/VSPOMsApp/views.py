@@ -217,29 +217,22 @@ def index(request):
 
     return render(request, 'VSPOMs/index.html', context=context_dict)
 
-def colourToStatus(colours):
-    return [True if "green" else False for colour in colours]
+def colourToStatus(colour):
+    return True if colour == "green" else False 
 
 def postPatches(request):
-    print("kill")
+    
     if (request.headers.get('x-requested-with') == 'XMLHttpRequest'):
-        source = request.POST
-        print(type(source))
-        data = source.data
-        patch_data = dict(
-            x=data["x"],
-            y=data["y"],
-            size=data["size"],
-            status=colourToStatus(data["color"])
-        )
+        patch_data = json.loads(request.body)
         patch_list = []
-        for item in patch_data:
-            patch_list.add( Patch(
-                item["x"],
-                item["y"],
-                item["status"],
-                item["size"]
-            ))
+        for i in patch_data["x"].keys():
+            if (i.isnumeric()):
+                patch_list.append( Patch(
+                    patch_data["x"][i],
+                    patch_data["y"][i],
+                    colourToStatus(patch_data["color"][int(i)]),
+                    patch_data["size"][i]
+                ))
         
         simulation = Simulator(patch_list,60,5)
         simulation.simulate()

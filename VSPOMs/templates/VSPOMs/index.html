@@ -74,7 +74,7 @@
         {{bokeh_div.button | safe}}
     </div>
     <div class="patch-container">
-        <button id="button-run">Run Simulation</button>
+        <button id="button-run">{% csrf_token %}Run Simulation</button>
     </div>
 
 </section>
