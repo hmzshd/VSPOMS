@@ -18,6 +18,8 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{% static 'assets/scripts.js' %}"></script>
+    <script src="{% static 'javascripts/data_retraction.js' %}"></script>
+
 
      <!-- MathJax -->
      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
@@ -89,6 +91,9 @@
     </div>
     <div class="patch-container">
         {{bokeh_div.button | safe}}
+    </div>
+    <div class="patch-container">
+        <button id="button-run">{% csrf_token %}Run Simulation</button>
     </div>
 
 </section>
