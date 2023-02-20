@@ -83,17 +83,33 @@
 <!-- Simulate panel -->
 <section id="simulate-panel" class="panel">
 
+    <!-- Patch graph -->
     <div class="patch-container">
         {{bokeh_div.map | safe}}
     </div>
-    <div class="patch-container">
-        {{bokeh_div.display | safe}}
+    
+    <!-- Patch settings -->
+    <div class="patch-settings-container">
+        <h2>Selected Patch</h2>
+        <div id="patch-size-input">{{bokeh_div.display | safe}}</div> <!-- Size input -->
+        <div id="patch-state-input">{{bokeh_div.button | safe}}</div> <!-- Colonised/extinct buttons -->
     </div>
-    <div class="patch-container">
-        {{bokeh_div.button | safe}}
+
+    <!-- Patch settings help -->
+    <div class="patch-help-container">
+        <h2>How to Use</h2>
+        <p>Drag patches to change their position.</p>
+        <p>Click on a patch to change its size and state.</p>
+        <p>Use ESCAPE to deselect a patch.</p>
+        <p>Use BACKSPACE to delete the selected patch.</p>
     </div>
-    <div class="patch-container">
-        <button id="button-run">{% csrf_token %}Run Simulation</button>
+
+    <!-- Run button -->
+    <div class="run-sim-button">
+        <button id="button-run" class="panel-button">
+            {% csrf_token %}
+            Run Simulation
+        </button>
     </div>
 
 </section>
@@ -138,14 +154,10 @@
 
 <!-- Simulation panel -->
 <section id="settings-panel" class="panel">
-    <h1>Define SPOM</h1>
+    <h1>Define SPOM Parameters</h1>
     <hr>
 
     <form action="">
-
-        <div class="button_submit-settings">
-            <button type="submit">Save Changes</button>
-        </div>
     
         <div class="box_row">
             <div class="function_box" id="box_dispersal-kernel-function">
@@ -154,7 +166,7 @@
                 <p><a class="parameter_label" style="background-color: #F5A9AD;">a</a> = <input type="number" id="dispersal-kernel-input" name="dispersal-kernel" placeholder="Enter value..." value="1"></p>
             </div>
             <div class="visualise_box" id="box_dispersal-kernel-graph">
-                <p>Graph or something</p>
+                <p>Graph will go here</p>
             </div>
         </div>
     
@@ -165,7 +177,7 @@
                 <p><a class="parameter_label" style="background-color: #90F5AA;">y</a> = <input type="number" id="colonization-probability-input" name="colonization-probability" placeholder="Enter value..." value="2"></p>
             </div>
             <div class="visualise_box" id="box_colonization-probability-graph">
-                <p>Graph or something</p>
+                <p>Graph will go here</p>
             </div>
         </div>
         
@@ -179,7 +191,7 @@
                 </p>
             </div>
             <div class="visualise_box" id="box_patch-extinction-probability-graph">
-                <p>Graph or something</p>
+                <p>Graph will go here</p>
             </div>
         </div>
     
@@ -200,11 +212,13 @@
             <div class="function_box" id="box_stochasticity-function">
                 <h2 class="parameter_heading">Stochasticity</h2>
                 <p><a class="parameter_label" style="background-color: #F5A69E;">ss</a> = <input type="number" id="stochasticity-input" name="stochasticity" placeholder="Enter value..." value="7"></p>
+
+                <p><a class="parameter_label" style="background-color: #F5A69E;">ss</a> = <input type="number" id="" name="" placeholder="Enter value..." disabled></p>
             </div>
-        </div>
-    
-        <div class="button_submit-settings">
-            <button type="submit">Save Changes</button>
+            <div class="function_box" id="box_other">
+                <h2 class="parameter_heading">Other Parameters</h2>
+                <p><a class="parameter_label">No. of Steps</a> = <input type="number" id="" name="" placeholder="Enter value...">, <a class="parameter_label">No. of Replicates</a> = <input type="number" id="" name="" placeholder="Enter value..."></p>
+            </div>
         </div>
 
     </form>

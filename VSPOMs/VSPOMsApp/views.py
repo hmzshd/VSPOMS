@@ -128,9 +128,10 @@ def index(request):
     plot = figure(
         x_range=(-map_size // 10, map_size * 1.1),
         y_range=(0, map_size * 1.1),
-        tools=[],
-        title='Point Draw Tool'
+        tools=[]
     )
+    plot.height = 750
+    plot.width = 850
 
     source = ColumnDataSource({
         'x': patches["x_coords"],
