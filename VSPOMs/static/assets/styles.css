@@ -209,7 +209,7 @@ section.panel .patch-settings-container, section.panel .patch-help-container {
     padding: 10px 30px;
 }
 section.panel .patch-settings-container {
-    height: 40vh;
+    height: 38vh;
 }
 section.panel .patch-help-container {
     height: 32vh;
@@ -238,7 +238,11 @@ section.panel .function_box, section.panel .visualise_box {
     padding: 6px 12px;
     width: 49%;
     margin-left: 0;
-    float: left
+    float: left;
+    transition: all 0.1s ease-in-out;
+}
+section.panel .function_box:hover, section.panel .visualise_box:hover {
+    box-shadow: 0 0 6px gray;
 }
 section.panel .visualise_box {
     height: 100%;
