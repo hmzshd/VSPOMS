@@ -1,8 +1,9 @@
+
 # pylint: disable=no-member, too-many-locals
 """
 Disables no-member and too-many-locals warnings.
 """
-
+import json
 import random
 import pandas as pd
 import plotly.express as px
@@ -14,9 +15,11 @@ from bokeh.models.widgets import RadioButtonGroup
 from bokeh.plotting import figure
 from bokeh.sampledata.stocks import MSFT
 from django.shortcuts import render
+from django.http import JsonResponse
 
 from simulator.patch import Patch
 from simulator.simulator import Simulator
+from simulator.parser import parse_csv
 
 
 def generate_patch_list_random(num):
@@ -128,8 +131,10 @@ def index(request):
         'x': patches["x_coords"],
         'y': patches["y_coords"],
         'color': status_to_colour(patches["statuses"]),
-        'size': patches["x_coords"]
-    })
+        ## this needs to be changed into actual size rather than using the x right now!
+        'size': patches["x_coords"]},
+        name='patch_data_source'
+    )
 
     size_source = ColumnDataSource(data={'size': []})
 
@@ -248,13 +253,42 @@ def index(request):
     patch_map['display'] = table
     patch_map['button'] = radio_button_group
 
+
     script, div = components(patch_map)
 
     context_dict = {
         'script': script,
         'bokeh_div': div,
         'table': table,
-        'graphs': graphs
+        'graphs': graphs,
     }
 
+
     return render(request, 'VSPOMs/index.html', context=context_dict)
+
+def colourToStatus(colour):
+    return True if colour == "green" else False 
+
+def postPatches(request):
+    
+    if (request.headers.get('x-requested-with') == 'XMLHttpRequest'):
+        patch_data = json.loads(request.body)
+        patch_list = []
+        for i in patch_data["x"].keys():
+            if (i.isnumeric()):
+                patch_list.append( Patch(
+                    patch_data["x"][i],
+                    patch_data["y"][i],
+                    colourToStatus(patch_data["color"][int(i)]),
+                    patch_data["size"][i]
+                ))
+        
+        simulation = Simulator(patch_list,60,5)
+        simulation.simulate()
+        
+        return JsonResponse({"message": "ALL GOOD"}, status=200)
+    else:
+        return JsonResponse({"error": "error"}, status=400)
+    
+    return JsonResponse({"error": "error"}, status=400)
+

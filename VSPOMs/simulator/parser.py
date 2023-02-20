@@ -7,7 +7,7 @@ And returns the setting for the simulation, and the patch objects
 
 from math import sqrt, pi
 import csv
-from patch import Patch
+from simulator.patch import Patch
 
 
 def parse_csv(filename):

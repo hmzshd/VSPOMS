@@ -6,16 +6,20 @@
 
 <head>
 
-    <title>Amazing VSPOMs</title>
+    <title>SPOM Simulator</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="{% static 'assets/styles.css' %}">
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/icon.ico' %}">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{% static 'assets/scripts.js' %}"></script>
+    <script src="{% static 'javascripts/data_retraction.js' %}"></script>
+
 
      <!-- MathJax -->
      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
@@ -28,27 +32,44 @@
     <script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-3.0.0.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-3.0.0.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.bokeh.org/bokeh/release/bokeh-gl-3.0.0.min.js" crossorigin="anonymous"></script>
+
     <script src="https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-3.0.0.min.js" crossorigin="anonymous"></script>
-    {{script| safe}}
+
+    {{script | safe}}
 
 </head>
 
 <body>
 
-<header>
+
+<!-- Navigation -->
+<div id="header-wrapper"><header>
     <div class="button-container">
-        <button id="button-create" class="active-page">Create</button>
-        <button id="button-simulate">Simulate</button>
-        <button id="button-graphs">Graphs</button>
-        <button id="button-settings">Settings</button>
+        <button id="button-create" class="active-page">
+            <span id="create-icon" class="navigation-button-icon"></span>
+            <span class="navigation-button-text"></span>
+        </button>
+        <button id="button-settings">
+            <span id="settings-icon" class="navigation-button-icon"></span>
+            <span class="navigation-button-text"></span>
+        </button>
+        <button id="button-simulate">
+            <span id="simulate-icon" class="navigation-button-icon"></span>
+            <span class="navigation-button-text"></span>
+        </button>
+        <button id="button-graphs">
+            <span id="graphs-icon" class="navigation-button-icon"></span>
+            <span class="navigation-button-text"></span>
+        </button>
     </div>
-</header>
+</header></div>
 
 
 <!-- Loading screen -->
 <section id="loading-panel" class="panel">
     <h1>Loading...</h1>
     <img src="{% static 'assets/loading.gif' %}" alt="">
+    <p>Use the arrow keys to navigate between pages</p>
 </section>
 
 
@@ -70,6 +91,9 @@
     </div>
     <div class="patch-container">
         {{bokeh_div.button | safe}}
+    </div>
+    <div class="patch-container">
+        <button id="button-run">{% csrf_token %}Run Simulation</button>
     </div>
 
 </section>
