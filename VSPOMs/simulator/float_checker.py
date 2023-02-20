@@ -1,8 +1,8 @@
 """
     Float checker
     Very simple module to check if a number passed is a float or not.
-    Needed as the built in isdigit will return false for floats - e.g.
-    "0.011".isdigit() would retrun false - as would isnumeric()
+    Needed as the built-in isdigit will return false for floats - e.g.
+    "0.011".isdigit() would return false - as would isnumeric()
     seems dumb to me but that's python for you!
 
 """
