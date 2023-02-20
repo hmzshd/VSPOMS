@@ -7,6 +7,7 @@ And returns the setting for the simulation, and a dictionary corresponding to th
 
 from math import sqrt, pi
 import csv
+from float_checker import is_float
 
 
 def parse_csv(filename):
@@ -22,49 +23,54 @@ def parse_csv(filename):
                 filename of csv file to parse_csv
     """
     with open(filename, encoding="utf-8") as csvfile:
+
         reader = csv.reader(csvfile, delimiter=',')
-        line_count = 0
         x_coords = list()
         y_coords = list()
         statuses = list()
         radiuses = list()
         settings = dict()
-        heading_line_indexes_set = set((0,4))
+        settings_read = False
+
         for row in reader:
+            # skipping 'empty' rows if there are any
+            if len(row) == 0:
+                # change this!!!
+                # print("passing on ", row)
+                continue
 
-            # 0th and 4th row just contain headings
-            if line_count in heading_line_indexes_set:
-                pass
+            # checking if the first item is a number
+            # if it's not it's simply the headings of the rows
+            # which can be safely ignored.
 
-            elif line_count == 2:
-                settings["dispersal_alpha"] = float(row[0])
-                settings["area_exponent_b"] = float(row[1])
-                settings["species_specific_constant_y"] = float(row[2])
-                settings["species_specific_constant_u"] = float(row[3])
-                settings["patch_area_effect_x"] = float(row[4])
+            # make elif!
+            print(row[0])
+            if is_float(row[0]):
+                print("A DIGIT!")
+                # checking if settings read - once again done first for efficiency
+                if settings_read:
+                    # print("settings read, values are", row)
+                    x_coord = float(row[0])
+                    y_coord = float(row[1])
+                    radius = sqrt(float(row[2]) / pi)
+                    if int(row[3]) == 0:
+                        status = False
+                    else:
+                        status = True
+                    x_coords.append(x_coord)
+                    y_coords.append(y_coord)
+                    statuses.append(status)
+                    radiuses.append(radius)
 
-            # using bitwise operator to check if even
-            # as this is faster than modulo!
-            # the way this works is we take the 'bitwise &'
-            # of the line counter with 1
-            # as any ODD digit in binary will always end in 1
-            # this will only return 1 when a number is odd
-            # as such we need to invent this
-            # basically we're doing something like
-            # NOT (binary representation of line count) & 0001
-            elif ~line_count & 1:
-                x_coord = float(row[0])
-                y_coord = float(row[1])
-                radius = sqrt(float(row[2]) / pi)
-                if int(row[3]) == 0:
-                    status = False
+                # path to take if settings unread
                 else:
-                    status = True
-                x_coords.append(x_coord)
-                y_coords.append(y_coord)
-                statuses.append(status)
-                radiuses.append(radius)
-            line_count = line_count + 1
+                    # print("settings unread, values are", row)
+                    settings["dispersal_alpha"] = float(row[0])
+                    settings["area_exponent_b"] = float(row[1])
+                    settings["species_specific_constant_y"] = float(row[2])
+                    settings["species_specific_constant_u"] = float(row[3])
+                    settings["patch_area_effect_x"] = float(row[4])
+                    settings_read = True
 
     patch_dict = {"x_coords": x_coords, "y_coords": y_coords,
                   "radiuses": radiuses, "statuses": statuses}
