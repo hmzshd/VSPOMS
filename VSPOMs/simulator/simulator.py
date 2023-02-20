@@ -24,7 +24,6 @@ from itertools import accumulate
 from bisect import bisect
 import pandas
 from numpy.random import exponential
-from simulator.events import ColonisationEvent, ExtinctionEvent
 
 
 class Simulator:
@@ -34,29 +33,49 @@ class Simulator:
 
     Attributes
     ---
+        patches: list
+            list of patches contained within the simulation.
+        events: list
+            list of possible events contained within the simulation.
+        patches_backup: list
+            maintains initial list of patches for the purpose of resetting the simulation for multiple replicates.
 
-    patches: list
-        list of patches contained within the simulation.
-    events: list
-        list of possible events contained within the simulation.
-    patches_backup: list
-        maintains initial list of patches for the purpose of resetting the simulation for multiple replicates.
+        steps: int
+            number of steps to perform in each simulation.
+        replicates: int
+            number of replicates to perform of the simulation.
+        completed_steps: int
+            number of steps completed in the current replicate.
+        completed_replicates: int
+            number of full replicates completed.
 
-    steps (int): number of steps to perform in each simulation.
-    replicates (int): number of replicates to perform of the simulation.
+        done: boolean
+            true if the full simulation has been completed.
 
-    dispersal_alpha: float
-    area_exponent_b: float
-    species_specific_constant_y: float
-    species_specific_constant_u: float
-    patch_area_effect_x: float
-        Above are simulation constants.
+        dispersal_alpha: float
+        area_exponent_b: float
+        species_specific_constant_y: float
+        species_specific_constant_u: float
+        patch_area_effect_x: float
+            Above are simulation constants.
 
-    total_colonisation_rate: float
-    total_extinction_rate: float
-    proportion_occupied_patches: float
-    time: float
-        Above are simulation variables.
+        total_colonisation_rate: float
+        total_extinction_rate: float
+        proportion_occupied_patches: float
+        proportion_occupied_area: float
+        time: float
+            Above are simulation variables. Exported to front-end for graphs.
+
+        data: pandas Dataframe
+            Holds data for graphs to be returned to front-end.
+
+        x_coords: list
+        y_coords: list
+        statuses: list
+            Above store data to create a CDS for front-end display of the patch map.
+
+        patch_dict: dict
+            Stores data for displaying patch map.
     """
 
     # pylint: disable=too-many-instance-attributes,too-many-public-methods
@@ -68,8 +87,14 @@ class Simulator:
 
         For now, uses default SPOM definition from diamina.par.
 
-        Parameters:
-            patches (list): a list of patch.py Patch objects.
+        Parameters
+        ---
+            patches: list
+                a list of patch.py Patch objects to be simulated over.
+            steps: int
+                number of steps to be completed in each replicate.
+            replicates: int
+                number of replicate simulations to complete.
         """
 
         # list of patches, list of events.
@@ -132,7 +157,11 @@ class Simulator:
     def simulate(self, debug=False):
         """
         Performs self.replicates full simulations with self.steps steps.
-        When done returns the dict generated
+
+        Parameters
+        ---
+            debug: boolean
+                true if debug console logs should be displayed.
         """
 
         while not self.done:
@@ -144,19 +173,23 @@ class Simulator:
     def step(self, debug):
         """
         Performs Gillespie process once.
-
         Increments self.step, or self.replicate if the current replicate ends.
-
         Calls self.end() if the simulation is done.
+
+        Parameters
+        ---
+            debug: boolean
+                true if debug console logs should be displayed.
         """
 
         self.update_frame()
 
-        if self.completed_steps == 0:
-            print(f'Replicate {self.completed_replicates + 1}:')
-        elif self.completed_steps % 20 == 0:
-            print(f'    Completed {self.completed_steps} steps.')
-            # self.print_status()
+        if debug:
+            if self.completed_steps == 0:
+                print(f'Replicate {self.completed_replicates + 1}:')
+            elif self.completed_steps % 20 == 0:
+                print(f'    Completed {self.completed_steps} steps.')
+                # self.print_status()
 
         if self.completed_steps < self.steps:  # sim does not need to start new replicate. does one step.
             selected_patch = self.gillespie_process(debug)
@@ -180,6 +213,11 @@ class Simulator:
             3) we use the sum of all the rates to calculate the time increment;
             4) we update time and the state of the system given the event that occurred;
             returns the patch that has been selected on completion
+
+        Parameters
+        ---
+            debug: boolean
+                true if debug console logs should be displayed.
         """
 
         self.update_rates()  # step 1
@@ -210,23 +248,18 @@ class Simulator:
         successive events.
 
         Parameters:
-            selected_event (Event): event selected to happen by select_event().
+            selected_event: Event
+                event selected to happen by select_event().
         """
 
-        # if total rates are 0, skips time increment.
-        # not ideal, must find out what should happen in this case.
-        if isinstance(selected_event, ColonisationEvent):
-            if self.total_colonisation_rate > 0:
-                self.time += exponential(1 / self.total_colonisation_rate)
-        elif isinstance(selected_event, ExtinctionEvent):
-            if self.total_extinction_rate > 0:
-                self.time += exponential(1 / self.total_extinction_rate)
+        self.time += exponential(1/(self.total_extinction_rate + self.total_colonisation_rate))
+
 
     def update_rates(self):
         """
-        Updates colonisation and extinction rates for each patch.
         Updates possible event for each patch.
-        Updates proportion of total occupied area.
+        Updates colonisation and extinction rates for each patch.
+        Updates proportion of occupied patches and total occupied area.
         """
 
         for patch_i in self.patches:
@@ -244,12 +277,12 @@ class Simulator:
         sets up initial correct conditions for a replicate.
 
         Steps:
-            Resets self.patches to self.patches_backup.
+            Resets self.patches to self.patches_backup, to restore original input patch list.
             Sets each patch's colonisation value.
             Sets each patch's extinction value.
             Creates events for each patch.
             Updates total colonisation and extinction rates.
-            Updates proportion occupied.
+            Updates proportion occupied patches and area.
         """
 
         self.patches = list(self.patches_backup)
@@ -468,3 +501,7 @@ class Simulator:
     def generate_dict(self):
         """Generates patch coord, status dict."""
         self.patch_dict = {"x_coords": self.x_coords, "y_coords": self.y_coords, "statuses": self.statuses}
+
+    def return_patch_list(self):
+        """returns patch list"""
+        return self.patches
