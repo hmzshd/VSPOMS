@@ -81,7 +81,7 @@ class Simulator:
     # pylint: disable=too-many-instance-attributes,too-many-public-methods
 
     # Initialises Simulator.
-    def __init__(self, patches, steps, replicates):
+    def __init__(self, patches, steps, replicates, dispersal_alpha, area_exponent_b, species_specific_constant_y, species_specific_constant_u, patch_area_effect_x):
         """
         Initialises Simulator object.
 
@@ -114,11 +114,11 @@ class Simulator:
         self.done = False
 
         # simulation constants
-        self.dispersal_alpha = 0.71  # Species specific dispersal constant, for dispersal kernel.
-        self.area_exponent_b = 0.5  # for connectivity.
-        self.species_specific_constant_y = 5.22  # for colonisation.
-        self.species_specific_constant_u = 0.0593  # for extinction.
-        self.patch_area_effect_x = 1.08  # for extinction.
+        self.dispersal_alpha = dispersal_alpha  # Species specific dispersal constant, for dispersal kernel.
+        self.area_exponent_b = area_exponent_b  # for connectivity.
+        self.species_specific_constant_y = species_specific_constant_y  # for colonisation.
+        self.species_specific_constant_u = species_specific_constant_u  # for extinction.
+        self.patch_area_effect_x = patch_area_effect_x  # for extinction.
 
         # simulation variables
         self.total_colonisation_rate = 0
