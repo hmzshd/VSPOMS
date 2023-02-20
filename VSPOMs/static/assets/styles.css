@@ -14,6 +14,7 @@ Colours:
 body, html {
     height: calc(100% - 50px);
 	width: 100%;
+    min-width: 1400px;
 	margin: 0;
     padding: 0;
 	font-size: 18px;
@@ -194,12 +195,39 @@ section.panel .graph-container {
 section.panel .patch-container {
     background-color: white;
     height: 82vh;
-    width: 82vh;
-    margin: 0 auto;
+    width: 60%;
+    margin: 0;
     border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    float: left;
+}
+section.panel .patch-settings-container, section.panel .patch-help-container {
+    float: right;
+    width: 38%;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    background-color: white;
+    padding: 10px 30px;
+}
+section.panel .patch-settings-container {
+    height: 38vh;
+}
+section.panel .patch-help-container {
+    height: 32vh;
+}
+section.panel .run-sim-button {
+    float: right;
+    width: 38%;
+}
+section.panel #patch-size-input {
+    width: 52%;
+    height: 56px;
+    overflow: hidden;
+    transform: scale(1.9) translate(22%, 20%);
+    margin-bottom: 50px;
+}
+section.panel #patch-state-input {
+    transform: scale(1.4) translateX(34%);
+    margin-top: 50px;
 }
 
 /* Settings panel styles */
@@ -221,7 +249,11 @@ section.panel .function_box, section.panel .visualise_box {
     padding: 6px 12px;
     width: 49%;
     margin-left: 0;
-    float: left
+    float: left;
+    transition: all 0.1s ease-in-out;
+}
+section.panel .function_box:hover, section.panel .visualise_box:hover {
+    box-shadow: 0 0 6px gray;
 }
 section.panel .visualise_box {
     height: 100%;
@@ -261,7 +293,7 @@ section.panel .button_submit-settings {
     margin: 20px auto;
     width: 400px;
 }
-section.panel button[type="submit"] {
+section.panel button.panel-button {
     margin: 0;
     width: 100%;
     padding: 20px;
@@ -274,7 +306,7 @@ section.panel button[type="submit"] {
     text-align: center;
     transition: 0.1s ease-in-out;
 }
-section.panel button[type="submit"]:hover {
+section.panel button.panel-button:hover {
     transform: scale(1.02);
     background-color: #26394F;
     cursor: pointer;
