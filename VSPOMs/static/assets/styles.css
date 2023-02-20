@@ -218,6 +218,17 @@ section.panel .run-sim-button {
     float: right;
     width: 38%;
 }
+section.panel #patch-size-input {
+    width: 52%;
+    height: 56px;
+    overflow: hidden;
+    transform: scale(1.9) translate(22%, 20%);
+    margin-bottom: 50px;
+}
+section.panel #patch-state-input {
+    transform: scale(1.4) translateX(34%);
+    margin-top: 50px;
+}
 
 /* Settings panel styles */
 section.panel#settings-panel {

@@ -91,8 +91,8 @@
     <!-- Patch settings -->
     <div class="patch-settings-container">
         <h2>Selected Patch</h2>
-        {{bokeh_div.display | safe}} <!-- Size input -->
-        {{bokeh_div.button | safe}} <!-- Colonised/extinct buttons -->
+        <div id="patch-size-input">{{bokeh_div.display | safe}}</div> <!-- Size input -->
+        <div id="patch-state-input">{{bokeh_div.button | safe}}</div> <!-- Colonised/extinct buttons -->
     </div>
 
     <!-- Patch settings help -->
