@@ -3,7 +3,7 @@ from parser import parse_csv
 # from simulator_testing import generate_patch_list_random
 patch_list, settings = parse_csv("demo.csv")
 
-print(patch_list)
+print(len(patch_list['x_coords']))
 print(settings)
 
 # print(patch_list)

@@ -14,8 +14,9 @@ def parse_csv(filename):
     """
     Function to parse a CSV file.
 
-    Returns two lists, one containing the sim settings.
-    And one containing patch objects, created from the data given in the CSV file.
+    Returns two dicts, one containing the sim settings.
+    And one containing the data for patches, formatted in a slightly odd way
+    as this is how the frontend takes it in.
 
     Parameters
         ---
@@ -35,21 +36,15 @@ def parse_csv(filename):
         for row in reader:
             # skipping 'empty' rows if there are any
             if len(row) == 0:
-                # change this!!!
-                # print("passing on ", row)
-                continue
+                pass
 
             # checking if the first item is a number
             # if it's not it's simply the headings of the rows
             # which can be safely ignored.
-
-            # make elif!
-            print(row[0])
-            if is_float(row[0]):
-                print("A DIGIT!")
-                # checking if settings read - once again done first for efficiency
+            elif is_float(row[0]):
+                # checking if settings read - done first for efficiency,
+                # most of the lines will pass this test, so we want it to be first.
                 if settings_read:
-                    # print("settings read, values are", row)
                     x_coord = float(row[0])
                     y_coord = float(row[1])
                     radius = sqrt(float(row[2]) / pi)
@@ -64,7 +59,6 @@ def parse_csv(filename):
 
                 # path to take if settings unread
                 else:
-                    # print("settings unread, values are", row)
                     settings["dispersal_alpha"] = float(row[0])
                     settings["area_exponent_b"] = float(row[1])
                     settings["species_specific_constant_y"] = float(row[2])
