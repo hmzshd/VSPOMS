@@ -67,7 +67,12 @@ def index(request):
     # Prepare Data
     map_size = 30
     patch_list = generate_patch_list_random(map_size)
-    spom_sim = Simulator(patch_list, 60, 5)
+    spom_sim = Simulator(patch_list, 60, 5,
+                         dispersal_alpha=0.71,
+                         area_exponent_b=0.5,
+                         species_specific_constant_y=5.22,
+                         species_specific_constant_u=0.0593,
+                         patch_area_effect_x=1.08)
     spom_sim.simulate()
     patches = pd.DataFrame.from_dict(spom_sim.get_turnovers())
 
@@ -283,7 +288,12 @@ def postPatches(request):
                     patch_data["size"][i]
                 ))
         
-        simulation = Simulator(patch_list,60,5)
+        simulation = simulation = Simulator(patch_list, 60, 5,
+                         dispersal_alpha=0.71,
+                         area_exponent_b=0.5,
+                         species_specific_constant_y=5.22,
+                         species_specific_constant_u=0.0593,
+                         patch_area_effect_x=1.08)
         simulation.simulate()
         
         return JsonResponse({"message": "ALL GOOD"}, status=200)
