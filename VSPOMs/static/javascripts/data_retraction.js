@@ -29,8 +29,24 @@ $(document).ready(function () {
             body: JSON.stringify(ds.data)
         })
         .then(response => {
+            (response.text().then(text => {
+                const xs = [];
+                const ys = [];
+                const data = [];
+                for(let i=0; i < JSON.parse(text).message.frames.length; i++){
+                    xs.push(JSON.parse(text).message.frames[i].data[0].x[i])
+                    ys.push(JSON.parse(text).message.frames[i].data[0].y[i])
+                    data.push(JSON.parse(text).message.frames[i].data[0])
+                }
+                var frame = [{data: {y: ys}}]
+                const graphLayout = JSON.parse(text).message.layout
+                const graphFrames = JSON.parse(text).message.frames
+                console.log(data)
+                console.log(graphFrames)
+                Plotly.newPlot('graph2', data, graphLayout)
+            }));
             alert("Simulation Complete")
-            return response.json()
+            return null
         })
     });
 })
