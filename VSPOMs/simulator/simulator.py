@@ -81,7 +81,7 @@ class Simulator:
     # pylint: disable=too-many-instance-attributes,too-many-public-methods
 
     # Initialises Simulator.
-    def __init__(self, patches, steps, replicates, dispersal_alpha, area_exponent_b, species_specific_constant_y, species_specific_constant_u, patch_area_effect_x):
+    def __init__(self, patches, dispersal_alpha, area_exponent_b, species_specific_constant_y, species_specific_constant_u, patch_area_effect_x, steps=100, replicates=1):
         """
         Initialises Simulator object.
 
