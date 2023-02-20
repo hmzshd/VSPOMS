@@ -290,15 +290,14 @@ def postPatches(request):
                     patch_data["size"][i]
                 ))
         
-        simulation = simulation = Simulator(patch_list,
+        simulation = Simulator(patch_list,
                          dispersal_alpha=float(data["dispersal_kernel"]),
                          area_exponent_b=float(data["connectivity"]),
                          species_specific_constant_y=float(data["colonization_probability"]),
                          species_specific_constant_u=float(data["patch_extinction_probability_u"]),
-                         patch_area_effect_x=float(data["patch_extinction_probability_x"])
-                                            )
+                         patch_area_effect_x=float(data["patch_extinction_probability_x"]))
         simulation.simulate()
-        
+
         return JsonResponse({"message": "ALL GOOD"}, status=200)
     else:
         return JsonResponse({"error": "error"}, status=400)
