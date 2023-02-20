@@ -2,17 +2,16 @@
 Parser.
 
 Simple module with one function parse_csv, which parses a csv file.
-And returns the setting for the simulation, and the patch objects
+And returns the setting for the simulation, and a dictionary corresponding to the patches
 """
 
 from math import sqrt, pi
 import csv
-from simulator.patch import Patch
 
 
 def parse_csv(filename):
     """
-    Function to parse_csv a CSV file.
+    Function to parse a CSV file.
 
     Returns two lists, one containing the sim settings.
     And one containing patch objects, created from the data given in the CSV file.
@@ -25,7 +24,10 @@ def parse_csv(filename):
     with open(filename, encoding="utf-8") as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
         line_count = 0
-        patch_list = list()
+        x_coords = list()
+        y_coords = list()
+        statuses = list()
+        radiuses = list()
         settings = list()
         heading_line_indexes_set = set((0,4))
         for row in reader:
@@ -54,7 +56,13 @@ def parse_csv(filename):
                     status = False
                 else:
                     status = True
-                patch_list.append(Patch(status, x_coord, y_coord, radius))
+                x_coords.append(x_coord)
+                y_coords.append(y_coord)
+                statuses.append(status)
+                radiuses.append(radius)
             line_count = line_count + 1
 
-    return patch_list, settings
+    patch_dict = {"x_coords": x_coords, "y_coords": y_coords,
+                  "radiuses": radiuses, "statuses": statuses}
+
+    return patch_dict, settings

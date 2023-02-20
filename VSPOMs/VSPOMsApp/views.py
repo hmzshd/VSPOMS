@@ -66,7 +66,7 @@ def index(request):
 
     # Prepare Data
     map_size = 30
-    patch_list = parse_csv(VSPOMs/simulator/demo.csv)[0]
+    patch_list = parse_csv("VSPOMs/simulator/demo.csv")[0]
     spom_sim = Simulator(patch_list, 60, 5)
     spom_sim.simulate()
     patches = pd.DataFrame.from_dict(spom_sim.get_turnovers())
