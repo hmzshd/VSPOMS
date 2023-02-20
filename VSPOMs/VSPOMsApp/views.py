@@ -67,7 +67,7 @@ def index(request):
     # Prepare Data
     map_size = 30
     patch_list = generate_patch_list_random(map_size)
-    spom_sim = Simulator(patch_list, 60, 5,
+    spom_sim = Simulator(patch_list,
                          dispersal_alpha=0.71,
                          area_exponent_b=0.5,
                          species_specific_constant_y=5.22,
@@ -290,7 +290,7 @@ def postPatches(request):
                     patch_data["size"][i]
                 ))
         
-        simulation = simulation = Simulator(patch_list, 50, 5,
+        simulation = simulation = Simulator(patch_list,
                          dispersal_alpha=float(data["dispersal_kernel"]),
                          area_exponent_b=float(data["connectivity"]),
                          species_specific_constant_y=float(data["colonization_probability"]),
