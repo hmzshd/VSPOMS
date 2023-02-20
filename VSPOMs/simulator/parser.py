@@ -7,7 +7,7 @@ And returns the setting for the simulation, and a dictionary corresponding to th
 
 from math import sqrt, pi
 import csv
-from float_checker import is_float
+from simulator.float_checker import is_float
 
 
 def parse_csv(filename):
