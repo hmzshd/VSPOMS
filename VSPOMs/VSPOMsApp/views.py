@@ -19,6 +19,7 @@ from django.http import JsonResponse
 
 from simulator.patch import Patch
 from simulator.simulator import Simulator
+from simulator.parser import parse_csv
 
 
 def generate_patch_list_random(num):
