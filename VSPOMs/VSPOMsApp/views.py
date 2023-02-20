@@ -278,7 +278,8 @@ def colourToStatus(colour):
 def postPatches(request):
     
     if (request.headers.get('x-requested-with') == 'XMLHttpRequest'):
-        patch_data = json.loads(request.body)
+        data = json.loads(request.body)
+        patch_data = data["bokeh"]
         patch_list = []
         for i in patch_data["x"].keys():
             if (i.isnumeric()):
@@ -289,12 +290,13 @@ def postPatches(request):
                     patch_data["size"][i]
                 ))
         
-        simulation = simulation = Simulator(patch_list, 60, 5,
-                         dispersal_alpha=0.71,
-                         area_exponent_b=0.5,
-                         species_specific_constant_y=5.22,
-                         species_specific_constant_u=0.0593,
-                         patch_area_effect_x=1.08)
+        simulation = simulation = Simulator(patch_list, 50, 5,
+                         dispersal_alpha=float(data["dispersal_kernel"]),
+                         area_exponent_b=float(data["connectivity"]),
+                         species_specific_constant_y=float(data["colonization_probability"]),
+                         species_specific_constant_u=float(data["patch_extinction_probability_u"]),
+                         patch_area_effect_x=float(data["patch_extinction_probability_x"])
+                                            )
         simulation.simulate()
         
         return JsonResponse({"message": "ALL GOOD"}, status=200)
