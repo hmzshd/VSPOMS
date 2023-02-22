@@ -132,3 +132,7 @@ dmypy.json
 # Run script (ask tim)
 VSPOMs/VSPOMS.ps1
 VSPOMs/IloveVSPOMS.bat
+
+# Angus testing files 
+/VSPOMs/simulator/parser_test.py
+
