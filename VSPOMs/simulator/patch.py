@@ -9,6 +9,7 @@ Classes:
 
 from math import pi
 import math
+# necessary to wrap this in try except due to the location of manage.py
 try:
     from simulator.events import ColonisationEvent, ExtinctionEvent
 except ModuleNotFoundError:

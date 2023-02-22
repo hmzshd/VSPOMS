@@ -7,6 +7,7 @@ And returns the setting for the simulation, and a dictionary corresponding to th
 
 from math import sqrt, pi
 import csv
+# necessary to wrap this in try except due to the location of manage.py
 try:
     from simulator.float_checker import is_float
 except ModuleNotFoundError:
