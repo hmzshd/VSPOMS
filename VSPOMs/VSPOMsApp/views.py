@@ -64,6 +64,8 @@ def status_to_colour(statuses):
     """
     return ["green" if status else "red" for status in statuses]
 
+
+
 def index(request):
     """
     Returns a request to serve index page.
@@ -121,12 +123,13 @@ def index(request):
         graphs[graph] = fig.to_html(full_html=False)
 
     patch_map = {'map': ''}
+    print([patches["x_coords"]])
 
     source = ColumnDataSource({
-        'x': patches["x_coords"],
-        'y': patches["y_coords"],
+        'x': patches["x_coords"].values.tolist(),
+        'y': patches["y_coords"].values.tolist(),
         'color': status_to_colour(patches["statuses"]),
-        'size': patches["radiuses"]},
+        'size': patches["radiuses"].values.tolist()},
         name='patch_data_source'
     )
     max_radius = max(source.data['size'])
@@ -276,14 +279,13 @@ def post_patches(request):
         data = json.loads(request.body)
         patch_data = data["bokeh"]
         patch_list = []
-        for i in patch_data["x"].keys():
-            if (i.isnumeric()):
-                patch_list.append( Patch(
-                    patch_data["x"][i],
-                    patch_data["y"][i],
-                    colour_to_status(patch_data["color"][int(i)]),
-                    patch_data["size"][i]
-                ))
+        for i in range(len(patch_data["x"])):
+            patch_list.append( Patch(
+                patch_data["x"][i],
+                patch_data["y"][i],
+                colour_to_status(patch_data["color"][i]),
+                patch_data["size"][i]
+            ))
         
         simulation = Simulator(patch_list,
                          dispersal_alpha=float(data["dispersal_kernel"]),
