@@ -1,0 +1,7 @@
+simulation = Simulator(patch_list,
+                       dispersal_alpha=float(settings["dispersal_alpha"]),
+                       area_exponent_b=float(settings["area_exponent_b"]),
+                       species_specific_constant_y=float(settings["species_specific_constant_y"]),
+                       species_specific_constant_u=float(settings["species_specific_constant_u"]),
+                       patch_area_effect_x=float(settings["patch_area_effect_x"]),
+                       steps=100, replicates=1)
