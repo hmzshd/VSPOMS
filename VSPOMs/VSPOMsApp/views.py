@@ -17,9 +17,15 @@ from bokeh.sampledata.stocks import MSFT
 from django.shortcuts import render
 from django.http import JsonResponse
 
-from simulator.patch import Patch
-from simulator.simulator import Simulator
-from simulator.parser import parse_csv
+# necessary to wrap this in try except due to the location of manage.py
+try:
+    from simulator.patch import Patch
+    from simulator.simulator import Simulator
+    from simulator.parser import parse_csv
+except ModuleNotFoundError:
+    from ..simulator.patch import Patch
+    from ..simulator.simulator import Simulator
+    from ..simulator.parser import parse_csv
 
 
 def generate_patch_list_random(num):
@@ -267,7 +273,8 @@ def colour_to_status(colour):
 def post_patches(request):
     
     if (request.headers.get('x-requested-with') == 'XMLHttpRequest'):
-        patch_data = json.loads(request.body)
+        data = json.loads(request.body)
+        patch_data = data["bokeh"]
         patch_list = []
         for i in patch_data["x"].keys():
             if (i.isnumeric()):
@@ -277,8 +284,13 @@ def post_patches(request):
                     colour_to_status(patch_data["color"][int(i)]),
                     patch_data["size"][i]
                 ))
-        print(patch_list)
-        simulation = Simulator(patch_list,60,1)
+        
+        simulation = Simulator(patch_list,
+                         dispersal_alpha=float(data["dispersal_kernel"]),
+                         area_exponent_b=float(data["connectivity"]),
+                         species_specific_constant_y=float(data["colonization_probability"]),
+                         species_specific_constant_u=float(data["patch_extinction_probability_u"]),
+                         patch_area_effect_x=float(data["patch_extinction_probability_x"]))
         simulation.simulate()
 
         graph_data = simulation.get_data().loc[0, :]
@@ -325,7 +337,7 @@ def post_patches(request):
                 height=400,
             )
             graphs[graph] = fig.to_json()
-        
+
         return JsonResponse({"message": json.loads(graphs["graph1"])}, status=200)
     else:
         return JsonResponse({"error": "error"}, status=400)

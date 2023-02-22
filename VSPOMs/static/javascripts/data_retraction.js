@@ -17,7 +17,21 @@ $(document).ready(function () {
     $("#button-run").click(function(){
         const csrftoken = getCookie('csrftoken');
         var ds = Bokeh.documents[0].get_model_by_name('patch_data_source');
-        alert("Simulation Begin");
+        var dispersal_kernel= document.getElementsByName("dispersal-kernel")[0].value;
+        var colonization_probability = document.getElementsByName("colonization-probability")[0].value;
+        var patch_extinction_probability_u = document.getElementsByName("patch-extinction-probability-u")[0].value;
+        var patch_extinction_probability_x = document.getElementsByName("patch-extinction-probability-a")[0].value;
+        var connectivity = document.getElementsByName("connectivity")[0].value;
+        var rescue_effect = document.getElementsByName("rescue-effect")[0].value;
+        var stochasticity = document.getElementsByName("stochasticity")[0].value;
+        alert("Simulation Begins with \n"+
+            "Disposal kernel = " + dispersal_kernel.toString()+"\n"+
+            "Colonization probability = " + colonization_probability.toString()+"\n"+
+            "Patch extinction u = " + patch_extinction_probability_u.toString()+"\n"+
+            "Patch extinction x = " + patch_extinction_probability_x.toString()+"\n"+
+            "Connectivity = " + connectivity.toString()+"\n"+
+            "Rescue Effect = " + rescue_effect.toString()+"\n"+
+            "Stochasticity = " + stochasticity.toString());
         fetch("post_patches",{
             method: 'POST',
             credentials: 'same-origin',
@@ -26,7 +40,14 @@ $(document).ready(function () {
                 'X-Requested-With': 'XMLHttpRequest',
                 'X-CSRFToken': csrftoken,
             },
-            body: JSON.stringify(ds.data)
+            body: JSON.stringify({"bokeh":ds.data,"dispersal_kernel":dispersal_kernel,
+                "colonization_probability":colonization_probability,
+                "patch_extinction_probability_u":patch_extinction_probability_u,
+                "patch_extinction_probability_x":patch_extinction_probability_x,
+                "connectivity":connectivity,
+                "rescue_effect":rescue_effect,
+                "stochasticity":stochasticity
+            })
         })
         .then(response => {
             (response.text().then(text => {
