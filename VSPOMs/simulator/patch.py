@@ -9,7 +9,10 @@ Classes:
 
 from math import pi
 import math
-from simulator.events import ColonisationEvent, ExtinctionEvent
+try:
+    from simulator.events import ColonisationEvent, ExtinctionEvent
+except ModuleNotFoundError:
+    from events import ColonisationEvent, ExtinctionEvent
 
 
 class Patch:
