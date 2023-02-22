@@ -326,7 +326,7 @@ def post_patches(request):
             )
             graphs[graph] = fig.to_json()
         
-        return JsonResponse({"message": json.loads(graphs["graph2"])}, status=200)
+        return JsonResponse({"message": json.loads(graphs["graph1"])}, status=200)
     else:
         return JsonResponse({"error": "error"}, status=400)
     

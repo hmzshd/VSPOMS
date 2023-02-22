@@ -30,20 +30,15 @@ $(document).ready(function () {
         })
         .then(response => {
             (response.text().then(text => {
-                const xs = [];
-                const ys = [];
-                const data = [];
-                for(let i=0; i < JSON.parse(text).message.frames.length; i++){
-                    xs.push(JSON.parse(text).message.frames[i].data[0].x[i])
-                    ys.push(JSON.parse(text).message.frames[i].data[0].y[i])
-                    data.push(JSON.parse(text).message.frames[i].data[0])
-                }
-                var frame = [{data: {y: ys}}]
+                const graphData = JSON.parse(text).message.data
                 const graphLayout = JSON.parse(text).message.layout
                 const graphFrames = JSON.parse(text).message.frames
-                console.log(data)
+                console.log(graphData)
                 console.log(graphFrames)
-                Plotly.newPlot('graph2', data, graphLayout)
+                console.log(graphLayout)
+                Plotly.newPlot('graph1', graphData, graphLayout).then(function () {
+                    Plotly.animate('graph1',graphFrames)
+                })
             }));
             alert("Simulation Complete")
             return null
