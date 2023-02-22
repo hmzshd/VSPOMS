@@ -17,9 +17,15 @@ from bokeh.sampledata.stocks import MSFT
 from django.shortcuts import render
 from django.http import JsonResponse
 
-from simulator.patch import Patch
-from simulator.simulator import Simulator
-from simulator.parser import parse_csv
+# necessary to wrap this in try except due to the location of manage.py
+try:
+    from simulator.patch import Patch
+    from simulator.simulator import Simulator
+    from simulator.parser import parse_csv
+except ModuleNotFoundError:
+    from ..simulator.patch import Patch
+    from ..simulator.simulator import Simulator
+    from ..simulator.parser import parse_csv
 
 
 def generate_patch_list_random(num):
