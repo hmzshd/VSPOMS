@@ -272,8 +272,6 @@ section.panel .function_box .parameter_label {
 }
 section.panel .function_box .equation {
     font-size: 26px;
-    float: left;
-    transform: translateX(-20%);
 }
 section.panel .function_box input {
     width: 8vw;
