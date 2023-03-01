@@ -295,7 +295,13 @@ def colour_to_status(colour):
 
 def post_patches(request):
     """
-    SOMEONE WRITE THIS PLEASE PROBABLY ROGER :)
+    Catches request from ajax and runs the simulation with the data extracted from the client.
+
+    Args:
+        request: JSON request
+    
+    Returns:
+        JsonResponses with either success or error message.
     """
 
     if (request.headers.get('x-requested-with') == 'XMLHttpRequest'):
@@ -319,6 +325,13 @@ def post_patches(request):
                          patch_area_effect_x=float(data["patch_extinction_probability_x"]))
         simulation.simulate()
 
+        return JsonResponse({"message": "ALL GOOD"}, status=200)
+    else:
+        return JsonResponse({"error": "error"}, status=400)
+    
+def post_create(request):
+    if (request.headers.get('x-requested-with') == 'XMLHttpRequest'):
+        
         return JsonResponse({"message": "ALL GOOD"}, status=200)
     else:
         return JsonResponse({"error": "error"}, status=400)

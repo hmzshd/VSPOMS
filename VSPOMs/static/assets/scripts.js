@@ -83,6 +83,23 @@ $(document).ready(function(){
         };
       });
 
-
+    
+    $("#button-random").click(function () {
+        const csrftoken = getCookie('csrftoken');
+        fetch("post_create", {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': csrftoken,
+            },
+            body: JSON.stringify("Nothing")
+        })
+            .then(response => {
+                openSimulate()
+                return response.json()
+            })
+    })
 
 });

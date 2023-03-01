@@ -28,4 +28,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('django_plotly_dash/', include('django_plotly_dash.urls')),
     path('post_patches',views.post_patches, name = 'post_patches'),
+    path('post_create',views.post_create, name = 'post_create')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
