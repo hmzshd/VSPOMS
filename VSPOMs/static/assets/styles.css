@@ -318,14 +318,26 @@ section.panel#create-panel h2 {
 }
 section.panel .choose-scenario-box, section.panel .random-scenario-box {
     border: 1px solid #1C2A3A;
-    width: calc(50% - 10px);
+    width: calc(47% - 10px);
     height: calc(100% - 120px);
     float: left;
     padding: 6px 12px;
     background-color: #DFE2E6;
     margin-top: 20px;
-    filter: brightness(0.9) saturate(0.7);
+    filter: brightness(0.95) saturate(0.7);
     transition: all 0.1s ease-in-out;
+}
+section.panel .or-box {
+    width: 6%;
+    float: left;
+    margin-top: 20px;
+    height: calc(100% - 120px);
+    padding: 0;
+    text-align: center;
+}
+section.panel .or-box h1 {
+    font-size: 40px;
+    margin-top: calc(40vh - 100px);
 }
 section.panel .choose-scenario-box:hover, section.panel .random-scenario-box:hover {
     box-shadow: 0 0 4px gray;
@@ -386,9 +398,9 @@ section.panel .random-scenario-box button {
     border-radius: 4px;
     border: none;
     transition: all 0.1s ease-in-out;
-    width: 40%;
-    height: 12%;
-    margin-top: 30%;
+    width: 300px;
+    height: 70px;
+    margin-top: calc(40vh - 175px);
 }
 section.panel .random-scenario-box button:hover {
     filter: brightness(1.1);

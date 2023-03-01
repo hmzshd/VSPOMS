@@ -3,11 +3,11 @@
 """
 Disables no-member and too-many-locals warnings.
 """
+import os
 import json
 import random
 import pandas as pd
 import plotly.express as px
-import os
 
 from bokeh.embed import components
 from bokeh.models import CustomJS
@@ -293,7 +293,7 @@ def colour_to_status(colour):
     return True if colour == "green" else False
 
 
-def postPatches(request):
+def post_patches(request):
     """
     SOMEONE WRITE THIS PLEASE PROBABLY ROGER :)
     """
