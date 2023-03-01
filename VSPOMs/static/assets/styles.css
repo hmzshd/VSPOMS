@@ -6,7 +6,7 @@ Colours:
     Primary (hover) - #26394F
     Highlighted - #1DB099
     Background - #E4E7EB
-    Panel - DFE2E6
+    Panel - #DFE2E6
 */
 
 
@@ -195,14 +195,14 @@ section.panel .graph-container {
 section.panel .patch-container {
     background-color: white;
     height: 82vh;
-    width: 60%;
+    width: 55%;
     margin: 0;
     border-radius: 5px;
     float: left;
 }
 section.panel .patch-settings-container, section.panel .patch-help-container {
     float: right;
-    width: 38%;
+    width: 43%;
     border-radius: 5px;
     margin-bottom: 20px;
     background-color: white;
@@ -216,7 +216,7 @@ section.panel .patch-help-container {
 }
 section.panel .run-sim-button {
     float: right;
-    width: 38%;
+    width: 43%;
 }
 section.panel #patch-size-input {
     width: 52%;
@@ -253,7 +253,7 @@ section.panel .function_box, section.panel .visualise_box {
     transition: all 0.1s ease-in-out;
 }
 section.panel .function_box:hover, section.panel .visualise_box:hover {
-    box-shadow: 0 0 6px gray;
+    box-shadow: 0 0 4px gray;
 }
 section.panel .visualise_box {
     height: 100%;
@@ -299,7 +299,7 @@ section.panel button.panel-button {
     padding: 20px;
     border: none;
     border-radius: 5px;
-    background-color: #1C2A3A;
+    background-color: #1DB099;
     font-size: 20px;
     font-weight: bold;
     color: white;
@@ -308,6 +308,102 @@ section.panel button.panel-button {
 }
 section.panel button.panel-button:hover {
     transform: scale(1.02);
-    background-color: #26394F;
+    filter: brightness(1.1);
+    cursor: pointer;
+}
+
+/* Create panel styles */
+section.panel#create-panel h2 {
+    font-size: 20px;
+}
+section.panel .choose-scenario-box, section.panel .random-scenario-box {
+    border: 1px solid #1C2A3A;
+    width: calc(47% - 10px);
+    height: calc(100% - 120px);
+    float: left;
+    padding: 6px 12px;
+    background-color: #DFE2E6;
+    margin-top: 20px;
+    filter: brightness(0.95) saturate(0.7);
+    transition: all 0.1s ease-in-out;
+}
+section.panel .or-box {
+    width: 6%;
+    float: left;
+    margin-top: 20px;
+    height: calc(100% - 120px);
+    padding: 0;
+    text-align: center;
+}
+section.panel .or-box h1 {
+    font-size: 40px;
+    margin-top: calc(40vh - 100px);
+}
+section.panel .choose-scenario-box:hover, section.panel .random-scenario-box:hover {
+    box-shadow: 0 0 4px gray;
+    filter: none;
+}
+section.panel .choose-scenario-box {
+    margin-right: 10px;
+}
+section.panel .scenario-list {
+    height: calc(100% - 80px);
+    overflow-y: scroll;
+}
+section.panel .scenario-list li {
+    background-color: white;
+    padding: 18px 10px;
+    border-radius: 2px;
+    margin: 10px 0;
+    width: 98%;
+    list-style-type: none;
+    font-size: 18px;
+    font-family: monospace;
+    word-break: break-all;
+    opacity: 0.7;
+}
+section.panel .scenario-list li:hover {
+    font-weight: bold;
+    opacity: 1;
+}
+section.panel .scenario-list li a {
+    font-weight: bold;
+    color: white;
+    background-color: #1DB099;
+    padding: 10px 40px;
+    border-radius: 4px;
+    float: right;
+    transition: all 0.1s ease-in-out;
+    margin-top: -10px;
+}
+section.panel .scenario-list li a:hover {
+    filter: brightness(1.1);
+    transform: scale(1.03);
+    cursor: pointer;
+}
+section.panel .random-scenario-box {
+    margin-left: 10px;
+}
+section.panel .random-scenario-box .generate-button-container {
+    display: flex;
+    justify-content: center;
+    height: calc(100% - 80px);
+}
+section.panel .random-scenario-box button {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    background-color: #1DB099;
+    border-radius: 4px;
+    border: none;
+    transition: all 0.1s ease-in-out;
+    width: 300px;
+    height: 70px;
+    margin-top: calc(40vh - 175px);
+}
+section.panel .random-scenario-box button:hover {
+    filter: brightness(1.1);
+    transform: scale(1.02);
     cursor: pointer;
 }
