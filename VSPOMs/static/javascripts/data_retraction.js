@@ -54,8 +54,11 @@ $(document).ready(function () {
                 const graphData = JSON.parse(text).message.data
                 const graphLayout = JSON.parse(text).message.layout
                 const graphFrames = JSON.parse(text).message.frames
-                console.log(Bokeh.index)
-                console.log(Bokeh.documents)
+                for (let i = 0; i < Bokeh.documents[0].get_model_by_name("vspoms").data_source.data["color"].length; i++) {
+                    Bokeh.documents[0].get_model_by_name("vspoms").data_source.data["color"][i] = "purple";
+                }
+                 Bokeh.documents[0].get_model_by_name("vspoms").data_source.change.emit()
+                console.log(Bokeh.documents[0].get_model_by_name("vspoms").data_source.data["color"])
                 Plotly.newPlot('graph1', graphData, graphLayout).then(function () {
                     Plotly.animate('graph1',graphFrames)
                 })

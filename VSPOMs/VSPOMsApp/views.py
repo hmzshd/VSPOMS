@@ -147,7 +147,8 @@ def index(request):
         y="y",
         source=source,
         color='color',
-        size="size"
+        size="size",
+        name="vspoms"
     )
     columns = [TableColumn(field='size', title='size')]
     table = DataTable(
