@@ -272,10 +272,10 @@ def index(request):
     return render(request, 'VSPOMs/index.html', context=context_dict)
 
 def colour_to_status(colour):
-    return True if colour == "green" else False
+    return True if colour == "green" else False 
 
 def post_patches(request):
-
+    
     if (request.headers.get('x-requested-with') == 'XMLHttpRequest'):
         data = json.loads(request.body)
         patch_data = data["bokeh"]

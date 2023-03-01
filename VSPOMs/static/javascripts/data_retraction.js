@@ -64,7 +64,8 @@ $(document).ready(function () {
                 })
             }));
             alert("Simulation Complete")
-            return response.json()
+            return null
         })
     });
 })
+
