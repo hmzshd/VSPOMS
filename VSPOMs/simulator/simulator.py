@@ -350,12 +350,15 @@ class Simulator:
             print(f"cumulative weights pre accumulate {cum_weights}")
         for event in self.events:
             if self.debug:
-                print(f"current event is {event}")
+                pass
+                # print(f"current event is {event}")
             cum_weights.append(event.probability)
         cum_weights = list(accumulate(cum_weights))
 
         if self.debug:
             print(f"cumulative weights post accumulate {cum_weights}")
+            for patch in self.patches:
+                print(patch)
 
         total = float(cum_weights[-1])
         if total <= 0.0:
