@@ -465,6 +465,19 @@ class Simulator:
         # proportion of area that is occupied.
         self.proportion_occupied_area = area_occupied / area_total
 
+    def calculate_turnover_events(self):
+        """
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAh
+        """
+
+        div_scale = math.ceil(self.steps / 10)
+
+        max_time = max(self.data.groupby(level=0).tail(1)['time'].tolist())
+        print(max_time)
+
+        plot_range = max_time / div_scale
+        print(plot_range)
+
     def print_status(self):
         """Temp debug function to observe changes."""
 
