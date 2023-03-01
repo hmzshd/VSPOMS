@@ -11,9 +11,11 @@ import csv
 try:
     from simulator.float_checker import is_float
     from simulator.patch import Patch
+    from simulator.scaler import scale_list
 except ModuleNotFoundError:
     from float_checker import is_float
     from patch import Patch
+    from scaler import  scale_list
 
 
 def parse_csv(filename):
@@ -74,7 +76,9 @@ def parse_csv(filename):
                     settings["patch_area_effect_x"] = float(row[4])
                     settings_read = True
 
-    patch_dict = {"x_coords": x_coords, "y_coords": y_coords,
+    x_coords_scaled = scale_list(x_coords)
+    y_coords_scaled = scale_list(y_coords)
+    patch_dict = {"x_coords": x_coords_scaled, "y_coords": y_coords_scaled,
                   "radiuses": radiuses, "statuses": statuses}
 
     return patch_dict, settings, patch_list
