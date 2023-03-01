@@ -195,14 +195,14 @@ section.panel .graph-container {
 section.panel .patch-container {
     background-color: white;
     height: 82vh;
-    width: 60%;
+    width: 55%;
     margin: 0;
     border-radius: 5px;
     float: left;
 }
 section.panel .patch-settings-container, section.panel .patch-help-container {
     float: right;
-    width: 38%;
+    width: 43%;
     border-radius: 5px;
     margin-bottom: 20px;
     background-color: white;
@@ -216,7 +216,7 @@ section.panel .patch-help-container {
 }
 section.panel .run-sim-button {
     float: right;
-    width: 38%;
+    width: 43%;
 }
 section.panel #patch-size-input {
     width: 52%;

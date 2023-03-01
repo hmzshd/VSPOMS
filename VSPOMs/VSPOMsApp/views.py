@@ -89,7 +89,7 @@ def index(request):
         dfa['step'] = i
         graph_df = pd.concat([graph_df, dfa])
 
-    msft_df = pd.DataFrame(MSFT)
+    msft_df = pd.DataFrame(MSFT) 
     msft_df["date"] = pd.to_datetime(msft_df["date"])
 
     graphs = {
@@ -136,8 +136,7 @@ def index(request):
         y_range=(0, map_size * 1.1),
         tools=[]
     )
-    plot.height = 750
-    plot.width = 850
+    plot.sizing_mode = "scale_both"
 
     source = ColumnDataSource({
         'x': patches["x_coords"],
