@@ -3,18 +3,12 @@
 $(document).ready(function(){
 
     // Initial page load
-    // $("#header-wrapper").delay(4000).fadeIn(500);
-    // $("#loading-panel").delay(3000).fadeOut(500);
-    // $("#create-panel").fadeOut(1000).delay(3000).fadeIn(500);
-    // $("#simulate-panel").fadeOut(1000);
-    // $("#graphs-panel").fadeOut(1000);
-    // $("#settings-panel").fadeOut(1000);
-
-    $("#header-wrapper").fadeIn(0);
-    $("#loading-panel").fadeOut(0);
-    $("#simulate-panel").fadeOut(0);
-    $("#graphs-panel").fadeOut(0);
-    $("#settings-panel").fadeOut(0);
+    $("#header-wrapper").delay(4000).fadeIn(500);
+    $("#loading-panel").delay(3000).fadeOut(500);
+    $("#create-panel").fadeOut(1000).delay(3000).fadeIn(500);
+    $("#simulate-panel").fadeOut(1000);
+    $("#graphs-panel").fadeOut(1000);
+    $("#settings-panel").fadeOut(1000);
 
 
     // Navigation functions
