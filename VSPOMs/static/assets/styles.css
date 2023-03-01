@@ -6,7 +6,7 @@ Colours:
     Primary (hover) - #26394F
     Highlighted - #1DB099
     Background - #E4E7EB
-    Panel - DFE2E6
+    Panel - #DFE2E6
 */
 
 
@@ -322,11 +322,14 @@ section.panel .choose-scenario-box, section.panel .random-scenario-box {
     height: calc(100% - 120px);
     float: left;
     padding: 6px 12px;
-    transition: all 0.1s ease-in-out;
+    background-color: #DFE2E6;
     margin-top: 20px;
+    filter: brightness(0.9) saturate(0.7);
+    transition: all 0.1s ease-in-out;
 }
 section.panel .choose-scenario-box:hover, section.panel .random-scenario-box:hover {
     box-shadow: 0 0 4px gray;
+    filter: none;
 }
 section.panel .choose-scenario-box {
     margin-right: 10px;
@@ -345,12 +348,10 @@ section.panel .scenario-list li {
     font-size: 18px;
     font-family: monospace;
     word-break: break-all;
-    transition: all 0.1s ease-in-out;
     opacity: 0.7;
 }
 section.panel .scenario-list li:hover {
     font-weight: bold;
-    padding: 22px 10px;
     opacity: 1;
 }
 section.panel .scenario-list li a {
@@ -365,7 +366,7 @@ section.panel .scenario-list li a {
 }
 section.panel .scenario-list li a:hover {
     filter: brightness(1.1);
-    transform: scale(1.05);
+    transform: scale(1.03);
     cursor: pointer;
 }
 section.panel .random-scenario-box {
