@@ -65,32 +65,25 @@ def status_to_colour(statuses):
     return ["green" if status else "red" for status in statuses]
 
 
+
 def index(request):
     """
     Returns a request to serve index page.
     """
 
     # Prepare Data
-    map_size = 30
-    patch_list = generate_patch_list_random(map_size)
-    spom_sim = Simulator(patch_list,
-                         dispersal_alpha=0.71,
-                         area_exponent_b=0.5,
-                         species_specific_constant_y=5.22,
-                         species_specific_constant_u=0.0593,
-                         patch_area_effect_x=1.08)
-    spom_sim.simulate()
-    patches = pd.DataFrame.from_dict(spom_sim.get_turnovers())
+    patch_list = parse_csv('static/data/demo.csv')[0]
+    patches = pd.DataFrame.from_dict(patch_list)
 
-    graph_data = spom_sim.get_data().loc[0, :]
-    graph_df = pd.DataFrame()
-    for i in range(len(graph_data.index)):
-        dfa = graph_data.head(i).copy()
-        dfa['step'] = i
-        graph_df = pd.concat([graph_df, dfa])
-
-    msft_df = pd.DataFrame(MSFT)
-    msft_df["date"] = pd.to_datetime(msft_df["date"])
+    #graph_data = spom_sim.get_data().loc[0, :]
+    graph_df = pd.DataFrame(columns= ["time",
+        "proportion occupied patches",
+        "proportion occupied area",
+        "extinction","step"])
+    #for i in range(len(graph_data.index)):
+        #dfa = graph_data.head(i).copy()
+        #dfa['step'] = i
+        #graph_df = pd.concat([graph_df, dfa])
 
     graphs = {
         'graph1': '',
@@ -118,7 +111,7 @@ def index(request):
         )
 
         # attribute adjustments
-        fig.layout.updatemenus[0].buttons[0]['args'][1]['frame']['redraw'] = True
+        #fig.layout.updatemenus[0].buttons[0]['args'][1]['frame']['redraw'] = True
 
         fig.update_traces(line_width=3)
 
@@ -130,22 +123,21 @@ def index(request):
         graphs[graph] = fig.to_html(full_html=False)
 
     patch_map = {'map': ''}
-
-    plot = figure(
-        x_range=(-map_size // 10, map_size * 1.1),
-        y_range=(0, map_size * 1.1),
-        tools=[]
-    )
-    plot.height = 750
-    plot.width = 850
+    print([patches["x_coords"]])
 
     source = ColumnDataSource({
-        'x': patches["x_coords"],
-        'y': patches["y_coords"],
+        'x': patches["x_coords"].values.tolist(),
+        'y': patches["y_coords"].values.tolist(),
         'color': status_to_colour(patches["statuses"]),
-        ## this needs to be changed into actual size rather than using the x right now!
-        'size': patches["x_coords"]},
+        'size': patches["radiuses"].values.tolist()},
         name='patch_data_source'
+    )
+    max_radius = max(source.data['size'])
+    max_diameter = max_radius+min(source.data['x'])/500
+    plot = figure(
+        x_range=((min(source.data['x'])-max_diameter), (max(source.data['x'])+max_diameter)),
+        y_range=((min(source.data['y'])-max_diameter), (max(source.data['y'])+max_diameter)),
+        tools=[]
     )
 
     size_source = ColumnDataSource(data={'size': []})
@@ -155,7 +147,8 @@ def index(request):
         y="y",
         source=source,
         color='color',
-        size="size"
+        size="size",
+        name="vspoms"
     )
     columns = [TableColumn(field='size', title='size')]
     table = DataTable(
@@ -168,7 +161,7 @@ def index(request):
 
     draw_tool = PointDrawTool(
         renderers=[renderer],
-        empty_value=50
+        empty_value=50 + max_radius//2
     )
     plot.add_tools(draw_tool)
     plot.toolbar.active_tap = draw_tool
@@ -278,24 +271,23 @@ def index(request):
 
     return render(request, 'VSPOMs/index.html', context=context_dict)
 
-def colourToStatus(colour):
-    return True if colour == "green" else False 
+def colour_to_status(colour):
+    return True if colour == "green" else False
 
-def postPatches(request):
-    
+def post_patches(request):
+
     if (request.headers.get('x-requested-with') == 'XMLHttpRequest'):
         data = json.loads(request.body)
         patch_data = data["bokeh"]
         patch_list = []
-        for i in patch_data["x"].keys():
-            if (i.isnumeric()):
-                patch_list.append( Patch(
-                    patch_data["x"][i],
-                    patch_data["y"][i],
-                    colourToStatus(patch_data["color"][int(i)]),
-                    patch_data["size"][i]
-                ))
-        
+        for i in range(len(patch_data["x"])):
+            patch_list.append( Patch(
+                patch_data["x"][i],
+                patch_data["y"][i],
+                colour_to_status(patch_data["color"][i]),
+                patch_data["size"][i]
+            ))
+
         simulation = Simulator(patch_list,
                          dispersal_alpha=float(data["dispersal_kernel"]),
                          area_exponent_b=float(data["connectivity"]),
@@ -304,7 +296,50 @@ def postPatches(request):
                          patch_area_effect_x=float(data["patch_extinction_probability_x"]))
         simulation.simulate()
 
-        return JsonResponse({"message": "ALL GOOD"}, status=200)
+        graph_data = simulation.get_data()
+        graph_df = pd.DataFrame()
+        for i in range(len(graph_data.index)):
+            dfa = graph_data.head(i).copy()
+            dfa['step'] = i
+            graph_df = pd.concat([graph_df, dfa])
+
+        graphs = {
+            'graph1': '',
+            'graph2': '',
+            'graph3': '',
+            'graph4': ''
+        }
+        graph_labels = [
+            "time",
+            "proportion occupied patches",
+            "proportion occupied area",
+            "extinction"
+        ]
+
+        for idx, graph in enumerate(graphs.keys()):
+            fig = px.line(
+                graph_df,
+                x='time',
+                y=graph_labels[idx],
+                animation_frame='step',
+                # template = 'plotly_dark',
+                width=1000,
+                height=600,
+            )
+
+            # attribute adjustments
+            fig.layout.updatemenus[0].buttons[0]['args'][1]['frame']['redraw'] = True
+
+            fig.update_traces(line_width=3)
+
+            fig.update_layout(
+                autosize=False,
+                width=500,
+                height=400,
+            )
+            graphs[graph] = fig.to_json()
+
+        return JsonResponse({"message": json.loads(graphs["graph1"])}, status=200)
     else:
         return JsonResponse({"error": "error"}, status=400)
     
