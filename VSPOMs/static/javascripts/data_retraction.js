@@ -54,9 +54,8 @@ $(document).ready(function () {
                 const graphData = JSON.parse(text).message.data
                 const graphLayout = JSON.parse(text).message.layout
                 const graphFrames = JSON.parse(text).message.frames
-                console.log(graphData)
-                console.log(graphFrames)
-                console.log(graphLayout)
+                console.log(Bokeh.index)
+                console.log(Bokeh.documents)
                 Plotly.newPlot('graph1', graphData, graphLayout).then(function () {
                     Plotly.animate('graph1',graphFrames)
                 })
