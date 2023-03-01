@@ -7,7 +7,8 @@ a,b,c = parse_csv("demo.csv")
 # for patch in c:
 #     print(patch)
 d = c[:5]
-print(d)
+for p in d:
+    print(p)
 simulation = Simulator(d,
                        dispersal_alpha=float(b["dispersal_alpha"]),
                        area_exponent_b=float(b["area_exponent_b"]),
