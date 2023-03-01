@@ -286,7 +286,7 @@ def post_patches(request):
                 colour_to_status(patch_data["color"][i]),
                 patch_data["size"][i]
             ))
-        
+
         simulation = Simulator(patch_list,
                          dispersal_alpha=float(data["dispersal_kernel"]),
                          area_exponent_b=float(data["connectivity"]),
@@ -295,14 +295,12 @@ def post_patches(request):
                          patch_area_effect_x=float(data["patch_extinction_probability_x"]))
         simulation.simulate()
 
-        graph_data = simulation.get_data().loc[0, :]
+        graph_data = simulation.get_data()
         graph_df = pd.DataFrame()
         for i in range(len(graph_data.index)):
             dfa = graph_data.head(i).copy()
             dfa['step'] = i
             graph_df = pd.concat([graph_df, dfa])
-
-        print(graph_df)
 
         graphs = {
             'graph1': '',
