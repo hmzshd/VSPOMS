@@ -293,14 +293,13 @@ def post_patches(request):
         data = json.loads(request.body)
         patch_data = data["bokeh"]
         patch_list = []
-        for i in patch_data["x"].keys():
-            if (i.isnumeric()):
-                patch_list.append(Patch(
-                    patch_data["x"][i],
-                    patch_data["y"][i],
-                    colour_to_status(patch_data["color"][int(i)]),
-                    patch_data["size"][i]
-                ))
+        for i in range(len(patch_data["x"])):
+            patch_list.append(Patch(
+                patch_data["x"][i],
+                patch_data["y"][i],
+                colour_to_status(patch_data["color"][i]),
+                patch_data["size"][i]
+            ))
 
         simulation = Simulator(patch_list,
                          dispersal_alpha=float(data["dispersal_kernel"]),
