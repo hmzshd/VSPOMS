@@ -3,6 +3,7 @@
 """
 Disables no-member and too-many-locals warnings.
 """
+import os
 import json
 import random
 import pandas as pd
@@ -16,6 +17,7 @@ from bokeh.plotting import figure
 from bokeh.sampledata.stocks import MSFT
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.conf import settings
 
 # necessary to wrap this in try except due to the location of manage.py
 try:
@@ -51,18 +53,6 @@ def generate_patch_list_random(num):
         )
     return patch_list
 
-
-def status_to_colour(statuses):
-    """
-    Maps statuses to colours to display on frontend graphs.
-
-    Args:
-        statuses (_type_): A list of statuses
-
-    Returns:
-        :(string): Returns "green" or "red" depending on status
-    """
-    return ["green" if status else "red" for status in statuses]
 
 
 
@@ -261,33 +251,60 @@ def index(request):
 
     script, div = components(patch_map)
 
+
+    # List all files in media folder for create page
+    media_folder = os.path.join(settings.MEDIA_ROOT)
+    media_files = os.listdir(media_folder)
+
+
     context_dict = {
         'script': script,
         'bokeh_div': div,
         'table': table,
         'graphs': graphs,
+        'media_files': media_files
     }
-
 
     return render(request, 'VSPOMs/index.html', context=context_dict)
 
+
+def status_to_colour(statuses):
+    """
+    Maps statuses to colours to display on frontend graphs.
+
+    Args:
+        statuses: A list of statuses
+
+    Returns:
+        :(string): Returns "green" or "red" depending on status
+    """
+    return ["green" if status else "red" for status in statuses]
+
 def colour_to_status(colour):
-    return True if colour == "green" else False 
+    """
+    Maps colours to statuses
+    """
+    return True if colour == "green" else False
+
 
 def post_patches(request):
-    
+    """
+    SOMEONE WRITE THIS PLEASE PROBABLY ROGER :)
+    """
+
     if (request.headers.get('x-requested-with') == 'XMLHttpRequest'):
         data = json.loads(request.body)
         patch_data = data["bokeh"]
         patch_list = []
-        for i in range(len(patch_data["x"])):
-            patch_list.append( Patch(
-                patch_data["x"][i],
-                patch_data["y"][i],
-                colour_to_status(patch_data["color"][i]),
-                patch_data["size"][i]
-            ))
-
+        for i in patch_data["x"].keys():
+            if (i.isnumeric()):
+                patch_list.append( Patch(
+                    patch_data["x"][i],
+                    patch_data["y"][i],
+                    colour_to_status(patch_data["color"][int(i)]),
+                    patch_data["size"][i]
+                ))
+        
         simulation = Simulator(patch_list,
                          dispersal_alpha=float(data["dispersal_kernel"]),
                          area_exponent_b=float(data["connectivity"]),
@@ -342,6 +359,3 @@ def post_patches(request):
         return JsonResponse({"message": json.loads(graphs["graph1"])}, status=200)
     else:
         return JsonResponse({"error": "error"}, status=400)
-    
-    return JsonResponse({"error": "error"}, status=400)
-

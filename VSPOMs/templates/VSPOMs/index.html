@@ -18,7 +18,7 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{% static 'assets/scripts.js' %}"></script>
-    <script src="{% static 'javascripts/data_retraction.js' %}"></script>
+    <script src="{% static 'assets/data_retraction.js' %}"></script>
 
 
      <!-- MathJax -->
@@ -74,8 +74,35 @@
 
 <!-- Create panel -->
 <section id="create-panel" class="panel">
-    <h1>Create Simulation</h1>
+    <h1>Create Scenario</h1>
     <hr>
+
+    <div class="choose-scenario-box">
+        <h2>Choose a Scenario</h2>
+
+        <div class="scenario-list">
+            {% for file in media_files %}
+            <li>{{ file }}<a>Load</a></li>
+            {% endfor %}
+            <li>asdassd_a456yrte.csv<a>Load</a></li>
+            <li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li>
+            <li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li>
+        </div>
+
+    </div>
+
+    <div class="or-box">
+        <h1>OR</h1>
+    </div>
+
+    <div class="random-scenario-box">
+        <h2>Generate a Random Scenario</h2>
+        <div class="generate-button-container">
+            <button>Generate Scenario</button>
+        </div>
+        
+    </div>
+
 </section>
 
 
