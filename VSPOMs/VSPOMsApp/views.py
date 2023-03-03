@@ -288,9 +288,6 @@ def colour_to_status(colour):
 
 
 def post_patches(request):
-    """
-    SOMEONE WRITE THIS PLEASE PROBABLY ROGER :)
-    """
 
     if (request.headers.get('x-requested-with') == 'XMLHttpRequest'):
         data = json.loads(request.body)
@@ -298,13 +295,13 @@ def post_patches(request):
         patch_list = []
         for i in patch_data["x"].keys():
             if (i.isnumeric()):
-                patch_list.append( Patch(
+                patch_list.append(Patch(
                     patch_data["x"][i],
                     patch_data["y"][i],
                     colour_to_status(patch_data["color"][int(i)]),
                     patch_data["size"][i]
                 ))
-        
+
         simulation = Simulator(patch_list,
                          dispersal_alpha=float(data["dispersal_kernel"]),
                          area_exponent_b=float(data["connectivity"]),
