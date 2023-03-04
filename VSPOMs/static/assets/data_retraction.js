@@ -50,8 +50,22 @@ $(document).ready(function () {
             })
         })
         .then(response => {
+            (response.text().then(text => {
+                const graphData = JSON.parse(text).message.data
+                const graphLayout = JSON.parse(text).message.layout
+                const graphFrames = JSON.parse(text).message.frames
+                for (let i = 0; i < Bokeh.documents[0].get_model_by_name("vspoms").data_source.data["color"].length; i++) {
+                    Bokeh.documents[0].get_model_by_name("vspoms").data_source.data["color"][i] = "purple";
+                }
+                Bokeh.documents[0].get_model_by_name("vspoms").data_source.change.emit()
+                console.log(Bokeh.documents[0].get_model_by_name("vspoms").data_source.data["color"])
+                Plotly.newPlot('graph1', graphData, graphLayout).then(function () {
+                    Plotly.animate('graph1',graphFrames)
+                })
+            }));
             alert("Simulation Complete")
-            return response.json()
+            return null
         })
     });
 })
+
