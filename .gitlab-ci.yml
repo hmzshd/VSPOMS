@@ -52,4 +52,4 @@ lint:
     - docker
   allow_failure: true
   script:
-    - pylint VSPOMs --recursive=true
+    - pylint --fail-under=9 VSPOMs --recursive=true

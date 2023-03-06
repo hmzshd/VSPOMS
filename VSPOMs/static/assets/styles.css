@@ -41,7 +41,7 @@ header {
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 7000000004;
+    z-index: 1000;
 }
 header:hover {
     height: 120px;
@@ -155,7 +155,7 @@ section.panel#loading-panel {
 }
 section.panel#loading-panel h1 {
     text-align: center;
-    margin-top: 26vh;
+    margin-top: 28vh;
 }
 section.panel#loading-panel img {
     display: block;
@@ -166,6 +166,25 @@ section.panel#loading-panel p {
     text-align: center;
     margin-top: 40px;
     color: gray;
+}
+
+/* Loading overlay styles */
+#loading-overlay {
+    display: none;
+    position: fixed;
+    background-color: #1C2A3A;
+    height: 100%;
+    width: 100%;
+    z-index: 100000001;
+    top: 0;
+    left: 0;
+    opacity: 0.5; 
+}
+#loading-overlay img {
+    display: block;
+    margin: 46vh auto 0 auto;
+    width: 40px;
+    text-align: center;
 }
 
 /* Graph panel styles */

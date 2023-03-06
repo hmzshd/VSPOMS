@@ -14,7 +14,6 @@ from bokeh.models import CustomJS
 from bokeh.models import DataTable, TableColumn, PointDrawTool, ColumnDataSource
 from bokeh.models.widgets import RadioButtonGroup
 from bokeh.plotting import figure
-from bokeh.sampledata.stocks import MSFT
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.conf import settings
@@ -55,32 +54,19 @@ def generate_patch_list_random(num):
 
 
 
+
 def index(request):
     """
     Returns a request to serve index page.
     """
 
     # Prepare Data
-    map_size = 30
-    patch_list = generate_patch_list_random(map_size)
-    spom_sim = Simulator(patch_list,
-                         dispersal_alpha=0.71,
-                         area_exponent_b=0.5,
-                         species_specific_constant_y=5.22,
-                         species_specific_constant_u=0.0593,
-                         patch_area_effect_x=1.08)
-    spom_sim.simulate()
-    patches = pd.DataFrame.from_dict(spom_sim.get_turnovers())
-
-    graph_data = spom_sim.get_data().loc[0, :]
-    graph_df = pd.DataFrame()
-    for i in range(len(graph_data.index)):
-        dfa = graph_data.head(i).copy()
-        dfa['step'] = i
-        graph_df = pd.concat([graph_df, dfa])
-
-    msft_df = pd.DataFrame(MSFT) 
-    msft_df["date"] = pd.to_datetime(msft_df["date"])
+    patch_list = parse_csv('static/data/demo.csv')[0]
+    patches = pd.DataFrame.from_dict(patch_list)
+    graph_df = pd.DataFrame(columns= ["time",
+        "proportion occupied patches",
+        "proportion occupied area",
+        "extinction","step"])
 
     graphs = {
         'graph1': '',
@@ -102,16 +88,12 @@ def index(request):
             x='time',
             y=graph_labels[idx],
             animation_frame='step',
-            # template = 'plotly_dark',
             width=1000,
             height=600,
         )
 
         # attribute adjustments
-        fig.layout.updatemenus[0].buttons[0]['args'][1]['frame']['redraw'] = True
-
         fig.update_traces(line_width=3)
-
         fig.update_layout(
             autosize=False,
             width=500,
@@ -120,22 +102,23 @@ def index(request):
         graphs[graph] = fig.to_html(full_html=False)
 
     patch_map = {'map': ''}
+    print([patches["x_coords"]])
 
+    source = ColumnDataSource({
+        'x': patches["x_coords"].values.tolist(),
+        'y': patches["y_coords"].values.tolist(),
+        'color': status_to_colour(patches["statuses"]),
+        'size': patches["radiuses"].values.tolist()},
+        name='patch_data_source'
+    )
+    max_radius = max(source.data['size'])
+    max_diameter = max_radius+min(source.data['x'])/500
     plot = figure(
-        x_range=(-map_size // 10, map_size * 1.1),
-        y_range=(0, map_size * 1.1),
+        x_range=((min(source.data['x'])-max_diameter), (max(source.data['x'])+max_diameter)),
+        y_range=((min(source.data['y'])-max_diameter), (max(source.data['y'])+max_diameter)),
         tools=[]
     )
     plot.sizing_mode = "scale_both"
-
-    source = ColumnDataSource({
-        'x': patches["x_coords"],
-        'y': patches["y_coords"],
-        'color': status_to_colour(patches["statuses"]),
-        ## this needs to be changed into actual size rather than using the x right now!
-        'size': patches["x_coords"]},
-        name='patch_data_source'
-    )
 
     size_source = ColumnDataSource(data={'size': []})
 
@@ -144,7 +127,8 @@ def index(request):
         y="y",
         source=source,
         color='color',
-        size="size"
+        size="size",
+        name="vspoms"
     )
     columns = [TableColumn(field='size', title='size')]
     table = DataTable(
@@ -157,7 +141,7 @@ def index(request):
 
     draw_tool = PointDrawTool(
         renderers=[renderer],
-        empty_value=50
+        empty_value=50 + max_radius//2
     )
     plot.add_tools(draw_tool)
     plot.toolbar.active_tap = draw_tool
@@ -211,7 +195,11 @@ def index(request):
 
     callback_resize = """
     for(const index of source.selected.indices) {
-        source.data.size[index] = size_source.data.size[0];
+        let size_float = parseFloat(size_source.data.size[0])
+        let is_valid = !isNaN(size_float);
+        if (is_valid){
+            source.data.size[index] = size_float;
+        }
     }
     source.change.emit();
     """
@@ -254,14 +242,11 @@ def index(request):
     patch_map['display'] = table
     patch_map['button'] = radio_button_group
 
-
     script, div = components(patch_map)
-
 
     # List all files in media folder for create page
     media_folder = os.path.join(settings.MEDIA_ROOT)
     media_files = os.listdir(media_folder)
-
 
     context_dict = {
         'script': script,
@@ -304,34 +289,66 @@ def post_patches(request):
         JsonResponses with either success or error message.
     """
 
-    if (request.headers.get('x-requested-with') == 'XMLHttpRequest'):
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         data = json.loads(request.body)
         patch_data = data["bokeh"]
         patch_list = []
-        for i in patch_data["x"].keys():
-            if (i.isnumeric()):
-                patch_list.append( Patch(
-                    patch_data["x"][i],
-                    patch_data["y"][i],
-                    colour_to_status(patch_data["color"][int(i)]),
-                    patch_data["size"][i]
-                ))
-        
+        for i in range(len(patch_data["x"])):
+            patch_list.append(Patch(
+                patch_data["x"][i],
+                patch_data["y"][i],
+                colour_to_status(patch_data["color"][i]),
+                patch_data["size"][i]
+            ))
+
         simulation = Simulator(patch_list,
-                         dispersal_alpha=float(data["dispersal_kernel"]),
-                         area_exponent_b=float(data["connectivity"]),
-                         species_specific_constant_y=float(data["colonization_probability"]),
-                         species_specific_constant_u=float(data["patch_extinction_probability_u"]),
-                         patch_area_effect_x=float(data["patch_extinction_probability_x"]))
+            dispersal_alpha=float(data["dispersal_kernel"]),
+            area_exponent_b=float(data["connectivity"]),
+            species_specific_constant_y=float(data["colonization_probability"]),
+            species_specific_constant_u=float(data["patch_extinction_probability_u"]),
+            patch_area_effect_x=float(data["patch_extinction_probability_x"]))
         simulation.simulate()
 
-        return JsonResponse({"message": "ALL GOOD"}, status=200)
-    else:
-        return JsonResponse({"error": "error"}, status=400)
-    
-def post_create(request):
-    if (request.headers.get('x-requested-with') == 'XMLHttpRequest'):
-        
-        return JsonResponse({"message": "ALL GOOD"}, status=200)
+        graph_data = simulation.get_data()
+        graph_df = pd.DataFrame()
+        for i in range(len(graph_data.index)):
+            dfa = graph_data.head(i).copy()
+            dfa['step'] = i
+            graph_df = pd.concat([graph_df, dfa])
+
+        graphs = {
+            'graph1': '',
+            'graph2': '',
+            'graph3': '',
+            'graph4': ''
+        }
+        graph_labels = [
+            "time",
+            "proportion occupied patches",
+            "proportion occupied area",
+            "extinction"
+        ]
+
+        for idx, graph in enumerate(graphs.keys()):
+            fig = px.line(
+                graph_df,
+                x='time',
+                y=graph_labels[idx],
+                animation_frame='step',
+                width=1000,
+                height=600,
+            )
+
+            # attribute adjustments
+            fig.layout.updatemenus[0].buttons[0]['args'][1]['frame']['redraw'] = True
+            fig.update_traces(line_width=3)
+            fig.update_layout(
+                autosize=False,
+                width=500,
+                height=400,
+            )
+            graphs[graph] = fig.to_json()
+
+        return JsonResponse({"message": json.loads(graphs["graph1"])}, status=200)
     else:
         return JsonResponse({"error": "error"}, status=400)

@@ -10,14 +10,14 @@ $(document).ready(function () {
         var connectivity = document.getElementsByName("connectivity")[0].value;
         var rescue_effect = document.getElementsByName("rescue-effect")[0].value;
         var stochasticity = document.getElementsByName("stochasticity")[0].value;
-        alert("Simulation Begins with \n"+
-            "Disposal kernel = " + dispersal_kernel.toString()+"\n"+
-            "Colonization probability = " + colonization_probability.toString()+"\n"+
-            "Patch extinction u = " + patch_extinction_probability_u.toString()+"\n"+
-            "Patch extinction x = " + patch_extinction_probability_x.toString()+"\n"+
-            "Connectivity = " + connectivity.toString()+"\n"+
-            "Rescue Effect = " + rescue_effect.toString()+"\n"+
-            "Stochasticity = " + stochasticity.toString());
+        // alert("Simulation Begins with \n"+
+        //     "Disposal kernel = " + dispersal_kernel.toString()+"\n"+
+        //     "Colonization probability = " + colonization_probability.toString()+"\n"+
+        //     "Patch extinction u = " + patch_extinction_probability_u.toString()+"\n"+
+        //     "Patch extinction x = " + patch_extinction_probability_x.toString()+"\n"+
+        //     "Connectivity = " + connectivity.toString()+"\n"+
+        //     "Rescue Effect = " + rescue_effect.toString()+"\n"+
+        //     "Stochasticity = " + stochasticity.toString());
         fetch("post_patches",{
             method: 'POST',
             credentials: 'same-origin',
@@ -36,8 +36,22 @@ $(document).ready(function () {
             })
         })
         .then(response => {
-            alert("Simulation Complete")
-            return response.json()
+            (response.text().then(text => {
+                const graphData = JSON.parse(text).message.data
+                const graphLayout = JSON.parse(text).message.layout
+                const graphFrames = JSON.parse(text).message.frames
+                for (let i = 0; i < Bokeh.documents[0].get_model_by_name("vspoms").data_source.data["color"].length; i++) {
+                    Bokeh.documents[0].get_model_by_name("vspoms").data_source.data["color"][i] = "purple";
+                }
+                Bokeh.documents[0].get_model_by_name("vspoms").data_source.change.emit()
+                console.log(Bokeh.documents[0].get_model_by_name("vspoms").data_source.data["color"])
+                Plotly.newPlot('graph1', graphData, graphLayout).then(function() {
+                    Plotly.animate('graph1',graphFrames)
+                })
+            }));
+            // Front-end transition
+            $("#loading-overlay").fadeOut(200);
+            return null
         })
     });
 })

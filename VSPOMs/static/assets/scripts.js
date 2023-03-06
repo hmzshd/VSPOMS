@@ -84,6 +84,10 @@ $(document).ready(function(){
       });
 
     
+    // On "Run Simulation" button click
+    $('#button-run').click(function() {
+        $("#loading-overlay").fadeIn(100);
+    })
     $("#button-random").click(function () {
         const csrftoken = getCookie('csrftoken');
         fetch("post_create", {
