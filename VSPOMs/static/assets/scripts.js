@@ -88,6 +88,7 @@ $(document).ready(function(){
     $('#button-run').click(function() {
         $("#loading-overlay").fadeIn(100);
     })
+
     $("#button-random").click(function () {
         const csrftoken = getCookie('csrftoken');
         fetch("post_create", {
@@ -101,8 +102,13 @@ $(document).ready(function(){
             body: JSON.stringify("Nothing")
         })
             .then(response => {
-                openSimulate()
-                return response.json()
+                openSimulate();
+                (response.text().then(text => {
+                    const patch_source = JSON.parse(text).message;
+                    var ds = Bokeh.documents[0].get_model_by_name('patch_data_source');
+                    ds.data = patch_source;
+                    ds.change.emit();
+                }));
             })
     })
 

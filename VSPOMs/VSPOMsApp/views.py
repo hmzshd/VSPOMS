@@ -102,7 +102,6 @@ def index(request):
         graphs[graph] = fig.to_html(full_html=False)
 
     patch_map = {'map': ''}
-    print([patches["x_coords"]])
 
     source = ColumnDataSource({
         'x': patches["x_coords"].values.tolist(),
@@ -350,5 +349,19 @@ def post_patches(request):
             graphs[graph] = fig.to_json()
 
         return JsonResponse({"message": json.loads(graphs["graph1"])}, status=200)
+    else:
+        return JsonResponse({"error": "error"}, status=400)
+
+def post_create(request):
+    if (request.headers.get('x-requested-with') == 'XMLHttpRequest'):
+        patch_list = parse_csv('static/data/demo.csv')[0]
+        patches = pd.DataFrame.from_dict(patch_list)
+        random_patch_source = json.dumps({
+            'x': patches["x_coords"].values.tolist(),
+            'y': patches["y_coords"].values.tolist(),
+            'color': status_to_colour(patches["statuses"]),
+            'size': patches["radiuses"].values.tolist()}
+            )
+        return JsonResponse({"message": json.loads(random_patch_source)}, status=200)
     else:
         return JsonResponse({"error": "error"}, status=400)
