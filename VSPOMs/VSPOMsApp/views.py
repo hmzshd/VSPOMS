@@ -243,14 +243,11 @@ def index(request):
     patch_map['display'] = table
     patch_map['button'] = radio_button_group
 
-
     script, div = components(patch_map)
-
 
     # List all files in media folder for create page
     media_folder = os.path.join(settings.MEDIA_ROOT)
     media_files = os.listdir(media_folder)
-
 
     context_dict = {
         'script': script,
@@ -300,11 +297,11 @@ def post_patches(request):
             ))
 
         simulation = Simulator(patch_list,
-                         dispersal_alpha=float(data["dispersal_kernel"]),
-                         area_exponent_b=float(data["connectivity"]),
-                         species_specific_constant_y=float(data["colonization_probability"]),
-                         species_specific_constant_u=float(data["patch_extinction_probability_u"]),
-                         patch_area_effect_x=float(data["patch_extinction_probability_x"]))
+            dispersal_alpha=float(data["dispersal_kernel"]),
+            area_exponent_b=float(data["connectivity"]),
+            species_specific_constant_y=float(data["colonization_probability"]),
+            species_specific_constant_u=float(data["patch_extinction_probability_u"]),
+            patch_area_effect_x=float(data["patch_extinction_probability_x"]))
         simulation.simulate()
 
         graph_data = simulation.get_data()
@@ -333,16 +330,13 @@ def post_patches(request):
                 x='time',
                 y=graph_labels[idx],
                 animation_frame='step',
-                # template = 'plotly_dark',
                 width=1000,
                 height=600,
             )
 
             # attribute adjustments
             fig.layout.updatemenus[0].buttons[0]['args'][1]['frame']['redraw'] = True
-
             fig.update_traces(line_width=3)
-
             fig.update_layout(
                 autosize=False,
                 width=500,
