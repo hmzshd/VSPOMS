@@ -84,5 +84,9 @@ $(document).ready(function(){
       });
 
 
+    // On "Run Simulation" button click
+    $('#button-run').click(function() {
+        $("#loading-overlay").fadeIn(100);
+    })
 
 });
