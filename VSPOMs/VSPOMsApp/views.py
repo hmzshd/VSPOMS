@@ -283,6 +283,9 @@ def colour_to_status(colour):
 
 
 def post_patches(request):
+    """
+    AJAX for "Run Simulation" button functionality
+    """
 
     if (request.headers.get('x-requested-with') == 'XMLHttpRequest'):
         data = json.loads(request.body)
