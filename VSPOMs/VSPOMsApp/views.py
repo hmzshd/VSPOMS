@@ -14,7 +14,6 @@ from bokeh.models import CustomJS
 from bokeh.models import DataTable, TableColumn, PointDrawTool, ColumnDataSource
 from bokeh.models.widgets import RadioButtonGroup
 from bokeh.plotting import figure
-from bokeh.sampledata.stocks import MSFT
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.conf import settings
@@ -284,7 +283,7 @@ def post_patches(request):
     AJAX for "Run Simulation" button functionality
     """
 
-    if (request.headers.get('x-requested-with') == 'XMLHttpRequest'):
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         data = json.loads(request.body)
         patch_data = data["bokeh"]
         patch_list = []
