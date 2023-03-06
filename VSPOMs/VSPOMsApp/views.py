@@ -64,16 +64,10 @@ def index(request):
     # Prepare Data
     patch_list = parse_csv('static/data/demo.csv')[0]
     patches = pd.DataFrame.from_dict(patch_list)
-
-    #graph_data = spom_sim.get_data().loc[0, :]
     graph_df = pd.DataFrame(columns= ["time",
         "proportion occupied patches",
         "proportion occupied area",
         "extinction","step"])
-    #for i in range(len(graph_data.index)):
-        #dfa = graph_data.head(i).copy()
-        #dfa['step'] = i
-        #graph_df = pd.concat([graph_df, dfa])
 
     graphs = {
         'graph1': '',
@@ -95,16 +89,12 @@ def index(request):
             x='time',
             y=graph_labels[idx],
             animation_frame='step',
-            # template = 'plotly_dark',
             width=1000,
             height=600,
         )
 
         # attribute adjustments
-        #fig.layout.updatemenus[0].buttons[0]['args'][1]['frame']['redraw'] = True
-
         fig.update_traces(line_width=3)
-
         fig.update_layout(
             autosize=False,
             width=500,
@@ -129,6 +119,7 @@ def index(request):
         y_range=((min(source.data['y'])-max_diameter), (max(source.data['y'])+max_diameter)),
         tools=[]
     )
+    plot.sizing_mode = "scale_both"
 
     size_source = ColumnDataSource(data={'size': []})
 
@@ -205,7 +196,11 @@ def index(request):
 
     callback_resize = """
     for(const index of source.selected.indices) {
-        source.data.size[index] = size_source.data.size[0];
+        let size_float = parseFloat(size_source.data.size[0])
+        let is_valid = !isNaN(size_float);
+        if (is_valid){
+            source.data.size[index] = size_float;
+        }
     }
     source.change.emit();
     """
