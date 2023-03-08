@@ -67,7 +67,6 @@ def parse_csv(filename):
                     y_coords.append(y_coord)
                     statuses.append(status)
                     radiuses.append(radius)
-                    #patch_list.append(Patch(status, x_coord, y_coord, radius))
 
                 # path to take if settings unread
                 else:
@@ -78,8 +77,8 @@ def parse_csv(filename):
                     settings["patch_area_effect_x"] = float(row[4])
                     settings_read = True
 
-    x_coords_scaled = scale_list(x_coords)
-    y_coords_scaled = scale_list(y_coords)
+    x_coords_scaled = x_coords
+    y_coords_scaled = y_coords
     for i in range(len(radiuses)):
         patch_list.append(Patch(statuses[i], x_coords_scaled[i], y_coords_scaled[i], radiuses[i]))
     patch_dict = {"x_coords": x_coords_scaled, "y_coords": y_coords_scaled,
