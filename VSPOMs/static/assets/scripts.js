@@ -93,7 +93,8 @@ $(document).ready(function(){
     $(".button-populate").click(function () {
         const csrftoken = getCookie('csrftoken');
         var message = JSON.stringify("Nothing");
-        if (!this.dataset.file == false) {
+        const loading = !this.dataset.file
+        if (!loading) {
             message = JSON.stringify(this.dataset.file);
         }
         fetch("post_create", {
@@ -109,10 +110,19 @@ $(document).ready(function(){
         .then(response => {
             openSimulate();
             (response.text().then(text => {
-                const patch_source = JSON.parse(text).message;
+                const patch_source = JSON.parse(text).patch_source;
+                const parameters = JSON.parse(JSON.parse(text).parameters);
                 var ds = Bokeh.documents[0].get_model_by_name('patch_data_source');
                 ds.data = patch_source;
                 ds.change.emit();
+
+                document.getElementsByName("dispersal-kernel")[0].value = parameters["dispersal_kernel"];
+                document.getElementsByName("colonization-probability")[0].value = parameters["colonization_probability"];
+                document.getElementsByName("patch-extinction-probability-u")[0].value = parameters["patch_extinction_probability_u"];
+                document.getElementsByName("patch-extinction-probability-a")[0].value = parameters["patch_extinction_probability_x"];
+                document.getElementsByName("connectivity")[0].value = parameters["connectivity"];
+                document.getElementsByName("rescue-effect")[0].value = parameters["rescue_effect"];
+                document.getElementsByName("stochasticity")[0].value = parameters["stochasticity"];
             }));
         })
     })

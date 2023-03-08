@@ -355,7 +355,16 @@ def post_create(request):
         data = json.loads(request.body)
         if (data != "Nothing"):
             address = 'media/'+data
-            patch_list = parse_csv(address)[0]
+            patch_list,settings = parse_csv(address)
+            parameters = json.dumps(dict(
+                dispersal_kernel=settings["dispersal_alpha"],
+                connectivity=settings["area_exponent_b"],
+                colonization_probability=settings["species_specific_constant_y"],
+                patch_extinction_probability_u=settings["species_specific_constant_u"],
+                patch_extinction_probability_x=settings["patch_area_effect_x"],
+                rescue_effect=random.uniform(0, 10),
+                stochasticity=random.uniform(0, 10)
+            ))
             patches = pd.DataFrame.from_dict(patch_list)
             random_patch_source = json.dumps({
                 'x': patches["x_coords"].values.tolist(),
@@ -371,7 +380,16 @@ def post_create(request):
                         'color': status_to_colour([patch.is_occupied() for patch in patch_list]),
                         'size': [patch.get_area() for patch in patch_list]
                         })
+            parameters = json.dumps(dict(
+                dispersal_kernel=random.uniform(0, 10),
+                connectivity=random.uniform(0, 10),
+                colonization_probability=random.uniform(0, 10),
+                patch_extinction_probability_u=random.uniform(0, 10),
+                patch_extinction_probability_x=random.uniform(0, 10),
+                rescue_effect=random.uniform(0, 10),
+                stochasticity=random.uniform(0, 10)
+            ))
         
-        return JsonResponse({"message": json.loads(random_patch_source)}, status=200)
+        return JsonResponse({"patch_source": json.loads(random_patch_source),"parameters": parameters}, status=200)
     else:
         return JsonResponse({"error": "error"}, status=400)
