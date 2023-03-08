@@ -2,7 +2,7 @@ from simulator import Simulator
 from parser import parse_csv
 from patch import Patch
 from patch_generator import generate_patch_list_random
-a,b,c = parse_csv("demo.csv")
+a,b,c = parse_csv("../media/demo.csv")
 
 # for patch in c:
 #     print(patch)

@@ -357,11 +357,13 @@ class Simulator:
 
         if self.debug:
             print(f"cumulative weights post accumulate {cum_weights}")
-            for patch in self.patches:
-                print(patch)
+            print(f"step number: {self.completed_steps}")
+            # for patch in self.patches:
+            #     print(patch)
 
         total = float(cum_weights[-1])
         if total <= 0.0:
+            print(f"dying on step number: {self.completed_steps}")
             raise ValueError('Total of weights must be greater than zero')
 
         upper = length - 1
