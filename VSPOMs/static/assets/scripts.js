@@ -90,8 +90,12 @@ $(document).ready(function(){
     })
 
     // On "Generate Scenario" button click
-    $("#button-random").click(function () {
+    $(".button-populate").click(function () {
         const csrftoken = getCookie('csrftoken');
+        var message = JSON.stringify("Nothing");
+        if (!this.dataset.file == false) {
+            message = JSON.stringify(this.dataset.file);
+        }
         fetch("post_create", {
             method: 'POST',
             credentials: 'same-origin',
@@ -100,7 +104,7 @@ $(document).ready(function(){
                 'X-Requested-With': 'XMLHttpRequest',
                 'X-CSRFToken': csrftoken,
             },
-            body: JSON.stringify("Nothing")
+            body: message
         })
         .then(response => {
             openSimulate();

@@ -352,15 +352,26 @@ def post_patches(request):
 
 def post_create(request):
     if (request.headers.get('x-requested-with') == 'XMLHttpRequest'):
-        patch_list = generate_patch_list_random(100)
-        random_patch_source = json.dumps({
-                    'x': [patch.get_coords()[0] for patch in patch_list],
-                    'y': [patch.get_coords()[1] for patch in patch_list],
-                    'color': status_to_colour([patch.is_occupied() for patch in patch_list]),
-                    'size': [patch.get_area() for patch in patch_list]
-                    })
-        # patch_list = parse_csv('static/data/demo.csv')[0]
-
+        data = json.loads(request.body)
+        if (data != "Nothing"):
+            address = 'media/'+data
+            patch_list = parse_csv(address)[0]
+            patches = pd.DataFrame.from_dict(patch_list)
+            random_patch_source = json.dumps({
+                'x': patches["x_coords"].values.tolist(),
+                'y': patches["y_coords"].values.tolist(),
+                'color': status_to_colour(patches["statuses"]),
+                'size': patches["radiuses"].values.tolist()}
+            )
+        else:
+            patch_list = generate_patch_list_random(100)
+            random_patch_source = json.dumps({
+                        'x': [patch.get_coords()[0] for patch in patch_list],
+                        'y': [patch.get_coords()[1] for patch in patch_list],
+                        'color': status_to_colour([patch.is_occupied() for patch in patch_list]),
+                        'size': [patch.get_area() for patch in patch_list]
+                        })
+        
         return JsonResponse({"message": json.loads(random_patch_source)}, status=200)
     else:
         return JsonResponse({"error": "error"}, status=400)
