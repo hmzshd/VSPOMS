@@ -1,8 +1,8 @@
-
 # pylint: disable=no-member, too-many-locals
 """
 Disables no-member and too-many-locals warnings.
 """
+import math
 import os
 import json
 import random
@@ -53,8 +53,6 @@ def generate_patch_list_random(num):
     return patch_list
 
 
-
-
 def index(request):
     """
     Returns a request to serve index page.
@@ -63,10 +61,10 @@ def index(request):
     # Prepare Data
     patch_list = parse_csv('static/data/demo.csv')[0]
     patches = pd.DataFrame.from_dict(patch_list)
-    graph_df = pd.DataFrame(columns= ["time",
-        "proportion occupied patches",
-        "proportion occupied area",
-        "extinction","step"])
+    graph_df = pd.DataFrame(columns=["time",
+                                     "proportion occupied patches",
+                                     "proportion occupied area",
+                                     "extinction", "step"])
 
     graphs = {
         'graph1': '',
@@ -82,7 +80,6 @@ def index(request):
     ]
 
     for idx, graph in enumerate(graphs.keys()):
-
         fig = px.line(
             graph_df,
             x='time',
@@ -112,10 +109,10 @@ def index(request):
         name='patch_data_source'
     )
     max_radius = max(source.data['size'])
-    max_diameter = max_radius+min(source.data['x'])/500
+    max_diameter = max_radius + min(source.data['x']) / 500
     plot = figure(
-        x_range=((min(source.data['x'])-max_diameter), (max(source.data['x'])+max_diameter)),
-        y_range=((min(source.data['y'])-max_diameter), (max(source.data['y'])+max_diameter)),
+        x_range=((min(source.data['x']) - max_diameter), (max(source.data['x']) + max_diameter)),
+        y_range=((min(source.data['y']) - max_diameter), (max(source.data['y']) + max_diameter)),
         tools=[]
     )
     plot.sizing_mode = "scale_both"
@@ -141,7 +138,7 @@ def index(request):
 
     draw_tool = PointDrawTool(
         renderers=[renderer],
-        empty_value=50 + max_radius//2
+        empty_value=50 + max_radius // 2
     )
     plot.add_tools(draw_tool)
     plot.toolbar.active_tap = draw_tool
@@ -207,7 +204,7 @@ def index(request):
     source.selected.js_on_change(
         'indices',
         CustomJS(
-            args = {
+            args={
                 "source": source,
                 "radio_button_group": radio_button_group,
                 "size_source": size_source,
@@ -219,7 +216,7 @@ def index(request):
     radio_button_group.js_on_event(
         "button_click",
         CustomJS(
-            args = {
+            args={
                 "source": source,
                 "radio_button_group": radio_button_group
             },
@@ -229,7 +226,7 @@ def index(request):
     size_source.js_on_change(
         'patching',
         CustomJS(
-            args = {
+            args={
                 "source": source,
                 "size_source": size_source,
                 "table": table
@@ -271,6 +268,7 @@ def status_to_colour(statuses):
     """
     return ["green" if status else "red" for status in statuses]
 
+
 def colour_to_status(colour):
     """
     Maps colours to statuses
@@ -292,15 +290,15 @@ def post_patches(request):
                 patch_data["x"][i],
                 patch_data["y"][i],
                 colour_to_status(patch_data["color"][i]),
-                patch_data["size"][i]
+                (math.pi * (patch_data["size"][i]) ** 2)
             ))
 
         simulation = Simulator(patch_list,
-            dispersal_alpha=float(data["dispersal_kernel"]),
-            area_exponent_b=float(data["connectivity"]),
-            species_specific_constant_y=float(data["colonization_probability"]),
-            species_specific_constant_u=float(data["patch_extinction_probability_u"]),
-            patch_area_effect_x=float(data["patch_extinction_probability_x"]))
+                               dispersal_alpha=float(data["dispersal_kernel"]),
+                               area_exponent_b=float(data["connectivity"]),
+                               species_specific_constant_y=float(data["colonization_probability"]),
+                               species_specific_constant_u=float(data["patch_extinction_probability_u"]),
+                               patch_area_effect_x=float(data["patch_extinction_probability_x"]))
         simulation.simulate()
 
         graph_data = simulation.get_data()
