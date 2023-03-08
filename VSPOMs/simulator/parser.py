@@ -65,7 +65,7 @@ def parse_csv(filename):
                     y_coords.append(y_coord)
                     statuses.append(status)
                     radiuses.append(radius)
-                    patch_list.append(Patch(status, x_coord, y_coord, radius))
+                    patch_list.append(Patch(status, x_coord, y_coord, area))
 
                 # path to take if settings unread
                 else:
