@@ -41,7 +41,7 @@ class Patch:
 
     # pylint: disable=too-many-instance-attributes
 
-    def __init__(self, status, x_coord, y_coord, radius):
+    def __init__(self, status, x_coord, y_coord, area):
         """
         Initialises Patch object.
         """
@@ -49,8 +49,7 @@ class Patch:
         # static patch values
         self.x_coord = x_coord
         self.y_coord = y_coord
-        self.radius = radius
-        self.area = pi * (radius**2)
+        self.area = area
 
         # runtime patch variables
         self.status = status  # true if occupied, false if unoccupied.
