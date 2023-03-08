@@ -1,19 +1,5 @@
 $(document).ready(function () {
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
+
     $("#button-run").click(function(){
         const csrftoken = getCookie('csrftoken');
         var ds = Bokeh.documents[0].get_model_by_name('patch_data_source');
@@ -24,14 +10,6 @@ $(document).ready(function () {
         var connectivity = document.getElementsByName("connectivity")[0].value;
         var rescue_effect = document.getElementsByName("rescue-effect")[0].value;
         var stochasticity = document.getElementsByName("stochasticity")[0].value;
-        // alert("Simulation Begins with \n"+
-        //     "Disposal kernel = " + dispersal_kernel.toString()+"\n"+
-        //     "Colonization probability = " + colonization_probability.toString()+"\n"+
-        //     "Patch extinction u = " + patch_extinction_probability_u.toString()+"\n"+
-        //     "Patch extinction x = " + patch_extinction_probability_x.toString()+"\n"+
-        //     "Connectivity = " + connectivity.toString()+"\n"+
-        //     "Rescue Effect = " + rescue_effect.toString()+"\n"+
-        //     "Stochasticity = " + stochasticity.toString());
         fetch("post_patches",{
             method: 'POST',
             credentials: 'same-origin',
@@ -70,3 +48,18 @@ $(document).ready(function () {
     });
 })
 
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}

@@ -29,30 +29,6 @@ except ModuleNotFoundError:
     from ..simulator.parser import parse_csv
 
 
-def generate_patch_list_random(num):
-    """
-    Generates a list of patches.
-    The patches with random parameters  for [status, x_coord, y_coord, radius]
-
-    Args:
-        num (int): The number of patches to be generated
-
-    Returns:
-        patch_list (list): A list of the generated patches
-    """
-    patch_list = []
-    for _ in range(num):
-        patch_list.append(
-            Patch(
-                bool(random.randint(0, 1)),
-                random.uniform(0, 25),
-                random.uniform(0, 25),
-                random.uniform(0, 5)
-            )
-        )
-    return patch_list
-
-
 def index(request):
     """
     Returns a request to serve index page.
@@ -89,7 +65,7 @@ def index(request):
             height=600,
         )
 
-        # attribute adjustments
+        # Attribute adjustments
         fig.update_traces(line_width=3)
         fig.update_layout(
             autosize=False,
@@ -99,7 +75,6 @@ def index(request):
         graphs[graph] = fig.to_html(full_html=False)
 
     patch_map = {'map': ''}
-    print([patches["x_coords"]])
 
     source = ColumnDataSource({
         'x': patches["x_coords"].values.tolist(),
@@ -109,10 +84,7 @@ def index(request):
         name='patch_data_source'
     )
     max_radius = max(source.data['size'])
-    max_diameter = max_radius + min(source.data['x']) / 500
     plot = figure(
-        x_range=((min(source.data['x']) - max_diameter), (max(source.data['x']) + max_diameter)),
-        y_range=((min(source.data['y']) - max_diameter), (max(source.data['y']) + max_diameter)),
         tools=[]
     )
     plot.sizing_mode = "scale_both"
@@ -149,6 +121,7 @@ def index(request):
         visible=False
     )
 
+    # Custom JS callbacks
     callback_select = """
     if(source.selected.indices.length > 0){
         radio_button_group.visible = true;
@@ -273,74 +246,191 @@ def colour_to_status(colour):
     """
     Maps colours to statuses
     """
-    return True if colour == "green" else False
+    return colour == "green"
 
 
 def post_patches(request):
     """
-    AJAX for "Run Simulation" button functionality
+    Catches request from ajax and runs the simulation with the data extracted from the client.
+
+    Args:
+        request: JSON request
+    
+    Returns:
+        JsonResponses with either success or error message.
     """
 
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        data = json.loads(request.body)
-        patch_data = data["bokeh"]
-        patch_list = []
-        for i in range(len(patch_data["x"])):
-            patch_list.append(Patch(
-                patch_data["x"][i],
-                patch_data["y"][i],
-                colour_to_status(patch_data["color"][i]),
-                (math.pi * (patch_data["size"][i]) ** 2)
-            ))
-
-        simulation = Simulator(patch_list,
-                               dispersal_alpha=float(data["dispersal_kernel"]),
-                               area_exponent_b=float(data["connectivity"]),
-                               species_specific_constant_y=float(data["colonization_probability"]),
-                               species_specific_constant_u=float(data["patch_extinction_probability_u"]),
-                               patch_area_effect_x=float(data["patch_extinction_probability_x"]))
-        simulation.simulate()
-
-        graph_data = simulation.get_data()
-        graph_df = pd.DataFrame()
-        for i in range(len(graph_data.index)):
-            dfa = graph_data.head(i).copy()
-            dfa['step'] = i
-            graph_df = pd.concat([graph_df, dfa])
-
-        graphs = {
-            'graph1': '',
-            'graph2': '',
-            'graph3': '',
-            'graph4': ''
-        }
-        graph_labels = [
-            "time",
-            "proportion occupied patches",
-            "proportion occupied area",
-            "extinction"
-        ]
-
-        for idx, graph in enumerate(graphs.keys()):
-            fig = px.line(
-                graph_df,
-                x='time',
-                y=graph_labels[idx],
-                animation_frame='step',
-                width=1000,
-                height=600,
-            )
-
-            # attribute adjustments
-            fig.layout.updatemenus[0].buttons[0]['args'][1]['frame']['redraw'] = True
-            fig.update_traces(line_width=3)
-            fig.update_layout(
-                autosize=False,
-                width=500,
-                height=400,
-            )
-            graphs[graph] = fig.to_json()
-
-        return JsonResponse({"message": json.loads(graphs["graph1"])}, status=200)
-    else:
+    if request.headers.get('x-requested-with') != 'XMLHttpRequest':
         return JsonResponse({"error": "error"}, status=400)
+
+    data = json.loads(request.body)
+    patch_data = data["bokeh"]
+    patch_list = []
+    for i in range(len(patch_data["x"])):
+        patch_list.append(Patch(
+            patch_data["x"][i],
+            patch_data["y"][i],
+            colour_to_status(patch_data["color"][i]),
+            patch_data["size"][i]
+        ))
+
+    # Simulate
+    simulation = Simulator(patch_list,
+        dispersal_alpha=float(data["dispersal_kernel"]),
+        area_exponent_b=float(data["connectivity"]),
+        species_specific_constant_y=float(data["colonization_probability"]),
+        species_specific_constant_u=float(data["patch_extinction_probability_u"]),
+        patch_area_effect_x=float(data["patch_extinction_probability_x"]))
+    simulation.simulate()
+
+    # Graphs
+    graph_data = simulation.get_data()
+    graph_df = pd.DataFrame()
+    for i in range(len(graph_data.index)):
+        dfa = graph_data.head(i).copy()
+        dfa['step'] = i
+        graph_df = pd.concat([graph_df, dfa])
+
+    graphs = {
+        'graph1': '',
+        'graph2': '',
+        'graph3': '',
+        'graph4': ''
+    }
+    graph_labels = [
+        "time",
+        "proportion occupied patches",
+        "proportion occupied area",
+        "extinction"
+    ]
+
+    for idx, graph in enumerate(graphs.keys()):
+        fig = px.line(
+            graph_df,
+            x='time',
+            y=graph_labels[idx],
+            animation_frame='step',
+            width=1000,
+            height=600,
+        )
+
+        # Attribute adjustments
+        fig.layout.updatemenus[0].buttons[0]['args'][1]['frame']['redraw'] = True
+        fig.update_traces(line_width=3)
+        fig.update_layout(
+            autosize=False,
+            width=500,
+            height=400,
+        )
+        graphs[graph] = fig.to_json()
+
+    return JsonResponse({"message": json.loads(graphs["graph1"])}, status=200)
+
+
+def generate_patch_list_random(num, min_x, max_x, min_y, max_y, min_radius, max_radius):
+    """
+    Generates a list of patches.
+    The patches with random parameters  for [status, x, y, radius]
+
+    Args:
+        num (int): The number of patches to be generated
+        min_x (int): Min value for x axis
+        max_x (int): Max value for x axis
+        min_y (int): Min value for y axis
+        max_y (int): Max value for y axis
+        min_radius (int): Min value for patch radius
+        max_radius (int): Max value for patch radius
+
+    Returns:
+        patch_list (list): A list of the generated patches
+    """
+    patch_list = []
+    for _ in range(num):
+        patch_list.append(
+            Patch(
+                bool(random.randint(0, 1)),
+                random.uniform(min_x, max_x),
+                random.uniform(min_y, max_y),
+                random.uniform(min_radius, max_radius)
+            )
+        )
+    return patch_list
+
+
+def post_create(request):
+    """
+    Catches request from ajax and determines the requested action 
+    then provides the appropriate patch data and settings
+
+    Args:
+        request: JSON request
+            link: Either 'Nothing' or a file name under media
+
+    Returns:
+        JsonResponses with either the patch data and settings, or error message.
+    """
+    if request.headers.get('x-requested-with') != 'XMLHttpRequest':
+        return JsonResponse({"error": "error"}, status=400)
+
+    data = json.loads(request.body)
+
+    # Read Scenario
+    if data["command"] == "load":
+        address = 'media/'+data["address"]
+        patch_list,settings = parse_csv(address)
+
+        patches = pd.DataFrame.from_dict(patch_list)
+        random_patch_source = json.dumps({
+            'x': patches["x_coords"].values.tolist(),
+            'y': patches["y_coords"].values.tolist(),
+            'color': status_to_colour(patches["statuses"]),
+            'size': patches["radiuses"].values.tolist()}
+        )
+
+        parameters = json.dumps({
+            "dispersal_kernel": settings["dispersal_alpha"],
+            "connectivity": settings["area_exponent_b"],
+            "colonization_probability": settings["species_specific_constant_y"],
+            "patch_extinction_probability_u": settings["species_specific_constant_u"],
+            "patch_extinction_probability_x": settings["patch_area_effect_x"],
+            "rescue_effect": random.uniform(0, 10),
+            "stochasticity": random.uniform(0, 10)
+        })
+
+
+    # Random Scenario
+    elif data["command"] == "random":
+        fields = data["fields"]
+        patch_list = generate_patch_list_random(
+            fields["num"],
+            fields["min_x"],
+            fields["max_x"],
+            fields["min_y"],
+            fields["max_y"],
+            fields["min_radius"],
+            fields["max_radius"]
+        )
+
+        random_patch_source = json.dumps({
+            'x': [patch.get_coords()[0] for patch in patch_list],
+            'y': [patch.get_coords()[1] for patch in patch_list],
+            'color': status_to_colour([patch.is_occupied() for patch in patch_list]),
+            'size': [patch.get_area() for patch in patch_list]
+            })
+
+        parameters = json.dumps({
+            "dispersal_kernel": random.uniform(0, 10),
+            "connectivity": random.uniform(0, 10),
+            "colonization_probability": random.uniform(0, 10),
+            "patch_extinction_probability_u": random.uniform(0, 10),
+            "patch_extinction_probability_x": random.uniform(0, 10),
+            "rescue_effect": random.uniform(0, 10),
+            "stochasticity": random.uniform(0, 10)
+        })
+
+    return JsonResponse(
+        {"patch_source": json.loads(random_patch_source),
+        "parameters": json.loads(parameters)
+        },
+        status=200
+    )
