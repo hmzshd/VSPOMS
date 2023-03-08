@@ -178,7 +178,7 @@ section.panel#loading-panel p {
     z-index: 100000001;
     top: 0;
     left: 0;
-    opacity: 0.5; 
+    opacity: 0.6; 
 }
 #loading-overlay img {
     display: block;
@@ -403,11 +403,6 @@ section.panel .scenario-list li a:hover {
 section.panel .random-scenario-box {
     margin-left: 10px;
 }
-section.panel .random-scenario-box .generate-button-container {
-    display: flex;
-    justify-content: center;
-    height: calc(100% - 80px);
-}
 section.panel .random-scenario-box button {
     text-align: center;
     font-size: 24px;
@@ -419,10 +414,44 @@ section.panel .random-scenario-box button {
     transition: all 0.1s ease-in-out;
     width: 300px;
     height: 70px;
-    margin-top: calc(40vh - 175px);
+    margin-top: 20px;
 }
 section.panel .random-scenario-box button:hover {
     filter: brightness(1.1);
     transform: scale(1.02);
     cursor: pointer;
+}
+.random-parameters .random-parameters_row {
+    display: flex;
+}
+.random-parameters .random-parameters_column {
+    flex: 50%;
+    background-color: white;
+    padding: 18px 10px;
+    border-radius: 4px;
+    margin: 6px;
+    opacity: 0.7;
+    transition: all 0.1s ease-in-out;
+}
+.random-parameters .random-parameters_column#random_num {
+    flex: 10%;
+}
+.random-parameters .random-parameters_column:hover {
+    opacity: 1;
+}
+.random-parameters input {
+    width: calc(50% - 8px);
+    border-radius: 2px;
+    font-size: 18px;
+    font-family: monospace;
+    border: 1px solid black;
+    margin: 6px 0 0 0;
+}
+.random-parameters .random-parameters_column#random_num input {
+    width: 100%;
+}
+section.panel .generate-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
 }

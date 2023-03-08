@@ -25,8 +25,7 @@
      <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
     <!-- Bokeh Links -->
-    <link href="http://cdn.pydata.org/bokeh/release/bokeh-3.0.0.min.css" rel="stylesheet" type="text/css">
-    <link href="http://cdn.pydata.org/bokeh/release/bokeh-widgets-3.0.0.min.css" rel="stylesheet" type="text/css">
+
     <script src="https://cdn.bokeh.org/bokeh/release/bokeh-3.0.0.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-3.0.0.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-3.0.0.min.js" crossorigin="anonymous"></script>
@@ -87,11 +86,14 @@
 
         <div class="scenario-list">
             {% for file in media_files %}
-            <li>{{ file }}<a>Load</a></li>
+            <li>
+                {{ file }}
+                <a class="button-populate" data-file ="{{ file }}">
+                {% csrf_token %}
+                Load
+                </a>
+            </li>
             {% endfor %}
-            <li>asdassd_a456yrte.csv<a>Load</a></li>
-            <li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li>
-            <li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li><li>asdassd_aasd-7dsad8d456yrte.csv<a>Load</a></li>
         </div>
 
     </div>
@@ -102,8 +104,36 @@
 
     <div class="random-scenario-box">
         <h2>Generate a Random Scenario</h2>
+        <div class="random-parameters">
+            <div class="random-parameters_row">
+                <p class="random-parameters_column" id="random_num"id="random_num">
+                    <a>No. of Patches</a><br> 
+                    <input type="number" name="random_num" placeholder="No. of patches" value="100">
+                </p>
+                <p class="random-parameters_column">
+                    <a>Patch Radius Range</a><br>
+                    <input type="number" name="random_min-radius" placeholder="Min radius" value="0"> -
+                    <input type="number" name="random_max-radius" placeholder="Max radius" value="5">
+                </p>
+            </div>
+            <div class="random-parameters_row">
+                <p class="random-parameters_column">
+                    <a>x Range</a><br>
+                    <input type="number" name="random_min-x" placeholder="Min x" value="0"> -
+                    <input type="number" name="random_max-x" placeholder="Max x" value="100">
+                </p>
+                <p class="random-parameters_column">
+                    <a>y Range</a><br>
+                    <input type="number" name="random_min-y" placeholder="Min y" value="0"> -
+                    <input type="number" name="random_max-y" placeholder="Max y" value="100">
+                </p>
+            </div>
+        </div>
         <div class="generate-button-container">
-            <button>Generate Scenario</button>
+            <button type="submit" class="button-populate">
+                {% csrf_token %}
+                Generate Scenario
+            </button>
         </div>
         
     </div>

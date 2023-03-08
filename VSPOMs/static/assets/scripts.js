@@ -80,13 +80,84 @@ $(document).ready(function(){
             else if ($("#button-simulate").hasClass("active-page")) {openSettings()}
             else if ($("#button-settings").hasClass("active-page")) {openCreate()}
             break;
+        // P is for PARTY
+        case 80:
+            $("html, body, div, header").css({
+                'background-color': 'rgb(234, 255, 0)',
+                'color': 'hotpink',
+                'font-weight': 'bold',
+                'text-transform': 'uppercase',
+                'font-family': "'Comic Sans MS', 'Comic Sans', cursive",
+                //'font-size': '50px',
+                'border': '10px solid #8cff00',
+                'border-radius': '40px',
+            });
         };
       });
 
-
+    
     // On "Run Simulation" button click
     $('#button-run').click(function() {
         $("#loading-overlay").fadeIn(100);
+    })
+
+    // On "Generate Scenario" button click
+    $(".button-populate").click(function () {
+        $("#loading-overlay").fadeIn(100);
+        const csrftoken = getCookie('csrftoken');
+        var message = {};
+        const loading = !this.dataset.file;
+        // Load csv file
+        if (!loading) {
+            message["command"] = "load"
+            message["address"] = this.dataset.file;
+        } 
+        // Create random
+        else {
+            message["command"] = "random"
+            // post 6 data fields
+            message["fields"] = {
+                "num" : parseInt(document.getElementsByName("random_num")[0].value),
+                "min_x" : parseInt(document.getElementsByName("random_min-x")[0].value),
+                "max_x" : parseInt(document.getElementsByName("random_max-x")[0].value),
+                "min_y" : parseInt(document.getElementsByName("random_min-y")[0].value),
+                "max_y" : parseInt(document.getElementsByName("random_max-y")[0].value),
+                "min_radius" : parseInt(document.getElementsByName("random_min-radius")[0].value),
+                "max_radius" : parseInt(document.getElementsByName("random_max-radius")[0].value)
+            }
+        }
+        message = JSON.stringify(message);
+        
+        fetch("post_create", {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': csrftoken,
+            },
+            body: message
+        })
+        .then(response => {
+            // Hide loading and navigate to simulate page
+            $("#loading-overlay").fadeOut(200);
+            openSimulate();
+            (response.text().then(text => {
+                const patch_source = JSON.parse(text).patch_source;
+                const parameters = JSON.parse(text).parameters;
+                var ds = Bokeh.documents[0].get_model_by_name('patch_data_source');
+                ds.data = patch_source;
+                ds.change.emit();
+
+                document.getElementsByName("dispersal-kernel")[0].value = parameters["dispersal_kernel"];
+                document.getElementsByName("colonization-probability")[0].value = parameters["colonization_probability"];
+                document.getElementsByName("patch-extinction-probability-u")[0].value = parameters["patch_extinction_probability_u"];
+                document.getElementsByName("patch-extinction-probability-a")[0].value = parameters["patch_extinction_probability_x"];
+                document.getElementsByName("connectivity")[0].value = parameters["connectivity"];
+                document.getElementsByName("rescue-effect")[0].value = parameters["rescue_effect"];
+                document.getElementsByName("stochasticity")[0].value = parameters["stochasticity"];
+            }));
+        })
     })
 
 });
