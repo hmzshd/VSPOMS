@@ -1,8 +1,8 @@
-from django.test import Client, TestCase
+from django.test import TestCase
 import json
 from VSPOMsApp.views import *
 
-class ViewsTestCase(TestCase):
+class ViewsTestCase(TestCase):        
     def test_index_view(self):
         response = self.client.get("/")
         self.assertEqual(response.status_code, 200)
@@ -70,7 +70,6 @@ class ViewsTestCase(TestCase):
 
     def test_post_patches(self):
         # create JSON data for the request
-        # WIP
         request_data = {
             "bokeh": {
                 "x": [1, 2, 3],
@@ -84,3 +83,15 @@ class ViewsTestCase(TestCase):
             "patch_extinction_probability_u": 0.8,
             "patch_extinction_probability_x": 0.9
         }
+
+        # send the POST request with the JSON data
+        response = self.client.post(
+            '/post_patches',
+            data=json.dumps(request_data),
+            content_type='application/json',
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest' 
+        )
+
+        # check that the response contains the expected JSON data
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('message' in response.json())
