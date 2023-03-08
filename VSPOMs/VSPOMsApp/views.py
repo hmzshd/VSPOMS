@@ -1,8 +1,8 @@
-
 # pylint: disable=no-member, too-many-locals
 """
 Disables no-member and too-many-locals warnings.
 """
+import math
 import os
 import json
 import random
@@ -37,10 +37,10 @@ def index(request):
     # Prepare Data
     patch_list = parse_csv('static/data/demo.csv')[0]
     patches = pd.DataFrame.from_dict(patch_list)
-    graph_df = pd.DataFrame(columns= ["time",
-        "proportion occupied patches",
-        "proportion occupied area",
-        "extinction","step"])
+    graph_df = pd.DataFrame(columns=["time",
+                                     "proportion occupied patches",
+                                     "proportion occupied area",
+                                     "extinction", "step"])
 
     graphs = {
         'graph1': '',
@@ -56,7 +56,6 @@ def index(request):
     ]
 
     for idx, graph in enumerate(graphs.keys()):
-
         fig = px.line(
             graph_df,
             x='time',
@@ -178,7 +177,7 @@ def index(request):
     source.selected.js_on_change(
         'indices',
         CustomJS(
-            args = {
+            args={
                 "source": source,
                 "radio_button_group": radio_button_group,
                 "size_source": size_source,
@@ -190,7 +189,7 @@ def index(request):
     radio_button_group.js_on_event(
         "button_click",
         CustomJS(
-            args = {
+            args={
                 "source": source,
                 "radio_button_group": radio_button_group
             },
@@ -200,7 +199,7 @@ def index(request):
     size_source.js_on_change(
         'patching',
         CustomJS(
-            args = {
+            args={
                 "source": source,
                 "size_source": size_source,
                 "table": table

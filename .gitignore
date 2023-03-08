@@ -136,3 +136,6 @@ VSPOMs/IloveVSPOMS.bat
 # Angus testing files 
 /VSPOMs/simulator/parser_test.py
 
+/VSPOMs/simulator/.demo.csv.kate-swp
+/VSPOMs/simulator/.~lock.demo2.csv#
+/VSPOMs/simulator/ohno.py

@@ -7,11 +7,14 @@ And returns the setting for the simulation, and a dictionary corresponding to th
 
 from math import sqrt, pi
 import csv
+
 # necessary to wrap this in try except due to the location of manage.py
 try:
     from simulator.float_checker import is_float
+    from simulator.patch import Patch
 except ModuleNotFoundError:
     from float_checker import is_float
+    from patch import Patch
 
 
 def parse_csv(filename):
@@ -35,6 +38,7 @@ def parse_csv(filename):
         statuses = list()
         radiuses = list()
         settings = dict()
+        patch_list = list()
         settings_read = False
 
         for row in reader:
@@ -51,7 +55,8 @@ def parse_csv(filename):
                 if settings_read:
                     x_coord = float(row[0])
                     y_coord = float(row[1])
-                    radius = sqrt(float(row[2]) / pi)
+                    area = float(row[2])
+                    radius = sqrt(area / pi)
                     if int(row[3]) == 0:
                         status = False
                     else:
@@ -60,6 +65,7 @@ def parse_csv(filename):
                     y_coords.append(y_coord)
                     statuses.append(status)
                     radiuses.append(radius)
+                    patch_list.append(Patch(status, x_coord, y_coord, area))
 
                 # path to take if settings unread
                 else:
@@ -73,4 +79,4 @@ def parse_csv(filename):
     patch_dict = {"x_coords": x_coords, "y_coords": y_coords,
                   "radiuses": radiuses, "statuses": statuses}
 
-    return patch_dict, settings
+    return patch_dict, settings, patch_list
