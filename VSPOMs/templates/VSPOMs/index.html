@@ -86,7 +86,13 @@
 
         <div class="scenario-list">
             {% for file in media_files %}
-            <li>{{ file }}<a class="button-populate" data-file ="{{ file }}">{% csrf_token %}Load</a></li>
+            <li>
+                {{ file }}
+                <a class="button-populate" data-file ="{{ file }}">
+                {% csrf_token %}
+                Load
+                </a>
+            </li>
             {% endfor %}
         </div>
 
@@ -99,7 +105,9 @@
     <div class="random-scenario-box">
         <h2>Generate a Random Scenario</h2>
         <div class="generate-button-container">
-            <button class="button-populate">{% csrf_token %}Generate Scenario</button>
+            <button class="button-populate">
+                {% csrf_token %}Generate Scenario
+            </button>
         </div>
         
     </div>
