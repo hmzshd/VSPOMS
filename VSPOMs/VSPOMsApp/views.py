@@ -66,7 +66,7 @@ def index(request):
             height=600,
         )
 
-        # attribute adjustments
+        # Attribute adjustments
         fig.update_traces(line_width=3)
         fig.update_layout(
             autosize=False,
@@ -111,7 +111,7 @@ def index(request):
 
     draw_tool = PointDrawTool(
         renderers=[renderer],
-        empty_value=50 + max_radius//2
+        empty_value=50 + max_radius // 2
     )
     plot.add_tools(draw_tool)
     plot.toolbar.active_tap = draw_tool
@@ -122,6 +122,7 @@ def index(request):
         visible=False
     )
 
+    # Custom JS callbacks
     callback_select = """
     if(source.selected.indices.length > 0){
         radio_button_group.visible = true;
@@ -241,6 +242,7 @@ def status_to_colour(statuses):
     """
     return ["green" if status else "red" for status in statuses]
 
+
 def colour_to_status(colour):
     """
     Maps colours to statuses
@@ -261,7 +263,7 @@ def post_patches(request):
 
     if request.headers.get('x-requested-with') != 'XMLHttpRequest':
         return JsonResponse({"error": "error"}, status=400)
-    
+
     data = json.loads(request.body)
     patch_data = data["bokeh"]
     patch_list = []
@@ -273,7 +275,7 @@ def post_patches(request):
             patch_data["size"][i]
         ))
 
-    #Simulate
+    # Simulate
     simulation = Simulator(patch_list,
         dispersal_alpha=float(data["dispersal_kernel"]),
         area_exponent_b=float(data["connectivity"]),
@@ -282,7 +284,7 @@ def post_patches(request):
         patch_area_effect_x=float(data["patch_extinction_probability_x"]))
     simulation.simulate()
 
-    # Graphs 
+    # Graphs
     graph_data = simulation.get_data()
     graph_df = pd.DataFrame()
     for i in range(len(graph_data.index)):
@@ -313,7 +315,7 @@ def post_patches(request):
             height=600,
         )
 
-        # attribute adjustments
+        # Attribute adjustments
         fig.layout.updatemenus[0].buttons[0]['args'][1]['frame']['redraw'] = True
         fig.update_traces(line_width=3)
         fig.update_layout(
@@ -326,7 +328,6 @@ def post_patches(request):
     return JsonResponse({"message": json.loads(graphs["graph1"])}, status=200)
 
 
-
 def generate_patch_list_random(num, min_x, max_x, min_y, max_y, min_radius, max_radius):
     """
     Generates a list of patches.
@@ -334,6 +335,12 @@ def generate_patch_list_random(num, min_x, max_x, min_y, max_y, min_radius, max_
 
     Args:
         num (int): The number of patches to be generated
+        min_x (int): Min value for x axis
+        max_x (int): Max value for x axis
+        min_y (int): Min value for y axis
+        max_y (int): Max value for y axis
+        min_radius (int): Min value for patch radius
+        max_radius (int): Max value for patch radius
 
     Returns:
         patch_list (list): A list of the generated patches
@@ -365,8 +372,9 @@ def post_create(request):
     """
     if request.headers.get('x-requested-with') != 'XMLHttpRequest':
         return JsonResponse({"error": "error"}, status=400)
-    
+
     data = json.loads(request.body)
+
     # Read Scenario
     if data["command"] == "load":
         address = 'media/'+data["address"]
@@ -389,8 +397,8 @@ def post_create(request):
             "rescue_effect": random.uniform(0, 10),
             "stochasticity": random.uniform(0, 10)
         })
-        
-        
+
+
     # Random Scenario
     elif data["command"] == "random":
         fields = data["fields"]
@@ -410,7 +418,7 @@ def post_create(request):
             'color': status_to_colour([patch.is_occupied() for patch in patch_list]),
             'size': [patch.get_area() for patch in patch_list]
             })
-        
+
         parameters = json.dumps({
             "dispersal_kernel": random.uniform(0, 10),
             "connectivity": random.uniform(0, 10),
@@ -424,7 +432,6 @@ def post_create(request):
     return JsonResponse(
         {"patch_source": json.loads(random_patch_source),
         "parameters": json.loads(parameters)
-        }, 
+        },
         status=200
     )
-        
