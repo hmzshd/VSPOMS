@@ -12,11 +12,9 @@ import csv
 try:
     from simulator.float_checker import is_float
     from simulator.patch import Patch
-    from simulator.scaler import scale_list
 except ModuleNotFoundError:
     from float_checker import is_float
     from patch import Patch
-    from scaler import scale_list
 
 
 def parse_csv(filename):
