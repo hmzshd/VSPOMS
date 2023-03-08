@@ -89,8 +89,8 @@ $(document).ready(function(){
                 'text-transform': 'uppercase',
                 'font-family': "'Comic Sans MS', 'Comic Sans', cursive",
                 //'font-size': '50px',
-                //'border': '30px solid #8cff00',
-                //'border-radius': '140px',
+                'border': '10px solid #8cff00',
+                'border-radius': '40px',
             });
         };
       });
@@ -103,6 +103,7 @@ $(document).ready(function(){
 
     // On "Generate Scenario" button click
     $(".button-populate").click(function () {
+        $("#loading-overlay").fadeIn(100);
         const csrftoken = getCookie('csrftoken');
         var message = {};
         const loading = !this.dataset.file;
@@ -138,6 +139,8 @@ $(document).ready(function(){
             body: message
         })
         .then(response => {
+            // Hide loading and navigate to simulate page
+            $("#loading-overlay").fadeOut(200);
             openSimulate();
             (response.text().then(text => {
                 const patch_source = JSON.parse(text).patch_source;
