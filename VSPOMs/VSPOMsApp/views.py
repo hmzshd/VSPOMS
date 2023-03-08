@@ -351,6 +351,16 @@ def post_patches(request):
         return JsonResponse({"error": "error"}, status=400)
 
 def post_create(request):
+    """
+    Catches request from ajax and determines the requested action then provides the appropriate patch data and settings.
+
+    Args:
+        request: JSON request
+            link: Either 'Nothing' or a file name under media
+
+    Returns:
+        JsonResponses with either the patch data and settings, or error message.
+    """
     if (request.headers.get('x-requested-with') == 'XMLHttpRequest'):
         data = json.loads(request.body)
         if (data != "Nothing"):
