@@ -80,6 +80,18 @@ $(document).ready(function(){
             else if ($("#button-simulate").hasClass("active-page")) {openSettings()}
             else if ($("#button-settings").hasClass("active-page")) {openCreate()}
             break;
+        // P is for PARTY
+        case 80:
+            $("html, body, div, header").css({
+                'background-color': 'rgb(234, 255, 0)',
+                'color': 'hotpink',
+                'font-weight': 'bold',
+                'text-transform': 'uppercase',
+                'font-family': "'Comic Sans MS', 'Comic Sans', cursive",
+                //'font-size': '50px',
+                //'border': '30px solid #8cff00',
+                //'border-radius': '140px',
+            });
         };
       });
 
@@ -92,11 +104,29 @@ $(document).ready(function(){
     // On "Generate Scenario" button click
     $(".button-populate").click(function () {
         const csrftoken = getCookie('csrftoken');
-        var message = JSON.stringify("Nothing");
-        const loading = !this.dataset.file
+        var message = {};
+        const loading = !this.dataset.file;
+        // Load csv file
         if (!loading) {
-            message = JSON.stringify(this.dataset.file);
+            message["command"] = "load"
+            message["address"] = this.dataset.file;
+        } 
+        // Create random
+        else {
+            message["command"] = "random"
+            // post 6 data fields
+            message["fields"] = {
+                "num" : parseInt(document.getElementsByName("random_num")[0].value),
+                "min_x" : parseInt(document.getElementsByName("random_min-x")[0].value),
+                "max_x" : parseInt(document.getElementsByName("random_max-x")[0].value),
+                "min_y" : parseInt(document.getElementsByName("random_min-y")[0].value),
+                "max_y" : parseInt(document.getElementsByName("random_max-y")[0].value),
+                "min_radius" : parseInt(document.getElementsByName("random_min-radius")[0].value),
+                "max_radius" : parseInt(document.getElementsByName("random_max-radius")[0].value)
+            }
         }
+        message = JSON.stringify(message);
+        
         fetch("post_create", {
             method: 'POST',
             credentials: 'same-origin',
@@ -126,6 +156,5 @@ $(document).ready(function(){
             }));
         })
     })
-
 
 });

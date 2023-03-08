@@ -104,9 +104,46 @@
 
     <div class="random-scenario-box">
         <h2>Generate a Random Scenario</h2>
+        <div class="random-parameters">
+            <div class="random-parameters_row">
+
+            </div>
+            <div class="random-parameters_row">
+                
+            </div>
+            <p>
+                <a>num</a><br> 
+                <input type="number" name="random_num" placeholder="Enter value..." value="100">
+            </p>
+            <p>
+                <a>min_x</a><br>
+                <input type="number" name="random_min-x" placeholder="Enter value..." value="0">
+            </p>
+            <p>
+                <a>max_x</a><br>
+                <input type="number" name="random_max-x" placeholder="Enter value..." value="25">
+            </p>
+            <p>
+                <a>min_y</a><br>
+                <input type="number" name="random_min-y" placeholder="Enter value..." value="0">
+            </p>
+            <p>
+                <a>max_y</a><br>
+                <input type="number" name="random_max-y" placeholder="Enter value..." value="25">
+            </p>
+            <p>
+                <a>min_radius</a><br>
+                <input type="number" name="random_min-radius" placeholder="Enter value..." value="0">
+            </p>
+            <p>
+                <a>max_radius</a><br>
+                <input type="number" name="random_max-radius" placeholder="Enter value..." value="5">
+            </p>
+        </div>
         <div class="generate-button-container">
-            <button class="button-populate">
-                {% csrf_token %}Generate Scenario
+            <button type="submit" class="button-populate">
+                {% csrf_token %}
+                Generate Scenario
             </button>
         </div>
         

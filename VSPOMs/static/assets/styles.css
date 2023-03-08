@@ -178,7 +178,7 @@ section.panel#loading-panel p {
     z-index: 100000001;
     top: 0;
     left: 0;
-    opacity: 0.5; 
+    opacity: 0.6; 
 }
 #loading-overlay img {
     display: block;
@@ -419,10 +419,13 @@ section.panel .random-scenario-box button {
     transition: all 0.1s ease-in-out;
     width: 300px;
     height: 70px;
-    margin-top: calc(40vh - 175px);
+    margin-top: 20px;
 }
 section.panel .random-scenario-box button:hover {
     filter: brightness(1.1);
     transform: scale(1.02);
     cursor: pointer;
+}
+.random-parameters {
+    background-color: pink;
 }

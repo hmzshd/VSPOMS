@@ -29,32 +29,6 @@ except ModuleNotFoundError:
     from ..simulator.parser import parse_csv
 
 
-def generate_patch_list_random(num):
-    """
-    Generates a list of patches.
-    The patches with random parameters  for [status, x, y, radius]
-
-    Args:
-        num (int): The number of patches to be generated
-
-    Returns:
-        patch_list (list): A list of the generated patches
-    """
-    patch_list = []
-    for _ in range(num):
-        patch_list.append(
-            Patch(
-                bool(random.randint(0, 1)),
-                random.uniform(0, 25),
-                random.uniform(0, 25),
-                random.uniform(0, 5)
-            )
-        )
-    return patch_list
-
-
-
-
 def index(request):
     """
     Returns a request to serve index page.
@@ -351,7 +325,31 @@ def post_patches(request):
 
     return JsonResponse({"message": json.loads(graphs["graph1"])}, status=200)
 
-        
+
+
+def generate_patch_list_random(num, min_x, max_x, min_y, max_y, min_radius, max_radius):
+    """
+    Generates a list of patches.
+    The patches with random parameters  for [status, x, y, radius]
+
+    Args:
+        num (int): The number of patches to be generated
+
+    Returns:
+        patch_list (list): A list of the generated patches
+    """
+    patch_list = []
+    for _ in range(num):
+        patch_list.append(
+            Patch(
+                bool(random.randint(0, 1)),
+                random.uniform(min_x, max_x),
+                random.uniform(min_y, max_y),
+                random.uniform(min_radius, max_radius)
+            )
+        )
+    return patch_list
+
 
 def post_create(request):
     """
@@ -369,9 +367,9 @@ def post_create(request):
         return JsonResponse({"error": "error"}, status=400)
     
     data = json.loads(request.body)
-    #Read Scenario
-    if data != "Nothing":
-        address = 'media/'+data
+    # Read Scenario
+    if data["command"] == "load":
+        address = 'media/'+data["address"]
         patch_list,settings = parse_csv(address)
 
         patches = pd.DataFrame.from_dict(patch_list)
@@ -393,9 +391,18 @@ def post_create(request):
         })
         
         
-    #Random Scenario
-    else:
-        patch_list = generate_patch_list_random(100)
+    # Random Scenario
+    elif data["command"] == "random":
+        fields = data["fields"]
+        patch_list = generate_patch_list_random(
+            fields["num"],
+            fields["min_x"],
+            fields["max_x"],
+            fields["min_y"],
+            fields["max_y"],
+            fields["min_radius"],
+            fields["max_radius"]
+        )
 
         random_patch_source = json.dumps({
             'x': [patch.get_coords()[0] for patch in patch_list],
@@ -419,5 +426,5 @@ def post_create(request):
         "parameters": json.loads(parameters)
         }, 
         status=200
-        )
+    )
         
