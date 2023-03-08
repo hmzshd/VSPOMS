@@ -32,7 +32,7 @@ except ModuleNotFoundError:
 def generate_patch_list_random(num):
     """
     Generates a list of patches.
-    The patches with random parameters  for [status, x, y, radius]
+    The patches with random parameters  for [status, x_coord, y_coord, radius]
 
     Args:
         num (int): The number of patches to be generated
