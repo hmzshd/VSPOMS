@@ -16,10 +16,37 @@ class ViewsTestCase(TestCase):
         colours = status_to_colour(statuses)
         self.assertEqual(colours, ['green', 'red', 'green'])
         
-    def test_index_data(self):
+    def test_index_graphs(self):
         response = self.client.get("/")
         self.assertContains(response, "graph1")
         self.assertContains(response, "graph2")
         self.assertContains(response, "graph3")
         self.assertContains(response, "graph4")
+    
+    def test_index_maps(self):
+        response = self.client.get("/")
         self.assertContains(response, "map")
+
+    def test_index_table(self):
+        response = self.client.get("/")
+        self.assertContains(response, "table")
+
+    def test_index_patch_data_source(self):
+        response = self.client.get("/")
+        self.assertContains(response, "patch_data_source")
+
+    def test_index_size_source(self):
+        response = self.client.get("/")
+        self.assertContains(response, "size_source")
+
+    def test_index_patches(self):
+        response = self.client.get("/")
+        self.assertContains(response, "patches")
+
+    def test_index_view_has_renderer(self):
+        response = self.client.get("/")
+        self.assertContains(response, "renderer")
+
+    def test_index_plot(self):
+        response = self.client.get("/")
+        self.assertContains(response, "plot")
