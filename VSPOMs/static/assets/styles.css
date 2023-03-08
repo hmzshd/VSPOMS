@@ -433,6 +433,9 @@ section.panel .random-scenario-box button:hover {
     opacity: 0.7;
     transition: all 0.1s ease-in-out;
 }
+.random-parameters .random-parameters_column#random_num {
+    flex: 10%;
+}
 .random-parameters .random-parameters_column:hover {
     opacity: 1;
 }
@@ -443,6 +446,9 @@ section.panel .random-scenario-box button:hover {
     font-family: monospace;
     border: 1px solid black;
     margin: 6px 0 0 0;
+}
+.random-parameters .random-parameters_column#random_num input {
+    width: 100%;
 }
 section.panel .generate-button-container {
     display: flex;
