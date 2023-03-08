@@ -68,9 +68,6 @@ class ViewsTestCase(TestCase):
         response = self.client.get("/")
         self.assertContains(response, "plot")
 
-    def setUp(self):
-        self.client = Client()
-
     def test_post_patches(self):
         # create JSON data for the request
         # WIP
