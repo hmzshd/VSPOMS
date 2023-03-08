@@ -7,6 +7,7 @@ And returns the setting for the simulation, and a dictionary corresponding to th
 
 from math import sqrt, pi
 import csv
+
 # necessary to wrap this in try except due to the location of manage.py
 try:
     from simulator.float_checker import is_float
@@ -15,7 +16,7 @@ try:
 except ModuleNotFoundError:
     from float_checker import is_float
     from patch import Patch
-    from scaler import  scale_list
+    from scaler import scale_list
 
 
 def parse_csv(filename):
@@ -57,8 +58,7 @@ def parse_csv(filename):
                     x_coord = float(row[0])
                     y_coord = float(row[1])
                     area = float(row[2])
-                    area_scaled = area/100
-                    radius = sqrt(area_scaled / pi)
+                    radius = sqrt(area / pi)
                     if int(row[3]) == 0:
                         status = False
                     else:
@@ -67,6 +67,7 @@ def parse_csv(filename):
                     y_coords.append(y_coord)
                     statuses.append(status)
                     radiuses.append(radius)
+                    patch_list.append(Patch(status, x_coord, y_coord, radius))
 
                 # path to take if settings unread
                 else:
@@ -77,11 +78,7 @@ def parse_csv(filename):
                     settings["patch_area_effect_x"] = float(row[4])
                     settings_read = True
 
-    x_coords_scaled = x_coords
-    y_coords_scaled = y_coords
-    for i in range(len(radiuses)):
-        patch_list.append(Patch(statuses[i], x_coords_scaled[i], y_coords_scaled[i], radiuses[i]))
-    patch_dict = {"x_coords": x_coords_scaled, "y_coords": y_coords_scaled,
+    patch_dict = {"x_coords": x_coords, "y_coords": y_coords,
                   "radiuses": radiuses, "statuses": statuses}
 
     return patch_dict, settings, patch_list
