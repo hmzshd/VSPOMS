@@ -385,11 +385,11 @@ def post_create(request):
         else:
             patch_list = generate_patch_list_random(100)
             random_patch_source = json.dumps({
-                        'x': [patch.get_coords()[0] for patch in patch_list],
-                        'y': [patch.get_coords()[1] for patch in patch_list],
-                        'color': status_to_colour([patch.is_occupied() for patch in patch_list]),
-                        'size': [patch.get_area() for patch in patch_list]
-                        })
+                'x': [patch.get_coords()[0] for patch in patch_list],
+                'y': [patch.get_coords()[1] for patch in patch_list],
+                'color': status_to_colour([patch.is_occupied() for patch in patch_list]),
+                'size': [patch.get_area() for patch in patch_list]
+                })
             parameters = json.dumps(dict(
                 dispersal_kernel=random.uniform(0, 10),
                 connectivity=random.uniform(0, 10),
