@@ -111,7 +111,7 @@ $(document).ready(function(){
             openSimulate();
             (response.text().then(text => {
                 const patch_source = JSON.parse(text).patch_source;
-                const parameters = JSON.parse(JSON.parse(text).parameters);
+                const parameters = JSON.parse(text).parameters;
                 var ds = Bokeh.documents[0].get_model_by_name('patch_data_source');
                 ds.data = patch_source;
                 ds.change.emit();

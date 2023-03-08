@@ -416,7 +416,7 @@ def post_create(request):
 
     return JsonResponse(
         {"patch_source": json.loads(random_patch_source),
-        "parameters": parameters
+        "parameters": json.loads(parameters)
         }, 
         status=200
         )
