@@ -138,4 +138,4 @@ class Patch:
     def __str__(self):
         """returns a pretty string containing some of the patch's important data"""
         return f"Status: {self.status}, coordinates: " \
-               f"{self.x_coord}, {self.y_coord}, area: {self.area}\n "
+               f"{self.x_coord}, {self.y_coord}, area: {self.area}"
