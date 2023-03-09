@@ -48,9 +48,10 @@ def parse_csv(filename):
         radiuses = list()
         settings = dict()
         patch_list = list()
+        first_column_headings = set(('a','A','x','X', 'a ', 'A ', 'x ', 'X '))
         settings_read = False
 
-        for row in reader:
+        for line_number, row in enumerate(reader):
             # skipping 'empty' rows if there are any
             if len(row) == 0:
                 pass
@@ -84,6 +85,12 @@ def parse_csv(filename):
                     settings["species_specific_constant_u"] = float(row[3])
                     settings["patch_area_effect_x"] = float(row[4])
                     settings_read = True
+            else:
+                if row[0] not in first_column_headings:
+                    raise ValueError(f"""Error, row {line_number + 1} is unreadable
+                    this may be as the column heading is not a, A, x or X. 
+                    Offending row:\n{row}""")
+
 
     patch_dict = {"x_coords": x_coords, "y_coords": y_coords,
                   "radiuses": radiuses, "statuses": statuses}
