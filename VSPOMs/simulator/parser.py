@@ -37,7 +37,7 @@ def parse_csv(filename):
     # handled by frontend - in addition to FileNotFound error.
 
     if not filename.lower().endswith("csv"):
-        raise UnicodeDecodeError("unknown",filename,)
+        raise UnicodeDecodeError("unknown", filename, )
 
     with open(filename, encoding="utf-8") as csvfile:
 
@@ -48,7 +48,7 @@ def parse_csv(filename):
         radiuses = list()
         settings = dict()
         patch_list = list()
-        first_column_headings = set(('a','A','x','X', 'a ', 'A ', 'x ', 'X '))
+        first_column_headings = set(('a', 'A', 'x', 'X', 'a ', 'A ', 'x ', 'X '))
         settings_read = False
 
         for line_number, row in enumerate(reader):
@@ -90,7 +90,6 @@ def parse_csv(filename):
                     raise ValueError(f"""Error, row {line_number + 1} is unreadable
                     this may be as the column heading is not a, A, x or X. 
                     Offending row:\n{row}""")
-
 
     patch_dict = {"x_coords": x_coords, "y_coords": y_coords,
                   "radiuses": radiuses, "statuses": statuses}
