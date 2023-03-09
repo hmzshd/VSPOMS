@@ -111,14 +111,9 @@ class Patch:
         """return patch coordinates"""
         return self.x_coord, self.y_coord
 
-    def set_radius(self, radius):
-        """set patch radius"""
-        self.radius = radius
-        self.area = pi * (radius ** 2)
-
-    def get_radius(self):
-        """return patch radius"""
-        return self.radius
+    def set_area(self, area):
+        """set patch area"""
+        self.area = area
 
     def get_area(self):
         """return patch area"""
@@ -143,4 +138,4 @@ class Patch:
     def __str__(self):
         """returns a pretty string containing some of the patch's important data"""
         return f"Status: {self.status}, coordinates: " \
-               f"{self.x_coord}, {self.y_coord}, radius: {self.radius} area: {self.area}\n "
+               f"{self.x_coord}, {self.y_coord}, area: {self.area}\n "
