@@ -30,6 +30,15 @@ def parse_csv(filename):
             filename: string
                 filename of csv file to parse_csv
     """
+
+    # checking file ends with csv - if not we'll return an error
+    # this doesn't check the file is a valid csv though, just that it ends with
+    # csv. that will still raise a UnicodeDecodeError (or similar) which should be
+    # handled by frontend - in addition to FileNotFound error.
+
+    if not filename.lower().endswith("csv"):
+        raise UnicodeDecodeError("unknown",filename,)
+
     with open(filename, encoding="utf-8") as csvfile:
 
         reader = csv.reader(csvfile, delimiter=',')

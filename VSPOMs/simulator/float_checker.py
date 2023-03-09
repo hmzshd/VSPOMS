@@ -25,3 +25,12 @@ def is_float(num):
     except ValueError:
         return False
     return True
+
+
+def list_is_floaty(list):
+    for el in list[1:]:
+        try:
+            float(el)
+        except ValueError:
+            return False
+    return True
