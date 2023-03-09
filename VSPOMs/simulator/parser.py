@@ -8,13 +8,17 @@ And returns the setting for the simulation, and a dictionary corresponding to th
 from math import sqrt, pi
 import csv
 
+import InvalidRowError
+
 # necessary to wrap this in try except due to the location of manage.py
 try:
     from simulator.float_checker import is_float
     from simulator.patch import Patch
+    from simulator import InvalidRowError
 except ModuleNotFoundError:
     from float_checker import is_float
     from patch import Patch
+    from InvalidRowError import InvalidRowError
 
 
 def parse_csv(filename):
@@ -57,8 +61,10 @@ def parse_csv(filename):
                 pass
 
             # checking if the first item is a number
-            # if it's not it's simply the headings of the rows
-            # which can be safely ignored.
+            # if it's not we then check if it's an acceptable first column heading
+            # if it is, we can safely skip, if not a heading
+            # we have to raise a valueerror, this is incase we have some case where
+            # the first item is 1.03x or some other typo.
             elif is_float(row[0]):
                 # checking if settings read - done first for efficiency,
                 # most of the lines will pass this test, so we want it to be first.
@@ -87,9 +93,7 @@ def parse_csv(filename):
                     settings_read = True
             else:
                 if row[0] not in first_column_headings:
-                    raise ValueError(f"""Error, row {line_number + 1} is unreadable
-                    this may be as the column heading is not a, A, x or X. 
-                    Offending row:\n{row}""")
+                    raise InvalidRowError(row[0],0,line_number + 1, row)
 
     patch_dict = {"x_coords": x_coords, "y_coords": y_coords,
                   "radiuses": radiuses, "statuses": statuses}
