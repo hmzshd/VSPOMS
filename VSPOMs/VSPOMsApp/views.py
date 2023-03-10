@@ -84,7 +84,10 @@ def index(request):
         name='patch_data_source'
     )
     max_radius = max(source.data['size'])
+    max_diameter = max_radius + min(source.data['x']) / 500
     plot = figure(
+        x_range=((min(source.data['x']) - max_diameter), (max(source.data['x']) + max_diameter)),
+        y_range=((min(source.data['y']) - max_diameter), (max(source.data['y']) + max_diameter)),
         tools=[]
     )
     plot.sizing_mode = "scale_both"
@@ -377,7 +380,8 @@ def post_create(request):
     # Read Scenario
     if data["command"] == "load":
         address = 'media/'+data["address"]
-        patch_list,settings = parse_csv(address)
+        patch_list = parse_csv(address)[0]
+        settings = parse_csv(address)[1]
 
         patches = pd.DataFrame.from_dict(patch_list)
         random_patch_source = json.dumps({
@@ -424,8 +428,8 @@ def post_create(request):
             "colonization_probability": random.uniform(0, 10),
             "patch_extinction_probability_u": random.uniform(0, 10),
             "patch_extinction_probability_x": random.uniform(0, 10),
-            "rescue_effect": random.uniform(0, 10),
-            "stochasticity": random.uniform(0, 10)
+            "rescue_effect": 0,
+            "stochasticity": 0
         })
 
     return JsonResponse(
