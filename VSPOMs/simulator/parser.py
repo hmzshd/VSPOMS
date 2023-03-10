@@ -69,19 +69,20 @@ def parse_csv(filename):
                 # checking if settings read - done first for efficiency,
                 # most of the lines will pass this test, so we want it to be first.
                 if settings_read:
-                    x_coord = float(row[0])
-                    y_coord = float(row[1])
-                    area = float(row[2])
-                    radius = sqrt(area / pi)
-                    if int(row[3]) == 0:
-                        status = False
-                    else:
-                        status = True
-                    x_coords.append(x_coord)
-                    y_coords.append(y_coord)
-                    statuses.append(status)
-                    radiuses.append(radius)
-                    patch_list.append(Patch(status, x_coord, y_coord, area))
+                    try:
+                        x_coord = float(row[0])
+                        y_coord = float(row[1])
+                        area = float(row[2])
+                        radius = sqrt(area / pi)
+                        if int(row[3]) == 0:
+                            status = False
+                        else:
+                            status = True
+                        x_coords.append(x_coord)
+                        y_coords.append(y_coord)
+                        statuses.append(status)
+                        radiuses.append(radius)
+                        patch_list.append(Patch(status, x_coord, y_coord, area))
 
                 # path to take if settings unread
                 else:
@@ -93,7 +94,11 @@ def parse_csv(filename):
                     settings_read = True
             else:
                 if row[0] not in first_column_headings:
-                    raise InvalidRowError(row[0],0,line_number + 1, row)
+                    item = row[0]
+                    column = 0
+                    line_number = line_number + 1
+                    return ValueError, item, column, line_number, row
+                    # raise InvalidRowError(row[0],0,line_number + 1, row)
 
     patch_dict = {"x_coords": x_coords, "y_coords": y_coords,
                   "radiuses": radiuses, "statuses": statuses}
