@@ -84,7 +84,10 @@ def index(request):
         name='patch_data_source'
     )
     max_radius = max(source.data['size'])
+    #max_diameter = max_radius + min(source.data['x']) / 500
     plot = figure(
+        #x_range=((min(source.data['x']) - max_diameter), (max(source.data['x']) + max_diameter)),
+        #y_range=((min(source.data['y']) - max_diameter), (max(source.data['y']) + max_diameter)),
         tools=[]
     )
     plot.sizing_mode = "scale_both"
@@ -377,7 +380,8 @@ def post_create(request):
     # Read Scenario
     if data["command"] == "load":
         address = 'media/'+data["address"]
-        patch_list,settings = parse_csv(address)
+        patch_list = parse_csv(address)[0]
+        scenario_settings = parse_csv(address)[1]
 
         patches = pd.DataFrame.from_dict(patch_list)
         random_patch_source = json.dumps({
@@ -386,13 +390,14 @@ def post_create(request):
             'color': status_to_colour(patches["statuses"]),
             'size': patches["radiuses"].values.tolist()}
         )
+        print(patches["x_coords"])
 
         parameters = json.dumps({
-            "dispersal_kernel": settings["dispersal_alpha"],
-            "connectivity": settings["area_exponent_b"],
-            "colonization_probability": settings["species_specific_constant_y"],
-            "patch_extinction_probability_u": settings["species_specific_constant_u"],
-            "patch_extinction_probability_x": settings["patch_area_effect_x"],
+            "dispersal_kernel": scenario_settings["dispersal_alpha"],
+            "connectivity": scenario_settings["area_exponent_b"],
+            "colonization_probability": scenario_settings["species_specific_constant_y"],
+            "patch_extinction_probability_u": scenario_settings["species_specific_constant_u"],
+            "patch_extinction_probability_x": scenario_settings["patch_area_effect_x"],
             "rescue_effect": random.uniform(0, 10),
             "stochasticity": random.uniform(0, 10)
         })
@@ -424,8 +429,8 @@ def post_create(request):
             "colonization_probability": random.uniform(0, 10),
             "patch_extinction_probability_u": random.uniform(0, 10),
             "patch_extinction_probability_x": random.uniform(0, 10),
-            "rescue_effect": random.uniform(0, 10),
-            "stochasticity": random.uniform(0, 10)
+            "rescue_effect": 0,
+            "stochasticity": 0
         })
 
     return JsonResponse(
