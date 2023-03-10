@@ -83,7 +83,8 @@ def parse_csv(filename):
                         statuses.append(status)
                         radiuses.append(radius)
                         patch_list.append(Patch(status, x_coord, y_coord, area))
-
+                    except:
+                        pass
                 # path to take if settings unread
                 else:
                     settings["dispersal_alpha"] = float(row[0])
@@ -97,8 +98,8 @@ def parse_csv(filename):
                     item = row[0]
                     column = 0
                     line_number = line_number + 1
-                    return ValueError, item, column, line_number, row
-                    # raise InvalidRowError(row[0],0,line_number + 1, row)
+                    # return ValueError, item, column, line_number, row
+                    raise InvalidRowError(row[0],0,line_number + 1, row)
 
     patch_dict = {"x_coords": x_coords, "y_coords": y_coords,
                   "radiuses": radiuses, "statuses": statuses}
