@@ -1,6 +1,8 @@
+# pylint: disable=C0116
 from django.test import TestCase
 import json
 from VSPOMsApp.views import *
+from math import pi
 
 class ViewsTestCase(TestCase):        
     def test_index_view(self):
@@ -9,24 +11,28 @@ class ViewsTestCase(TestCase):
         self.assertTemplateUsed(response, "VSPOMs/index.html")
 
     def test_generate_patch_list_random(self):
-        patch_list = generate_patch_list_random(30)
-        self.assertEqual(len(patch_list), 30)
+        num = 10
+        min_x = 0
+        max_x = 100
+        min_y = 0
+        max_y = 100
+        min_radius = 5
+        max_radius = 15
+        max_area = pi * (max_radius ** 2)
+        min_area = pi * (min_radius ** 2)
 
-    def test_generate_patch_list_randomness(self):
-        patch_list = generate_patch_list_random(5)
-        patch_list2 = generate_patch_list_random(5)
-        self.assertNotEqual(patch_list, patch_list2)
-    
-    def test_generate_patch_list_properties(self):
-        patch_list = generate_patch_list_random(5)
+        patch_list = generate_patch_list_random(num, min_x, max_x, min_y, max_y, min_radius, max_radius)
+
+        self.assertEqual(len(patch_list), num)
+
         for patch in patch_list:
-            self.assertIsInstance(patch.status, bool)
-            self.assertGreaterEqual(patch.x_coord, 0)
-            self.assertLessEqual(patch.x_coord, 25)
-            self.assertGreaterEqual(patch.y_coord, 0)
-            self.assertLessEqual(patch.y_coord, 25)
-            self.assertGreaterEqual(patch.radius, 0)
-            self.assertLessEqual(patch.radius, 5)
+            self.assertIsInstance(patch, Patch)
+            self.assertGreaterEqual(patch.x_coord, min_x)
+            self.assertLessEqual(patch.x_coord, max_x)
+            self.assertGreaterEqual(patch.y_coord, min_y)
+            self.assertLessEqual(patch.y_coord, max_y)
+            self.assertLessEqual(patch.area, min_area)
+            self.assertLessEqual(patch.area, max_area)
 
     def test_status_to_colour(self):
         statuses = [True, False, True]
