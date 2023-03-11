@@ -122,8 +122,8 @@ $(document).ready(function(){
                 "max_x" : parseInt(document.getElementsByName("random_max-x")[0].value),
                 "min_y" : parseInt(document.getElementsByName("random_min-y")[0].value),
                 "max_y" : parseInt(document.getElementsByName("random_max-y")[0].value),
-                "min_radius" : parseInt(document.getElementsByName("random_min-radius")[0].value),
-                "max_radius" : parseInt(document.getElementsByName("random_max-radius")[0].value)
+                "min_area" : parseInt(document.getElementsByName("random_min-area")[0].value),
+                "max_area" : parseInt(document.getElementsByName("random_max-area")[0].value)
             }
         }
         message = JSON.stringify(message);

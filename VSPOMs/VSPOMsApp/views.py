@@ -274,7 +274,7 @@ def post_patches(request):
             patch_data["x"][i],
             patch_data["y"][i],
             colour_to_status(patch_data["color"][i]),
-            patch_data["size"][i]
+            math.pi * (patch_data["size"][i] ** 2)
         ))
 
     # Simulate
@@ -332,7 +332,7 @@ def post_patches(request):
     return JsonResponse({"message": json.loads(graphs["graph1"]), "turnovers": json.loads(turnovers), "replicates": json.loads(replicates)}, status=200)
 
 
-def generate_patch_list_random(num, min_x, max_x, min_y, max_y, min_radius, max_radius):
+def generate_patch_list_random(num, min_x, max_x, min_y, max_y, min_area, max_area):
     """
     Generates a list of patches.
     The patches with random parameters  for [status, x, y, radius]
@@ -343,8 +343,8 @@ def generate_patch_list_random(num, min_x, max_x, min_y, max_y, min_radius, max_
         max_x (int): Max value for x axis
         min_y (int): Min value for y axis
         max_y (int): Max value for y axis
-        min_radius (int): Min value for patch radius
-        max_radius (int): Max value for patch radius
+        min_area (int): Min value for patch area
+        max_area (int): Max value for patch area
 
     Returns:
         patch_list (list): A list of the generated patches
@@ -356,7 +356,7 @@ def generate_patch_list_random(num, min_x, max_x, min_y, max_y, min_radius, max_
                 bool(random.randint(0, 1)),
                 random.uniform(min_x, max_x),
                 random.uniform(min_y, max_y),
-                random.uniform(min_radius, max_radius)
+                random.uniform(min_area, max_area)
             )
         )
     return patch_list
@@ -414,8 +414,8 @@ def post_create(request):
             fields["max_x"],
             fields["min_y"],
             fields["max_y"],
-            fields["min_radius"],
-            fields["max_radius"]
+            fields["min_area"],
+            fields["max_area"]
         )
 
         random_patch_source = json.dumps({
