@@ -28,17 +28,42 @@ $(document).ready(function () {
             })
         })
         .then(response => {
-            (response.text().then(text => {
-                const graphData = JSON.parse(text).message.data
-                const graphLayout = JSON.parse(text).message.layout
-                const graphFrames = JSON.parse(text).message.frames
-                for (let i = 0; i < Bokeh.documents[0].get_model_by_name("vspoms").data_source.data["color"].length; i++) {
-                    Bokeh.documents[0].get_model_by_name("vspoms").data_source.data["color"][i] = "purple";
+            (response.text().then(async text => {
+                const graphData = JSON.parse(text).message.data;
+                const graphLayout = JSON.parse(text).message.layout;
+                const graphFrames = JSON.parse(text).message.frames;
+                const x = JSON.parse(text).turnovers.statuses;
+                const y = JSON.parse(text).turnovers.x_coords;
+                const status = JSON.parse(text).turnovers.y_coords;
+                const dataTable = Bokeh.documents[0].get_model_by_name("vspoms").data_source;
+                for (let i = 0; i < status.length; i++) {
+                    for (let j = 0; j < dataTable.data["color"].length; j++) {
+                        let mapx = dataTable.data["x"][j];
+                        let mapy = dataTable.data["y"][j];
+                        if (mapx == x[i] && mapy == y[i]) {
+                            if (status[i] != true) {
+                                dataTable.data["color"][j] = "green";
+                                console.log(dataTable.data["color"][j])
+                                console.log(dataTable.data["x"][j])
+                                console.log(dataTable.data["y"][j])
+                                console.log("g2r")
+                            } else {
+                                dataTable.data["color"][j] = "red";
+                                console.log(dataTable.data["color"][j])
+                                console.log(dataTable.data["x"][j])
+                                console.log(dataTable.data["y"][j])
+                                console.log("g2r")
+                                console.log("r2g")
+                            }
+                        }
+                    }
+                    dataTable.change.emit();
+                    console.log("Changes changed");
+                    await sleep(200);
                 }
-                Bokeh.documents[0].get_model_by_name("vspoms").data_source.change.emit()
-                console.log(Bokeh.documents[0].get_model_by_name("vspoms").data_source.data["color"])
-                Plotly.newPlot('graph1', graphData, graphLayout).then(function() {
-                    Plotly.animate('graph1',graphFrames)
+                console.log(JSON.parse(text))
+                Plotly.newPlot('graph1', graphData, graphLayout).then(function () {
+                    Plotly.animate('graph1', graphFrames)
                 })
             }));
             // Front-end transition
@@ -62,4 +87,8 @@ function getCookie(name) {
         }
     }
     return cookieValue;
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }

@@ -323,8 +323,9 @@ def post_patches(request):
             height=400,
         )
         graphs[graph] = fig.to_json()
+        turnovers = json.dumps(simulation.get_turnovers())
 
-    return JsonResponse({"message": json.loads(graphs["graph1"])}, status=200)
+    return JsonResponse({"message": json.loads(graphs["graph1"]), "turnovers": json.loads(turnovers)}, status=200)
 
 
 def generate_patch_list_random(num, min_x, max_x, min_y, max_y, min_radius, max_radius):
