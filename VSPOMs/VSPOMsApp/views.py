@@ -66,7 +66,7 @@ def index(request):
         )
 
         # Attribute adjustments
-        fig.update_traces(line_width=3)
+        fig.update_traces(line_width=1)
         fig.update_layout(
             autosize=False,
             width=500,
@@ -319,7 +319,7 @@ def post_patches(request):
 
         # Attribute adjustments
         fig.layout.updatemenus[0].buttons[0]['args'][1]['frame']['redraw'] = True
-        fig.update_traces(line_width=3)
+        fig.update_traces(line_width= 1)
         fig.update_layout(
             autosize=False,
             width=500,

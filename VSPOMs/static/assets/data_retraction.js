@@ -53,6 +53,7 @@ $(document).ready(function () {
                     dataTable.change.emit();
                     await sleep(200);
                 }
+                alert("The animating has been animated on the map")
                 Plotly.newPlot('graph1', graphData, graphLayout).then(function () {
                     Plotly.animate('graph1', graphFrames)
                 })
