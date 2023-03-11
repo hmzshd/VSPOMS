@@ -35,33 +35,24 @@ $(document).ready(function () {
                 const x = JSON.parse(text).turnovers.statuses;
                 const y = JSON.parse(text).turnovers.x_coords;
                 const status = JSON.parse(text).turnovers.y_coords;
+                const replicates = JSON.parse(text).replicates;
                 const dataTable = Bokeh.documents[0].get_model_by_name("vspoms").data_source;
-                for (let i = 0; i < status.length; i++) {
-                    for (let j = 0; j < dataTable.data["color"].length; j++) {
+                console.log(status.length / replicates);
+                for (let i = 0; i < status.length  / replicates; i++) {
+                    for (let j = 0; j < (dataTable.data["color"].length); j++) {
                         let mapx = dataTable.data["x"][j];
                         let mapy = dataTable.data["y"][j];
                         if (mapx == x[i] && mapy == y[i]) {
                             if (status[i] != true) {
                                 dataTable.data["color"][j] = "green";
-                                console.log(dataTable.data["color"][j])
-                                console.log(dataTable.data["x"][j])
-                                console.log(dataTable.data["y"][j])
-                                console.log("g2r")
                             } else {
                                 dataTable.data["color"][j] = "red";
-                                console.log(dataTable.data["color"][j])
-                                console.log(dataTable.data["x"][j])
-                                console.log(dataTable.data["y"][j])
-                                console.log("g2r")
-                                console.log("r2g")
                             }
                         }
                     }
                     dataTable.change.emit();
-                    console.log("Changes changed");
                     await sleep(200);
                 }
-                console.log(JSON.parse(text))
                 Plotly.newPlot('graph1', graphData, graphLayout).then(function () {
                     Plotly.animate('graph1', graphFrames)
                 })
