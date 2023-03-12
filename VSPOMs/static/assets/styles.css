@@ -228,10 +228,10 @@ section.panel .patch-settings-container, section.panel .patch-help-container {
     padding: 10px 30px;
 }
 section.panel .patch-settings-container {
-    height: 38vh;
+    height: 30vh;
 }
 section.panel .patch-help-container {
-    height: 32vh;
+    height: 30vh;
 }
 section.panel .run-sim-button {
     float: right;
@@ -281,7 +281,7 @@ section.panel .visualise_box {
 #box_stochasticity-function {
     margin-right: 1%;
 }
-#box_dispersal-kernel-graph, #box_colonization-probability-graph, #box_patch-extinction-probability-graph, #box_rescue-effect-function, #box_other {
+#box_dispersal-kernel-graph, #box_colonization-probability-graph, #box_patch-extinction-probability-graph, #box_rescue-effect-function {
     margin-left: 1%;
 }
 /* Box styles */

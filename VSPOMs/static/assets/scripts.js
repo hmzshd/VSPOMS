@@ -64,24 +64,9 @@ $(document).ready(function(){
         openSettings();
     });
 
-
-    // Navigation key events
-    $(document).keydown(function(e) {
-        switch(e.which) {
-        // Right arrow key
-        case 39:
-            if ($("#button-create").hasClass("active-page")) {openSettings()}
-            else if ($("#button-settings").hasClass("active-page")) {openSimulate()}
-            else if ($("#button-simulate").hasClass("active-page")) {openGraphs()};
-            break;
-        // Left arrow key
-        case 37:
-            if ($("#button-graphs").hasClass("active-page")) {openSimulate()}
-            else if ($("#button-simulate").hasClass("active-page")) {openSettings()}
-            else if ($("#button-settings").hasClass("active-page")) {openCreate()}
-            break;
-        // P is for PARTY
-        case 80:
+    let p=false;let a=false;let r=false;let t=false;let y=false;
+    function isItTime() {
+        if (p && a && r && t && y) {
             $("html, body, div, header").css({
                 'background-color': 'rgb(234, 255, 0)',
                 'color': 'hotpink',
@@ -92,6 +77,39 @@ $(document).ready(function(){
                 'border': '10px solid #8cff00',
                 'border-radius': '40px',
             });
+        }
+    }
+    // Navigation key events
+    $(document).keydown(function(e) {
+        switch(e.which) {
+            // Right arrow key
+            case 39:
+                if ($("#button-create").hasClass("active-page")) {openSettings()}
+                else if ($("#button-settings").hasClass("active-page")) {openSimulate()}
+                else if ($("#button-simulate").hasClass("active-page")) {openGraphs()};
+                break;
+            // Left arrow key
+            case 37:
+                if ($("#button-graphs").hasClass("active-page")) {openSimulate()}
+                else if ($("#button-simulate").hasClass("active-page")) {openSettings()}
+                else if ($("#button-settings").hasClass("active-page")) {openCreate()}
+                break;
+            case 80:
+                p = true; isItTime();break;
+            case 65:
+                if (p) {a=true;}
+                isPartyTime();break;
+            case 82:
+                if (p && a) {r=true;}
+                isPartyTime();break;
+            case 84:
+                if (p && a && r) {t=true}
+                isPartyTime();break;
+            case 89:
+                if (p && a && r && t) {y=true;}
+                isPartyTime();break;
+            default:
+                p=false;a=false;r=false;t=false;y=false;break;
         };
       });
 

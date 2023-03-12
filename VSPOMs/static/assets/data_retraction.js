@@ -10,6 +10,8 @@ $(document).ready(function () {
         var connectivity = document.getElementsByName("connectivity")[0].value;
         var rescue_effect = document.getElementsByName("rescue-effect")[0].value;
         var stochasticity = document.getElementsByName("stochasticity")[0].value;
+        var steps = document.getElementsByName("sim_steps")[0].value;
+        var replicates = document.getElementsByName("sim_replicates")[0].value;
         fetch("post_patches",{
             method: 'POST',
             credentials: 'same-origin',
@@ -24,7 +26,9 @@ $(document).ready(function () {
                 "patch_extinction_probability_x":patch_extinction_probability_x,
                 "connectivity":connectivity,
                 "rescue_effect":rescue_effect,
-                "stochasticity":stochasticity
+                "stochasticity":stochasticity,
+                "steps" : steps,
+                "replicates" : replicates
             })
         })
         .then(response => {
@@ -35,9 +39,9 @@ $(document).ready(function () {
                 const x = JSON.parse(text).turnovers.statuses;
                 const y = JSON.parse(text).turnovers.x_coords;
                 const status = JSON.parse(text).turnovers.y_coords;
+                const steps = JSON.parse(text).steps;
                 const replicates = JSON.parse(text).replicates;
                 const dataTable = Bokeh.documents[0].get_model_by_name("vspoms").data_source;
-                console.log(status.length / replicates);
                 for (let i = 0; i < status.length  / replicates; i++) {
                     for (let j = 0; j < (dataTable.data["color"].length); j++) {
                         let mapx = dataTable.data["x"][j];
@@ -51,10 +55,11 @@ $(document).ready(function () {
                         }
                     }
                     dataTable.change.emit();
-                    await sleep(200);
+                    let simulation_speed = parseInt(document.getElementsByName("sim_speed")[0].value);
+                    await sleep(simulation_speed);
                 }
-                alert("The animating has been animated on the map")
-                Plotly.newPlot('graph1', graphData, graphLayout).then(function () {
+                alert("The animating has been animated on the map");
+                Plotly.newPlot('graph1', graphData, graphLayout).then(function() {
                     Plotly.animate('graph1', graphFrames)
                 })
             }));

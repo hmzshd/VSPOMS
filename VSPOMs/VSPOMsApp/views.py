@@ -283,7 +283,10 @@ def post_patches(request):
         area_exponent_b=float(data["connectivity"]),
         species_specific_constant_y=float(data["colonization_probability"]),
         species_specific_constant_u=float(data["patch_extinction_probability_u"]),
-        patch_area_effect_x=float(data["patch_extinction_probability_x"]))
+        patch_area_effect_x=float(data["patch_extinction_probability_x"]),
+        steps=int(data["steps"]),
+        replicates=int(data["replicates"])
+    )
     simulation.simulate()
 
     # Graphs

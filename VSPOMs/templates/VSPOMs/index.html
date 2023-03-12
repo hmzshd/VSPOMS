@@ -167,10 +167,21 @@
 
     <!-- Run button -->
     <div class="run-sim-button">
+
+        <label for="sim_speed">Time between frames:</label>
+        <input type="number" name="sim_speed" placeholder="Speed in milliseconds" value="10">
+        <br>
+        <label for="sim_speed">No. of Steps:</label>
+        <input type="number" name="sim_steps" placeholder="No. of Steps..." value="100">
+        <br>
+        <label for="sim_speed">No. of Replicates:</label>
+        <input type="number" name="sim_replicates" placeholder="No. of Replicates" value="1">
+
         <button id="button-run" class="panel-button">
             {% csrf_token %}
             Run Simulation
         </button>
+
     </div>
 
 </section>
@@ -273,10 +284,6 @@
             <div class="function_box" id="box_stochasticity-function">
                 <h2 class="parameter_heading">Stochasticity</h2>
                 <p><a class="parameter_label" style="background-color: #F5A69E;">\(ss\)</a> = <input type="number" id="stochasticity-input" name="stochasticity" placeholder="Enter value..." value="7"></p>
-            </div>
-            <div class="function_box" id="box_other">
-                <h2 class="parameter_heading">Other Parameters</h2>
-                <p><a class="parameter_label">No. of Steps</a> = <input type="number" id="" name="" placeholder="Enter value...">, <a class="parameter_label">No. of Replicates</a> = <input type="number" id="" name="" placeholder="Enter value..."></p>
             </div>
         </div>
 
