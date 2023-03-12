@@ -45,9 +45,9 @@ $(document).ready(function() {
         .then(response => {
             (response.text().then(async text => {
                 // Parse returned JSON message
-                const graphData = JSON.parse(text).message.data;
-                const graphLayout = JSON.parse(text).message.layout;
-                const graphFrames = JSON.parse(text).message.frames;
+                const graphData = JSON.parse(text).graphs.data;
+                const graphLayout = JSON.parse(text).graphs.layout;
+                const graphFrames = JSON.parse(text).graphs.frames;
                 const x = JSON.parse(text).turnovers.statuses;
                 const y = JSON.parse(text).turnovers.x_coords;
                 const status = JSON.parse(text).turnovers.y_coords;
@@ -72,6 +72,7 @@ $(document).ready(function() {
                     let simulation_speed = parseInt(document.getElementsByName("sim_speed")[0].value);
                     await sleep(simulation_speed);
                     dataTable.change.emit();
+                    console.log("Frame animated");
                 }
                 // When sim animation has finished
                 $(this).text("Re-Run Simulation").attr("disabled", false);
