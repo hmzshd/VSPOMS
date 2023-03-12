@@ -1,6 +1,6 @@
 # pylint: disable=no-member, too-many-locals
 """
-Django views fro VSPOMs
+Django views for VSPOMs
 """
 import math
 import os
@@ -37,10 +37,13 @@ def index(request):
     # Prepare Data
     patch_list = parse_csv('static/data/demo.csv')[0]
     patches = pd.DataFrame.from_dict(patch_list)
-    graph_df = pd.DataFrame(columns=["time",
-                                     "proportion occupied patches",
-                                     "proportion occupied area",
-                                     "extinction", "step"])
+    graph_df = pd.DataFrame(columns=[
+        "time",
+        "proportion occupied patches",
+        "proportion occupied area",
+        "extinction",
+        "step"
+        ])
 
     graphs = {
         'graph1': '',
@@ -126,39 +129,38 @@ def index(request):
 
     # Custom JS callbacks
     callback_select = """
-    if(source.selected.indices.length > 0){
+    if(source.selected.indices.length > 0) {
         radio_button_group.visible = true;
         table.visible = true;
-        if (source.data.color[source.selected.indices[0]] == 'green'){
+        if (source.data.color[source.selected.indices[0]] == 'green') {
             radio_button_group.active = 0;
         }
-        if (source.data.color[source.selected.indices[0]] == 'red'){
+        if (source.data.color[source.selected.indices[0]] == 'red') {
             radio_button_group.active = 1;
         }
         const size = []
-        for(let i = 0; i < source.selected.indices.length; i++) {
+        for(let i=0;i<source.selected.indices.length;i++) {
             size[i] = source.data.size[source.selected.indices[i]];
         }
         size_source.data.size = size;
     }
-    if (source.selected.indices.length == 0){
+    if (source.selected.indices.length == 0) {
         radio_button_group.visible = false;  
         radio_button_group.active = null;
         size_source.data.size = [];
         table.visible = false;
-         
     }
     source.change.emit();
     size_source.change.emit();
     """
 
     callback_button = """
-    if(radio_button_group.active == 0){
+    if(radio_button_group.active == 0) {
         for(const index of source.selected.indices) {
             source.data.color[index] = 'green';
         }
     }
-    if(radio_button_group.active == 1){
+    if(radio_button_group.active == 1) {
         for(const index of source.selected.indices) {
             source.data.color[index] = 'red';
         }
@@ -168,7 +170,7 @@ def index(request):
 
     callback_resize = """
     for(const index of source.selected.indices) {
-        let size_float = parseFloat(size_source.data.size[0])
+        let size_float = parseFloat(size_source.data.size[0]);
         let is_valid = !isNaN(size_float);
         if (is_valid){
             source.data.size[index] = size_float;
@@ -277,7 +279,7 @@ def post_patches(request):
             math.pi * (patch_data["size"][i] ** 2)
         ))
 
-    # Simulate
+    # Run simulation
     simulation = Simulator(patch_list,
         dispersal_alpha=float(data["dispersal_kernel"]),
         area_exponent_b=float(data["connectivity"]),

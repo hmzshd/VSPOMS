@@ -150,14 +150,13 @@
     
     <!-- Patch settings -->
     <div class="patch-settings-container">
-        <h2>Selected Patch</h2>
+        <h3>Selected Patch</h3>
         <div id="patch-size-input">{{bokeh_div.display | safe}}</div> <!-- Size input -->
         <div id="patch-state-input">{{bokeh_div.button | safe}}</div> <!-- Colonised/extinct buttons -->
     </div>
 
     <!-- Patch settings help -->
     <div class="patch-help-container">
-        <h2>How to Use</h2>
         <p>
             Drag patches to change their position.<br>
             Click on a patch to change its size and state.<br>
@@ -166,23 +165,29 @@
         </p>
     </div>
 
+    <!-- Simulation parameters -->
+    <div class="patch-param-container">
+        <h3>Simulation Settings</h3>
+        <div class="sim-param_row">
+            <label for="sim_speed">Time between frames:</label>
+            <input type="number" name="sim_speed" placeholder="Speed in milliseconds" value="100">
+        </div>
+        <div class="sim-param_row">
+            <label for="sim_speed">No. of Steps:</label>
+            <input type="number" name="sim_steps" placeholder="No. of Steps..." value="100">
+        </div>
+        <div class="sim-param_row">
+            <label for="sim_speed">No. of Replicates:</label>
+            <input type="number" name="sim_replicates" placeholder="No. of Replicates" value="1">
+        </div>
+    </div>
+
     <!-- Run button -->
     <div class="run-sim-button">
-
-        <label for="sim_speed">Time between frames:</label>
-        <input type="number" name="sim_speed" placeholder="Speed in milliseconds" value="100">
-        <br>
-        <label for="sim_speed">No. of Steps:</label>
-        <input type="number" name="sim_steps" placeholder="No. of Steps..." value="100">
-        <br>
-        <label for="sim_speed">No. of Replicates:</label>
-        <input type="number" name="sim_replicates" placeholder="No. of Replicates" value="1">
-
         <button id="button-run" class="panel-button">
             {% csrf_token %}
             Run Simulation
         </button>
-
     </div>
 
 </section>

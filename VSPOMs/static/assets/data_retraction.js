@@ -4,6 +4,7 @@ $(document).ready(function() {
 
     // On "Run Simulation" click
     $("#button-run").click(function() {
+        $(this).text("Loading...").attr("disabled", true);
         // Start loading overlay
         $("#loading-overlay").fadeIn(100);
         const csrftoken = getCookie('csrftoken');
@@ -71,8 +72,8 @@ $(document).ready(function() {
                     await sleep(simulation_speed);
                     dataTable.change.emit();
                 }
-                // When animation has finished
-                alert("The animating has been animated on the map");
+                // When sim animation has finished
+                $(this).text("Re-Run Simulation").attr("disabled", false);
                 // Plot graphs
                 Plotly.newPlot('graph1', graphData, graphLayout).then(function() {
                     Plotly.animate('graph1', graphFrames)
@@ -80,6 +81,7 @@ $(document).ready(function() {
             }));
             // Hide loading overlay
             $("#loading-overlay").fadeOut(200);
+            $(this).text("Simulation Running...");
             return null
         })
     });
