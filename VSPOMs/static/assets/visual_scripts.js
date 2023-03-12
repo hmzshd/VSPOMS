@@ -15,6 +15,8 @@ $(document).ready(function(){
     $("#button-simulate").click(function() {openSimulate();});
     $("#button-graphs").click(function() {openGraphs();});
     $("#button-settings").click(function() {openSettings();});
+    // On "Save parameters" click
+    $("#button-save-parameters").click(function() {openSimulate();});
 
     // Keydown events
     let p0=false;let p1=false;let p2=false;let p3=false;

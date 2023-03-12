@@ -338,11 +338,7 @@ input[type=number] {
     appearance: textfield;
     -moz-appearance: textfield;
 }
-/* "Save Changes" button */
-.button_submit-settings {
-    margin: 20px auto;
-    width: 400px;
-}
+/* "Run Simulation" & "Save Parameters" buttons */
 button.panel-button {
     margin: 0;
     width: 100%;
@@ -365,6 +361,9 @@ button.panel-button:disabled, button.panel-button:disabled:hover {
     filter: brightness(0.95) saturate(0.7);
     cursor: not-allowed;
     transform: none;
+}
+button.panel-button#button-save-parameters {
+    margin: 20px 0;
 }
 
 /* Create panel styles */
