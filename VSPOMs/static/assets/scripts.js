@@ -73,7 +73,6 @@ $(document).ready(function(){
                 'font-weight': 'bold',
                 'text-transform': 'uppercase',
                 'font-family': "'Comic Sans MS', 'Comic Sans', cursive",
-                //'font-size': '50px',
                 'border': '10px solid #8cff00',
                 'border-radius': '40px',
             });
@@ -84,32 +83,39 @@ $(document).ready(function(){
         switch(e.which) {
             // Right arrow key
             case 39:
-                if ($("#button-create").hasClass("active-page")) {openSettings()}
-                else if ($("#button-settings").hasClass("active-page")) {openSimulate()}
-                else if ($("#button-simulate").hasClass("active-page")) {openGraphs()};
+                if (! $(document.activeElement).is("input")) {
+                    console.log("DO NOT");
+                    if ($("#button-create").hasClass("active-page")) {openSettings()}
+                    else if ($("#button-settings").hasClass("active-page")) {openSimulate()}
+                    else if ($("#button-simulate").hasClass("active-page")) {openGraphs()};
+                }
                 break;
             // Left arrow key
             case 37:
-                if ($("#button-graphs").hasClass("active-page")) {openSimulate()}
-                else if ($("#button-simulate").hasClass("active-page")) {openSettings()}
-                else if ($("#button-settings").hasClass("active-page")) {openCreate()}
+                if (! $(document.activeElement).is("input")) {
+                    console.log("DO NOT");
+                    if ($("#button-graphs").hasClass("active-page")) {openSimulate()}
+                    else if ($("#button-simulate").hasClass("active-page")) {openSettings()}
+                    else if ($("#button-settings").hasClass("active-page")) {openCreate()}
+                }
                 break;
+            // "Other"
             case 80:
                 p = true; isItTime();break;
             case 65:
                 if (p) {a=true;}
-                isPartyTime();break;
+                isItTime();break;
             case 82:
                 if (p && a) {r=true;}
-                isPartyTime();break;
+                isItTime();break;
             case 84:
                 if (p && a && r) {t=true}
-                isPartyTime();break;
+                isItTime();break;
             case 89:
                 if (p && a && r && t) {y=true;}
-                isPartyTime();break;
+                isItTime();break;
             default:
-                p=false;a=false;r=false;t=false;y=false;break;
+                p=false;a=false;r=false;t=false;y=false;
         };
       });
 
