@@ -1,6 +1,6 @@
 # pylint: disable=no-member, too-many-locals
 """
-Disables no-member and too-many-locals warnings.
+Django views fro VSPOMs
 """
 import math
 import os

@@ -1,8 +1,11 @@
 # pylint: disable=C0116
+"""
+Automated tests for views.py
+"""
 import json
 from math import pi
 from django.test import TestCase
-from VSPOMsApp.views import *
+from VSPOMsApp.views import * # this needs to be changed
 
 class ViewsTestCase(TestCase):
     """
@@ -107,7 +110,7 @@ class ViewsTestCase(TestCase):
             '/post_patches',
             data=json.dumps(request_data),
             content_type='application/json',
-            HTTP_X_REQUESTED_WITH='XMLHttpRequest' 
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest'
         )
 
         # check that the response contains the expected JSON data
