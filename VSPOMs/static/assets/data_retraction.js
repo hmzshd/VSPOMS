@@ -4,7 +4,8 @@ $(document).ready(function() {
 
     // On "Run Simulation" click
     $("#button-run").click(function() {
-        $(this).text("Loading...").attr("disabled", true);
+        $(this).attr("disabled", true);
+        $(this).children('p').text("Loading...");
         // Start loading overlay
         $("#loading-overlay").fadeIn(100);
         const csrftoken = getCookie('csrftoken');
@@ -56,6 +57,7 @@ $(document).ready(function() {
                 const dataTable = Bokeh.documents[0].get_model_by_name("vspoms").data_source;
                 // Animate patch graph
                 Plotly.newPlot('graph1', graphData, graphLayout)
+                $("#progress-bar").css("display", "flex");
                 for (let i = 0; i < status.length  / replicates; i++) {
                     for (let j = 0; j < (dataTable.data["color"].length); j++) {
                         let mapx = dataTable.data["x"][j];
@@ -71,16 +73,21 @@ $(document).ready(function() {
                     // Set animation speed
                     let simulation_speed = parseInt(document.getElementsByName("sim_speed")[0].value);
                     await sleep(simulation_speed);
-                    dataTable.change.emit();
-                    console.log("Frame animated");
+                    dataTable.change.emit();  
+                    let percent_done = Math.round(i / (status.length / replicates) * 100) + "%";
+                    $("#progress-bar").css("width", percent_done);
+                    $(this).children('p').text(percent_done);
                 }
                 // When sim animation has finished
-                $(this).text("Re-Run Simulation").attr("disabled", false);
+                $(this).children('p').text("100%");
+                $(this).attr("disabled", false);
+                await sleep(200);
+                $("#progress-bar").css("width", "0%").hide();
+                $(this).children('p').text("Re-Run Simulation");
             }));
             // Hide loading overlay
             $("#loading-overlay").fadeOut(200);
-            $(this).text("Simulation Running...");
-            return null
+            return null;
         })
     });
 

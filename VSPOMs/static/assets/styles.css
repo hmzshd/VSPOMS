@@ -261,6 +261,32 @@ section.panel#graphs-panel {
     float: right;
     width: 43%;
 }
+.run-sim-button button {
+    height: 60px;
+    position: relative;
+}
+.run-sim-button p {
+    position: absolute;
+    text-align: center;
+    height: 100%;
+    width: 100%;
+    top: 50;
+    left: 50;
+    transform: translate(-3%, -50%);
+}
+/* Simulation progress bar */
+#progress-bar {
+    display: none;
+    justify-content: center;
+    height: 100%;
+    width: 0%;
+    background-color: #1DB099;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 5px;
+}
+
 #patch-size-input {
     width: 52%;
     height: 56px;
@@ -358,9 +384,10 @@ button.panel-button:hover {
     cursor: pointer;
 }
 button.panel-button:disabled, button.panel-button:disabled:hover {
-    filter: brightness(0.95) saturate(0.7);
+    filter: brightness(1);
     cursor: not-allowed;
     transform: none;
+    background-color: #1C2A3A;
 }
 button.panel-button#button-save-parameters {
     margin: 20px 0;

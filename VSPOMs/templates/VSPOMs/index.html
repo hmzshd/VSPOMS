@@ -169,7 +169,7 @@
     <div class="patch-param-container">
         <h3>Simulation Settings</h3>
         <div class="sim-param_row">
-            <label for="sim_speed">Time between frames:</label>
+            <label for="sim_speed">Time between steps:</label>
             <input type="number" name="sim_speed" placeholder="Speed in milliseconds" value="100">
         </div>
         <div class="sim-param_row">
@@ -186,7 +186,9 @@
     <div class="run-sim-button">
         <button id="button-run" class="panel-button">
             {% csrf_token %}
-            Run Simulation
+            <div id="progress-bar"></div>
+            <p>Run Simulation</p>
+            
         </button>
     </div>
 
