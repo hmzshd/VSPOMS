@@ -25,7 +25,6 @@
      <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
     <!-- Bokeh Links -->
-
     <script src="https://cdn.bokeh.org/bokeh/release/bokeh-3.0.0.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-3.0.0.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-3.0.0.min.js" crossorigin="anonymous"></script>
@@ -273,17 +272,17 @@
                 <div class="equation">$$S_{i}(t) = \sum_{j=1,j \neq i}^{n}(p_{j}(t) \times k_{j}(d_{ij}) \times A_{j}^{\bbox[#CBA9F5, 3px]{b}})$$</div>
                 <p><a class="parameter_label" style="background-color: #CBA9F5;">\(b\)</a> = <input type="number" id="connectivity-input" name="connectivity" placeholder="Enter value..." value="5"></p>
             </div>
-            <div class="function_box" id="box_rescue-effect-function">
+            <div class="function_box disabled_function" id="box_rescue-effect-function">
                 <h2 class="parameter_heading">Extinction Probability with Rescue Effect</h2>
                 <div class="equation">$$E_{i}(t) = E_{i}(1-C_{i}(t))^{\bbox[#DEF5A4, 3px]{r}}$$</div>
-                <p><a class="parameter_label" style="background-color: #DEF5A4;">\(r\)</a> = <input type="number" id="rescue-effect-input" name="rescue-effect" placeholder="Enter value..." value="6"></p>
+                <p><a class="parameter_label" style="background-color: #DEF5A4;">\(r\)</a> = <input disabled type="number" id="rescue-effect-input" name="rescue-effect" placeholder="Enter value..." value="6"></p>
             </div>
         </div>
     
         <div class="box_row">
-            <div class="function_box" id="box_stochasticity-function">
+            <div class="function_box disabled_function" id="box_stochasticity-function">
                 <h2 class="parameter_heading">Stochasticity</h2>
-                <p><a class="parameter_label" style="background-color: #F5A69E;">\(ss\)</a> = <input type="number" id="stochasticity-input" name="stochasticity" placeholder="Enter value..." value="7"></p>
+                <p><a class="parameter_label" style="background-color: #F5A69E;">\(ss\)</a> = <input disabled type="number" id="stochasticity-input" name="stochasticity" placeholder="Enter value..." value="7"></p>
             </div>
         </div>
 

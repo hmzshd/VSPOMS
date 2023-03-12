@@ -84,7 +84,6 @@ $(document).ready(function(){
             // Right arrow key
             case 39:
                 if (! $(document.activeElement).is("input")) {
-                    console.log("DO NOT");
                     if ($("#button-create").hasClass("active-page")) {openSettings()}
                     else if ($("#button-settings").hasClass("active-page")) {openSimulate()}
                     else if ($("#button-simulate").hasClass("active-page")) {openGraphs()};
@@ -93,7 +92,6 @@ $(document).ready(function(){
             // Left arrow key
             case 37:
                 if (! $(document.activeElement).is("input")) {
-                    console.log("DO NOT");
                     if ($("#button-graphs").hasClass("active-page")) {openSimulate()}
                     else if ($("#button-simulate").hasClass("active-page")) {openSettings()}
                     else if ($("#button-settings").hasClass("active-page")) {openCreate()}
