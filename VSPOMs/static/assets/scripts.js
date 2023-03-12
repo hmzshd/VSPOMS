@@ -9,47 +9,7 @@ $(document).ready(function(){
     $("#simulate-panel").fadeOut(1000);
     $("#graphs-panel").fadeOut(1000);
     $("#settings-panel").fadeOut(1000);
-
-
-    // Navigation functions
-    function resetNav() {
-        $("#button-create, #button-simulate, #button-graphs, #button-settings").removeClass("active-page");
-        $("#create-panel, #simulate-panel, #graphs-panel, #settings-panel").hide(0);
-    };
-
-    function openCreate() {
-        if (!$("#button-create").hasClass("active-page")) {
-            resetNav();
-            $("#button-create").addClass("active-page");
-            $("#create-panel").fadeIn(200);
-        }
-    };
-
-    function openSimulate() {
-        if (!$("#button-simulate").hasClass("active-page")) {
-            resetNav();
-            $("#button-simulate").addClass("active-page");
-            $("#simulate-panel").fadeIn(200);
-        }
-    };
-
-    function openGraphs() {
-        if (!$("#button-graphs").hasClass("active-page")) {
-            resetNav();
-            $("#button-graphs").addClass("active-page");
-            $("#graphs-panel").fadeIn(200);
-        }
-    };
-
-    function openSettings() {
-        if (!$("#button-settings").hasClass("active-page")) {
-            resetNav();
-            $("#button-settings").addClass("active-page");
-            $("#settings-panel").fadeIn(200);
-        }
-    };
     
-
     // Navigation button click events
     $("#button-create").click(function() {
         openCreate();
@@ -64,9 +24,9 @@ $(document).ready(function(){
         openSettings();
     });
 
-    let p0=false;let p1=false;let p2=false;let p3=false;
 
     // Navigation key events
+    let p0=false;let p1=false;let p2=false;let p3=false;
     $(document).keydown(function(e) {
         switch(e.which) {
             // Right arrow key
@@ -115,69 +75,44 @@ $(document).ready(function(){
         };
       });
 
-    
-    // On "Run Simulation" button click
-    $('#button-run').click(function() {
-        $("#loading-overlay").fadeIn(100);
-    })
-
-    // On "Generate Scenario" button click
-    $(".button-populate").click(function () {
-        $("#loading-overlay").fadeIn(100);
-        const csrftoken = getCookie('csrftoken');
-        var message = {};
-        const loading = !this.dataset.file;
-        // Load csv file
-        if (!loading) {
-            message["command"] = "load"
-            message["address"] = this.dataset.file;
-        } 
-        // Create random
-        else {
-            message["command"] = "random"
-            // post 6 data fields
-            message["fields"] = {
-                "num" : parseInt(document.getElementsByName("random_num")[0].value),
-                "min_x" : parseInt(document.getElementsByName("random_min-x")[0].value),
-                "max_x" : parseInt(document.getElementsByName("random_max-x")[0].value),
-                "min_y" : parseInt(document.getElementsByName("random_min-y")[0].value),
-                "max_y" : parseInt(document.getElementsByName("random_max-y")[0].value),
-                "min_area" : parseInt(document.getElementsByName("random_min-area")[0].value),
-                "max_area" : parseInt(document.getElementsByName("random_max-area")[0].value)
-            }
-        }
-        message = JSON.stringify(message);
-        
-        fetch("post_create", {
-            method: 'POST',
-            credentials: 'same-origin',
-            headers: {
-                'Accept': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-CSRFToken': csrftoken,
-            },
-            body: message
-        })
-        .then(response => {
-            // Hide loading and navigate to simulate page
-            $("#loading-overlay").fadeOut(200);
-            openSimulate();
-            (response.text().then(text => {
-                const patch_source = JSON.parse(text).patch_source;
-                const parameters = JSON.parse(text).parameters;
-                var ds = Bokeh.documents[0].get_model_by_name('patch_data_source');
-                ds.data = patch_source;
-                ds.change.emit();
-
-                document.getElementsByName("dispersal-kernel")[0].value = parameters["dispersal_kernel"];
-                document.getElementsByName("colonization-probability")[0].value = parameters["colonization_probability"];
-                document.getElementsByName("patch-extinction-probability-u")[0].value = parameters["patch_extinction_probability_u"];
-                document.getElementsByName("patch-extinction-probability-a")[0].value = parameters["patch_extinction_probability_x"];
-                document.getElementsByName("connectivity")[0].value = parameters["connectivity"];
-                document.getElementsByName("rescue-effect")[0].value = parameters["rescue_effect"];
-                document.getElementsByName("stochasticity")[0].value = parameters["stochasticity"];
-            }));
-        })
-    })
 
 });
+
+
+// Navigation functions
+function resetNav() {
+    $("#button-create, #button-simulate, #button-graphs, #button-settings").removeClass("active-page");
+    $("#create-panel, #simulate-panel, #graphs-panel, #settings-panel").hide(0);
+};
+
+function openCreate() {
+    if (!$("#button-create").hasClass("active-page")) {
+        resetNav();
+        $("#button-create").addClass("active-page");
+        $("#create-panel").fadeIn(200);
+    }
+};
+
+function openSimulate() {
+    if (!$("#button-simulate").hasClass("active-page")) {
+        resetNav();
+        $("#button-simulate").addClass("active-page");
+        $("#simulate-panel").fadeIn(200);
+    }
+};
+
+function openGraphs() {
+    if (!$("#button-graphs").hasClass("active-page")) {
+        resetNav();
+        $("#button-graphs").addClass("active-page");
+        $("#graphs-panel").fadeIn(200);
+    }
+};
+
+function openSettings() {
+    if (!$("#button-settings").hasClass("active-page")) {
+        resetNav();
+        $("#button-settings").addClass("active-page");
+        $("#settings-panel").fadeIn(200);
+    }
+};
