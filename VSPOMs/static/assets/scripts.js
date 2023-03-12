@@ -64,20 +64,8 @@ $(document).ready(function(){
         openSettings();
     });
 
-    let p=false;let a=false;let r=false;let t=false;let y=false;
-    function isItTime() {
-        if (p && a && r && t && y) {
-            $("html, body, div, header").css({
-                'background-color': 'rgb(234, 255, 0)',
-                'color': 'hotpink',
-                'font-weight': 'bold',
-                'text-transform': 'uppercase',
-                'font-family': "'Comic Sans MS', 'Comic Sans', cursive",
-                'border': '10px solid #8cff00',
-                'border-radius': '40px',
-            });
-        }
-    }
+    let p0=false;let p1=false;let p2=false;let p3=false;
+
     // Navigation key events
     $(document).keydown(function(e) {
         switch(e.which) {
@@ -97,23 +85,33 @@ $(document).ready(function(){
                     else if ($("#button-settings").hasClass("active-page")) {openCreate()}
                 }
                 break;
-            // "Other"
+            // Other
             case 80:
-                p = true; isItTime();break;
+                p0 = true;break;
             case 65:
-                if (p) {a=true;}
-                isItTime();break;
+                if (p0) {p1=true;}
+                break;
             case 82:
-                if (p && a) {r=true;}
-                isItTime();break;
+                if (p0 && p1) {p2=true;}
+                break;
             case 84:
-                if (p && a && r) {t=true}
-                isItTime();break;
+                if (p0 && p1 && p2) {p3=true}
+                break;
             case 89:
-                if (p && a && r && t) {y=true;}
-                isItTime();break;
+                if (p0 && p1 && p2 && p3) {
+                    $("html, body, div, header").css({
+                        'background-color': 'rgb(234, 255, 0)',
+                        'color': 'hotpink',
+                        'font-weight': 'bold',
+                        'text-transform': 'uppercase',
+                        'font-family': "'Comic Sans MS', 'Comic Sans', cursive",
+                        'border': '10px solid #8cff00',
+                        'border-radius': '40px',
+                    });
+                }
+                break;
             default:
-                p=false;a=false;r=false;t=false;y=false;
+                p0=false;p1=false;p2=false;p3=false;
         };
       });
 

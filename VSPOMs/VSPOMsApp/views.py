@@ -428,14 +428,22 @@ def post_create(request):
             'size': [patch.get_area() for patch in patch_list]
             })
 
+        # Calculate scenario parameters
+        param_u = ((fields["min_area"] + fields["max_area"]) / 2) / 10
+        print("AVG DISTANCE: ", ( (fields["max_x"] - fields["min_x"]) + (fields["max_y"] - fields["min_y"]) ) / 4)
+        param_a = ( ( (fields["max_x"] - fields["min_x"]) + (fields["max_y"] - fields["min_y"]) ) / 40 ) / 50
+        param_x = 1
+        param_b = 1
+        param_y = 3
+
         parameters = json.dumps({
-            "dispersal_kernel": random.uniform(0, 10),
-            "connectivity": random.uniform(0, 10),
-            "colonization_probability": random.uniform(0, 10),
-            "patch_extinction_probability_u": random.uniform(0, 10),
-            "patch_extinction_probability_x": random.uniform(0, 10),
-            "rescue_effect": 0,
-            "stochasticity": 0
+            "dispersal_kernel": param_a, # a
+            "connectivity": param_b, # b
+            "colonization_probability": param_y, # y
+            "patch_extinction_probability_u": param_u, # u
+            "patch_extinction_probability_x": param_x, # x
+            #"rescue_effect": 0,
+            #"stochasticity": 0
         })
 
     return JsonResponse(
