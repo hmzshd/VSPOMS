@@ -1,10 +1,14 @@
 # pylint: disable=C0116
-from django.test import TestCase
 import json
-from VSPOMsApp.views import *
 from math import pi
+from django.test import TestCase
+from VSPOMsApp.views import *
 
-class ViewsTestCase(TestCase):        
+class ViewsTestCase(TestCase):
+    """
+    Write this docstring pls :)
+    """
+
     def test_index_view(self):
         response = self.client.get("/")
         self.assertEqual(response.status_code, 200)
@@ -21,7 +25,15 @@ class ViewsTestCase(TestCase):
         max_area = pi * (max_radius ** 2)
         min_area = pi * (min_radius ** 2)
 
-        patch_list = generate_patch_list_random(num, min_x, max_x, min_y, max_y, min_radius, max_radius)
+        patch_list = generate_patch_list_random(
+            num,
+            min_x,
+            max_x,
+            min_y,
+            max_y,
+            min_area,
+            max_area
+        )
 
         self.assertEqual(len(patch_list), num)
 
@@ -38,14 +50,14 @@ class ViewsTestCase(TestCase):
         statuses = [True, False, True]
         colours = status_to_colour(statuses)
         self.assertEqual(colours, ['green', 'red', 'green'])
-        
+
     def test_index_graphs(self):
         response = self.client.get("/")
         self.assertContains(response, "graph1")
         self.assertContains(response, "graph2")
         self.assertContains(response, "graph3")
         self.assertContains(response, "graph4")
-    
+
     def test_index_maps(self):
         response = self.client.get("/")
         self.assertContains(response, "map")

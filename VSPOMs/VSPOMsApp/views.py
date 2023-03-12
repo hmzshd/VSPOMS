@@ -332,7 +332,11 @@ def post_patches(request):
         turnovers = json.dumps(simulation.get_turnovers())
         replicates = json.dumps(simulation.replicates + 1)
 
-    return JsonResponse({"message": json.loads(graphs["graph1"]), "turnovers": json.loads(turnovers), "replicates": json.loads(replicates)}, status=200)
+    return JsonResponse({
+        "message": json.loads(graphs["graph1"]),
+        "turnovers": json.loads(turnovers),
+        "replicates": json.loads(replicates)
+    }, status=200)
 
 
 def generate_patch_list_random(num, min_x, max_x, min_y, max_y, min_area, max_area):
@@ -430,11 +434,10 @@ def post_create(request):
 
         # Calculate scenario parameters
         param_u = ((fields["min_area"] + fields["max_area"]) / 2) / 10
-        print("AVG DISTANCE: ", ( (fields["max_x"] - fields["min_x"]) + (fields["max_y"] - fields["min_y"]) ) / 4)
         param_a = ( ( (fields["max_x"] - fields["min_x"]) + (fields["max_y"] - fields["min_y"]) ) / 40 ) / 50
         param_x = 1
         param_b = 1
-        param_y = 3
+        param_y = 3 # not sure if this is suitable
 
         parameters = json.dumps({
             "dispersal_kernel": param_a, # a

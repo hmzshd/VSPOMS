@@ -11,21 +11,12 @@ $(document).ready(function(){
     $("#settings-panel").fadeOut(1000);
     
     // Navigation button click events
-    $("#button-create").click(function() {
-        openCreate();
-    });
-    $("#button-simulate").click(function() {
-        openSimulate();
-    });
-    $("#button-graphs").click(function() {
-        openGraphs();
-    });
-    $("#button-settings").click(function() {
-        openSettings();
-    });
+    $("#button-create").click(function() {openCreate();});
+    $("#button-simulate").click(function() {openSimulate();});
+    $("#button-graphs").click(function() {openGraphs();});
+    $("#button-settings").click(function() {openSettings();});
 
-
-    // Navigation key events
+    // Keydown events
     let p0=false;let p1=false;let p2=false;let p3=false;
     $(document).keydown(function(e) {
         switch(e.which) {
@@ -36,6 +27,7 @@ $(document).ready(function(){
                     else if ($("#button-settings").hasClass("active-page")) {openSimulate()}
                     else if ($("#button-simulate").hasClass("active-page")) {openGraphs()};
                 }
+                p0=false;p1=false;p2=false;p3=false;
                 break;
             // Left arrow key
             case 37:
@@ -44,19 +36,13 @@ $(document).ready(function(){
                     else if ($("#button-simulate").hasClass("active-page")) {openSettings()}
                     else if ($("#button-settings").hasClass("active-page")) {openCreate()}
                 }
+                p0=false;p1=false;p2=false;p3=false;
                 break;
             // Other
-            case 80:
-                p0 = true;break;
-            case 65:
-                if (p0) {p1=true;}
-                break;
-            case 82:
-                if (p0 && p1) {p2=true;}
-                break;
-            case 84:
-                if (p0 && p1 && p2) {p3=true}
-                break;
+            case 80: p0 = true;break;
+            case 65: if (p0) {p1=true;} break;
+            case 82: if (p0 && p1) {p2=true;} break;
+            case 84: if (p0 && p1 && p2) {p3=true} break;
             case 89:
                 if (p0 && p1 && p2 && p3) {
                     $("html, body, div, header").css({
@@ -70,11 +56,9 @@ $(document).ready(function(){
                     });
                 }
                 break;
-            default:
-                p0=false;p1=false;p2=false;p3=false;
+            default: p0=false;p1=false;p2=false;p3=false;
         };
       });
-
 
 });
 
