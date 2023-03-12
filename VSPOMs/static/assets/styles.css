@@ -15,6 +15,7 @@ body, html {
     height: calc(100% - 50px);
 	width: 100%;
     min-width: 1400px;
+    min-height: 700px;
 	margin: 0;
     padding: 0;
 	font-size: 18px;
@@ -228,10 +229,11 @@ section.panel .patch-settings-container, section.panel .patch-help-container {
     padding: 10px 30px;
 }
 section.panel .patch-settings-container {
-    height: 38vh;
+    height: 30vh;
 }
 section.panel .patch-help-container {
-    height: 32vh;
+    height: 30vh;
+    line-height: 1.5em;
 }
 section.panel .run-sim-button {
     float: right;
@@ -281,13 +283,20 @@ section.panel .visualise_box {
 #box_stochasticity-function {
     margin-right: 1%;
 }
-#box_dispersal-kernel-graph, #box_colonization-probability-graph, #box_patch-extinction-probability-graph, #box_rescue-effect-function, #box_other {
+#box_dispersal-kernel-graph, #box_colonization-probability-graph, #box_patch-extinction-probability-graph, #box_rescue-effect-function {
     margin-left: 1%;
 }
 /* Box styles */
 section.panel .function_box .parameter_label {
     padding: 0 6px;
     font-family:'Times New Roman', Times, serif;
+}
+.disabled_function {
+    backdrop-filter: brightness(0.9);
+    filter: brightness(0.9);
+}
+.disabled_function:hover, .disabled_function input:hover {
+    cursor: not-allowed;
 }
 section.panel .function_box .equation {
     font-size: 26px;

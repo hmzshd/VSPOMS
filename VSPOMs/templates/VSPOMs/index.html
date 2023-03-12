@@ -17,7 +17,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="{% static 'assets/scripts.js' %}"></script>
+    <script src="{% static 'assets/visual_scripts.js' %}"></script>
     <script src="{% static 'assets/data_retraction.js' %}"></script>
 
 
@@ -25,7 +25,6 @@
      <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
     <!-- Bokeh Links -->
-
     <script src="https://cdn.bokeh.org/bokeh/release/bokeh-3.0.0.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-3.0.0.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-3.0.0.min.js" crossorigin="anonymous"></script>
@@ -112,8 +111,8 @@
                 </p>
                 <p class="random-parameters_column">
                     <a>Patch Area Range</a><br>
-                    <input type="number" name="random_min-radius" placeholder="Min radius" value="10"> -
-                    <input type="number" name="random_max-radius" placeholder="Max radius" value="100">
+                    <input type="number" name="random_min-area" placeholder="Min area" value="10"> -
+                    <input type="number" name="random_max-area" placeholder="Max area" value="100">
                 </p>
             </div>
             <div class="random-parameters_row">
@@ -159,18 +158,31 @@
     <!-- Patch settings help -->
     <div class="patch-help-container">
         <h2>How to Use</h2>
-        <p>Drag patches to change their position.</p>
-        <p>Click on a patch to change its size and state.</p>
-        <p>Use ESCAPE to deselect a patch.</p>
-        <p>Use BACKSPACE to delete the selected patch.</p>
+        <p>
+            Drag patches to change their position.<br>
+            Click on a patch to change its size and state.<br>
+            Use ESCAPE to deselect a patch.<br>
+            Use BACKSPACE to delete the selected patch.
+        </p>
     </div>
 
     <!-- Run button -->
     <div class="run-sim-button">
+
+        <label for="sim_speed">Time between frames:</label>
+        <input type="number" name="sim_speed" placeholder="Speed in milliseconds" value="100">
+        <br>
+        <label for="sim_speed">No. of Steps:</label>
+        <input type="number" name="sim_steps" placeholder="No. of Steps..." value="100">
+        <br>
+        <label for="sim_speed">No. of Replicates:</label>
+        <input type="number" name="sim_replicates" placeholder="No. of Replicates" value="1">
+
         <button id="button-run" class="panel-button">
             {% csrf_token %}
             Run Simulation
         </button>
+
     </div>
 
 </section>
@@ -262,21 +274,17 @@
                 <div class="equation">$$S_{i}(t) = \sum_{j=1,j \neq i}^{n}(p_{j}(t) \times k_{j}(d_{ij}) \times A_{j}^{\bbox[#CBA9F5, 3px]{b}})$$</div>
                 <p><a class="parameter_label" style="background-color: #CBA9F5;">\(b\)</a> = <input type="number" id="connectivity-input" name="connectivity" placeholder="Enter value..." value="5"></p>
             </div>
-            <div class="function_box" id="box_rescue-effect-function">
+            <div class="function_box disabled_function" id="box_rescue-effect-function">
                 <h2 class="parameter_heading">Extinction Probability with Rescue Effect</h2>
                 <div class="equation">$$E_{i}(t) = E_{i}(1-C_{i}(t))^{\bbox[#DEF5A4, 3px]{r}}$$</div>
-                <p><a class="parameter_label" style="background-color: #DEF5A4;">\(r\)</a> = <input type="number" id="rescue-effect-input" name="rescue-effect" placeholder="Enter value..." value="6"></p>
+                <p><a class="parameter_label" style="background-color: #DEF5A4;">\(r\)</a> = <input disabled type="number" id="rescue-effect-input" name="rescue-effect" placeholder="Enter value..." value="6"></p>
             </div>
         </div>
     
         <div class="box_row">
-            <div class="function_box" id="box_stochasticity-function">
+            <div class="function_box disabled_function" id="box_stochasticity-function">
                 <h2 class="parameter_heading">Stochasticity</h2>
-                <p><a class="parameter_label" style="background-color: #F5A69E;">\(ss\)</a> = <input type="number" id="stochasticity-input" name="stochasticity" placeholder="Enter value..." value="7"></p>
-            </div>
-            <div class="function_box" id="box_other">
-                <h2 class="parameter_heading">Other Parameters</h2>
-                <p><a class="parameter_label">No. of Steps</a> = <input type="number" id="" name="" placeholder="Enter value...">, <a class="parameter_label">No. of Replicates</a> = <input type="number" id="" name="" placeholder="Enter value..."></p>
+                <p><a class="parameter_label" style="background-color: #F5A69E;">\(ss\)</a> = <input disabled type="number" id="stochasticity-input" name="stochasticity" placeholder="Enter value..." value="7"></p>
             </div>
         </div>
 

@@ -274,7 +274,7 @@ def post_patches(request):
             patch_data["x"][i],
             patch_data["y"][i],
             colour_to_status(patch_data["color"][i]),
-            patch_data["size"][i]
+            math.pi * (patch_data["size"][i] ** 2)
         ))
 
     # Simulate
@@ -283,7 +283,10 @@ def post_patches(request):
         area_exponent_b=float(data["connectivity"]),
         species_specific_constant_y=float(data["colonization_probability"]),
         species_specific_constant_u=float(data["patch_extinction_probability_u"]),
-        patch_area_effect_x=float(data["patch_extinction_probability_x"]))
+        patch_area_effect_x=float(data["patch_extinction_probability_x"]),
+        steps=int(data["steps"]),
+        replicates=int(data["replicates"])
+    )
     simulation.simulate()
 
     # Graphs
@@ -332,10 +335,14 @@ def post_patches(request):
     replicates = json.dumps(simulation.replicates + 1)
     #graphs = json.dumps(graphs)
 
-    return JsonResponse({"graphs": json.loads(graphs["graph3"]), "turnovers": json.loads(turnovers), "replicates": json.loads(replicates)}, status=200)
+    return JsonResponse({
+        "graphs": json.loads(graphs["graph3"]),
+        "turnovers": json.loads(turnovers),
+        "replicates": json.loads(replicates)
+    }, status=200)
 
 
-def generate_patch_list_random(num, min_x, max_x, min_y, max_y, min_radius, max_radius):
+def generate_patch_list_random(num, min_x, max_x, min_y, max_y, min_area, max_area):
     """
     Generates a list of patches.
     The patches with random parameters  for [status, x, y, radius]
@@ -346,8 +353,8 @@ def generate_patch_list_random(num, min_x, max_x, min_y, max_y, min_radius, max_
         max_x (int): Max value for x axis
         min_y (int): Min value for y axis
         max_y (int): Max value for y axis
-        min_radius (int): Min value for patch radius
-        max_radius (int): Max value for patch radius
+        min_area (int): Min value for patch area
+        max_area (int): Max value for patch area
 
     Returns:
         patch_list (list): A list of the generated patches
@@ -359,7 +366,7 @@ def generate_patch_list_random(num, min_x, max_x, min_y, max_y, min_radius, max_
                 bool(random.randint(0, 1)),
                 random.uniform(min_x, max_x),
                 random.uniform(min_y, max_y),
-                random.uniform(min_radius, max_radius)
+                random.uniform(min_area, max_area)
             )
         )
     return patch_list
@@ -417,8 +424,8 @@ def post_create(request):
             fields["max_x"],
             fields["min_y"],
             fields["max_y"],
-            fields["min_radius"],
-            fields["max_radius"]
+            fields["min_area"],
+            fields["max_area"]
         )
 
         random_patch_source = json.dumps({
@@ -428,14 +435,21 @@ def post_create(request):
             'size': [patch.get_area() for patch in patch_list]
             })
 
+        # Calculate scenario parameters
+        param_u = ((fields["min_area"] + fields["max_area"]) / 2) / 10
+        param_a = ( ( (fields["max_x"] - fields["min_x"]) + (fields["max_y"] - fields["min_y"]) ) / 40 ) / 50
+        param_x = 1
+        param_b = 1
+        param_y = 3 # not sure if this is suitable
+
         parameters = json.dumps({
-            "dispersal_kernel": random.uniform(0, 10),
-            "connectivity": random.uniform(0, 10),
-            "colonization_probability": random.uniform(0, 10),
-            "patch_extinction_probability_u": random.uniform(0, 10),
-            "patch_extinction_probability_x": random.uniform(0, 10),
-            "rescue_effect": 0,
-            "stochasticity": 0
+            "dispersal_kernel": param_a, # a
+            "connectivity": param_b, # b
+            "colonization_probability": param_y, # y
+            "patch_extinction_probability_u": param_u, # u
+            "patch_extinction_probability_x": param_x, # x
+            #"rescue_effect": 0,
+            #"stochasticity": 0
         })
 
     return JsonResponse(
