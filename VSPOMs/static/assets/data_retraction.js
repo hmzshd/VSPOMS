@@ -29,15 +29,16 @@ $(document).ready(function () {
         })
         .then(response => {
             (response.text().then(async text => {
-                const graphData = JSON.parse(text).message.data;
-                const graphLayout = JSON.parse(text).message.layout;
-                const graphFrames = JSON.parse(text).message.frames;
+                console.log(JSON.parse(text).graphs)
+                const graphData = JSON.parse(text).graphs.data;
+                const graphLayout = JSON.parse(text).graphs.layout;
+                const graphFrames = JSON.parse(text).graphs.frames;
                 const x = JSON.parse(text).turnovers.statuses;
                 const y = JSON.parse(text).turnovers.x_coords;
                 const status = JSON.parse(text).turnovers.y_coords;
                 const replicates = JSON.parse(text).replicates;
                 const dataTable = Bokeh.documents[0].get_model_by_name("vspoms").data_source;
-                console.log(status.length / replicates);
+                Plotly.newPlot('graph1', graphData, graphLayout)
                 for (let i = 0; i < status.length  / replicates; i++) {
                     for (let j = 0; j < (dataTable.data["color"].length); j++) {
                         let mapx = dataTable.data["x"][j];
@@ -54,9 +55,6 @@ $(document).ready(function () {
                     await sleep(200);
                 }
                 alert("The animating has been animated on the map")
-                Plotly.newPlot('graph1', graphData, graphLayout).then(function () {
-                    Plotly.animate('graph1', graphFrames)
-                })
             }));
             // Front-end transition
             $("#loading-overlay").fadeOut(200);

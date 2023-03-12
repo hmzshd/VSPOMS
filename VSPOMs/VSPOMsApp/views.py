@@ -294,6 +294,8 @@ def post_patches(request):
         dfa['step'] = i
         graph_df = pd.concat([graph_df, dfa])
 
+    print(graph_df)
+
     graphs = {
         'graph1': '',
         'graph2': '',
@@ -312,13 +314,13 @@ def post_patches(request):
             graph_df,
             x='time',
             y=graph_labels[idx],
-            animation_frame='step',
+            #animation_frame='step',
             width=1000,
             height=600,
         )
 
         # Attribute adjustments
-        fig.layout.updatemenus[0].buttons[0]['args'][1]['frame']['redraw'] = True
+        #fig.layout.updatemenus[0].buttons[0]['args'][1]['frame']['redraw'] = True
         fig.update_traces(line_width= 1)
         fig.update_layout(
             autosize=False,
@@ -326,10 +328,11 @@ def post_patches(request):
             height=400,
         )
         graphs[graph] = fig.to_json()
-        turnovers = json.dumps(simulation.get_turnovers())
-        replicates = json.dumps(simulation.replicates + 1)
+    turnovers = json.dumps(simulation.get_turnovers())
+    replicates = json.dumps(simulation.replicates + 1)
+    #graphs = json.dumps(graphs)
 
-    return JsonResponse({"message": json.loads(graphs["graph1"]), "turnovers": json.loads(turnovers), "replicates": json.loads(replicates)}, status=200)
+    return JsonResponse({"graphs": json.loads(graphs["graph3"]), "turnovers": json.loads(turnovers), "replicates": json.loads(replicates)}, status=200)
 
 
 def generate_patch_list_random(num, min_x, max_x, min_y, max_y, min_radius, max_radius):
