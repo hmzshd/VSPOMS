@@ -196,29 +196,29 @@
 <!-- Graphs panel -->
 <section id="graphs-panel" class="panel">
     
-    <div class="graph-grid", id = "graph1">
-        <div class="graph-container">
+    <div class="graph-grid">
+        <div class="graph-container" id="graph1">
             {% if graphs.graph1 %}
             {{ graphs.graph1|safe }}
             {% else %}
             <p>No graph was provided.</p>
             {% endif %}
         </div>
-        <div class="graph-container", id = "graph2">
+        <div class="graph-container" id="graph2">
             {% if graphs.graph2 %}
             {{ graphs.graph2|safe }}
             {% else %}
             <p>No graph was provided.</p>
             {% endif %}
         </div>
-        <div class="graph-container", id = "graph3">
+        <div class="graph-container" id="graph3">
             {% if graphs.graph3 %}
             {{ graphs.graph3|safe }}
             {% else %}
             <p>No graph was provided.</p>
             {% endif %}
         </div>
-        <div class="graph-container", id = "graph4">
+        <div class="graph-container" id="graph4">
             {% if graphs.graph4 %}
             {{ graphs.graph4|safe }}
             {% else %}

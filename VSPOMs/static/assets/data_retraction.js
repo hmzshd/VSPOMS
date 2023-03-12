@@ -55,6 +55,7 @@ $(document).ready(function() {
                 const replicates = JSON.parse(text).replicates;
                 const dataTable = Bokeh.documents[0].get_model_by_name("vspoms").data_source;
                 // Animate patch graph
+                Plotly.newPlot('graph1', graphData, graphLayout)
                 for (let i = 0; i < status.length  / replicates; i++) {
                     for (let j = 0; j < (dataTable.data["color"].length); j++) {
                         let mapx = dataTable.data["x"][j];
@@ -74,10 +75,6 @@ $(document).ready(function() {
                 }
                 // When sim animation has finished
                 $(this).text("Re-Run Simulation").attr("disabled", false);
-                // Plot graphs
-                Plotly.newPlot('graph1', graphData, graphLayout).then(function() {
-                    Plotly.animate('graph1', graphFrames)
-                })
             }));
             // Hide loading overlay
             $("#loading-overlay").fadeOut(200);
@@ -97,7 +94,7 @@ $(document).ready(function() {
         if (!loading) {
             message["command"] = "load"
             message["address"] = this.dataset.file;
-        } 
+        }
         // Otherwise create random scenario
         else {
             message["command"] = "random"
@@ -113,7 +110,7 @@ $(document).ready(function() {
             }
         }
         message = JSON.stringify(message);
-        
+
         // Post message to post_create view
         fetch("post_create", {
             method: 'POST',
