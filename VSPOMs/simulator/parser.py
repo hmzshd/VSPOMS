@@ -42,13 +42,14 @@ def parse_csv(filename):
     with open(filename, encoding="utf-8") as csvfile:
 
         reader = csv.reader(csvfile, delimiter=',')
-        x_coords = list()
-        y_coords = list()
-        statuses = list()
-        radiuses = list()
-        settings = dict()
-        patch_list = list()
+        x_coords = []
+        y_coords = []
+        statuses = []
+        radiuses = []
+        settings = []
+        patch_list = []
         first_column_headings = set(('a', 'x',))
+        valid_status_set = set((0,1))
         settings_read = False
 
         for line_number, row in enumerate(reader):
@@ -73,13 +74,15 @@ def parse_csv(filename):
                         y_coord = float(row[1])
                         area = float(row[2])
                         radius = sqrt(area / pi)
+
                         # validating patch status
                         status_int = int(row[3])
-                        if status_int != 0 and status_int != 1:
+                        status_invalid = status_int not in valid_status_set
+                        if status_invalid:
                             raise_value_error(4, row, line_number, row[3], 3)
                             raise ValueError("error_string")
 
-                        if int(row[3]) == 0:
+                        if status_int == 0:
                             status = False
                         else:
                             status = True
@@ -91,7 +94,7 @@ def parse_csv(filename):
                         patch_list.append(Patch(status, x_coord, y_coord, area))
 
                     except ValueError:
-                        unconvertible_items = invalid_row_item_finder(row[0:4], line_number)
+                        invalid_row_item_finder(row[0:4], line_number)
 
 
                 # path to take if settings unread
@@ -104,7 +107,7 @@ def parse_csv(filename):
                         settings["patch_area_effect_x"] = float(row[4])
                         settings_read = True
                     except ValueError:
-                        invalid_row_item_finder(row)
+                        invalid_row_item_finder(row[0:5], line_number)
 
 
             # big if else here -
@@ -124,7 +127,7 @@ def parse_csv(filename):
 
 
 def invalid_row_item_finder(row, line_number):
-    unconvertible_items = list()
+    unconvertible_items = []
 
     for index, element in enumerate(row):
         if not is_float(element):
