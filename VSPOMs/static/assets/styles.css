@@ -165,7 +165,7 @@ section.panel#loading-panel {
     font-family: 'Oswald', sans-serif;
     font-weight: bold;
     font-size: 90px;
-    margin-top: 36vh;
+    margin-top: 32vh;
     margin-bottom: 0;
 }
 #loading-panel h2 {
@@ -181,7 +181,7 @@ section.panel#loading-panel {
 }
 #loading-panel #loading-panel_outline {
     position: absolute;
-    border: 1px solid #26394F;
+    border: 2px solid #26394F;
     height: 40%;
     width: 70%;
     top: 26%;
@@ -189,27 +189,11 @@ section.panel#loading-panel {
 }
 #loading-panel #loading-panel_outline-2 {
     position: absolute;
-    border: 1px solid #1DB099;
+    border: 2px solid #1DB099;
     height: 32%;
     width: 90%;
     top: 30%;
     left: 5%;
-}
-#loading-panel #loading-panel_decoration {
-    position: absolute;
-    background-color: #1DB099;
-    width: 70px;
-    height: 100%;
-    top: 0;
-    left: 10%;
-}
-#loading-panel #loading-panel_decoration-2 {
-    position: absolute;
-    background-color: #1DB099;
-    height: 70px;
-    width: 100%;
-    left: 0;
-    bottom: 29%;
 }
 
 /* Loading overlay styles */
