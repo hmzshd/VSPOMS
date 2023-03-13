@@ -53,7 +53,6 @@ def parse_csv(filename):
         statuses = []
         radiuses = []
         settings = dict()
-        patch_list = []
         first_column_headings = set(('a', 'x',))
         valid_status_set = set((0, 1))
         settings_read = False
@@ -123,7 +122,6 @@ def parse_csv(filename):
                         y_coords.append(y_coord)
                         statuses.append(status)
                         radiuses.append(radius)
-                        patch_list.append(Patch(status, x_coord, y_coord, area))
 
                     except ValueError:
                         # we only want the 0-3rd items as their may be blank lines
@@ -167,7 +165,7 @@ def parse_csv(filename):
         patch_dict = {"x_coords": x_coords, "y_coords": y_coords,
                       "radiuses": radiuses, "statuses": statuses}
 
-    return patch_dict, settings, scaling_factor, patch_list
+    return patch_dict, settings, scaling_factor
 
 
 def row_error_investigator(row, line_number):
