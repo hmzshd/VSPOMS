@@ -551,9 +551,6 @@ class Simulator:
     def print_turnover_graph_data(self):
         print(self.turnover_frame.to_string())
 
-    def get_turnover_graph_data(self):
-        return self.turnover_frame
-
     def get_turnovers(self):
         """Returns self.patch_dict containing turnover event data."""
         return self.patch_dict
