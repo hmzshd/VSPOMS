@@ -91,20 +91,8 @@ def parse_csv(filename):
                         patch_list.append(Patch(status, x_coord, y_coord, area))
 
                     except ValueError:
-                        unconvertible_items = invalid_row_item_finder(row[0:4])
+                        unconvertible_items = invalid_row_item_finder(row[0:4], line_number)
 
-                        # invalid_row_item_finder will return False as the 1st element
-                        # of the list if there is only one incorrect element, otherwise
-                        # it just returns the second invalid element in the 1st item
-                        if unconvertible_items[1] == False:
-                            item = unconvertible_items[0][0]
-                            column = unconvertible_items[0][1]
-                            raise_value_error(2, row, line_number, item, column)
-
-                        else:
-                            # extract items, we don't care as much about column numbers in this case
-                            items = [item[1] for item in unconvertible_items]
-                            raise_value_error(2, row, line_number, items, 0)
 
                 # path to take if settings unread
                 else:
@@ -117,6 +105,7 @@ def parse_csv(filename):
                         settings_read = True
                     except ValueError:
                         invalid_row_item_finder(row)
+
 
             # big if else here -
             # this is the case if the 0th item of the row isn't a float
@@ -134,7 +123,7 @@ def parse_csv(filename):
     return patch_dict, settings, patch_list
 
 
-def invalid_row_item_finder(row):
+def invalid_row_item_finder(row, line_number):
     unconvertible_items = list()
 
     for index, element in enumerate(row):
@@ -142,9 +131,12 @@ def invalid_row_item_finder(row):
             unconvertible_items.append((index, element))
 
     if len(unconvertible_items) == 1:
-        return [unconvertible_items[0], False]
+        item = unconvertible_items[0][0]
+        column = unconvertible_items[0][1]
+        raise_value_error(2, row, line_number, item, column)
     else:
-        return unconvertible_items
+        items = [item[1] for item in unconvertible_items]
+        raise_value_error(3, row, line_number, items, 0)
 
 
 def raise_value_error(case_value, row, line_number, item, column):
