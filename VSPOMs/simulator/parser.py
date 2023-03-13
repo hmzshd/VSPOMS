@@ -33,14 +33,15 @@ def parse_csv(filename):
             filename: string
                 filename of csv file to parse_csv
     """
-
     # checking file ends with csv - if not we'll return an error
     # this doesn't check the file is a valid csv though, just that it ends with
     # csv. that will still raise a UnicodeDecodeError (or similar) which should be
     # handled by frontend - in addition to FileNotFound error.
-
     if not filename.lower().endswith("csv"):
-        raise UnicodeDecodeError("unknown", filename,)
+        # we need to create an empty bytes object as a UnicodeDecodeError
+        # requires this
+        empty_bytes_object = b''
+        raise UnicodeDecodeError("file does not end with .csv", empty_bytes_object, 0, 1, "file does not end with .csv")
 
     with open(filename, encoding="utf-8") as csvfile:
 
@@ -52,7 +53,7 @@ def parse_csv(filename):
         settings = dict()
         patch_list = []
         first_column_headings = set(('a', 'x',))
-        valid_status_set = set((0,1))
+        valid_status_set = set((0, 1))
         settings_read = False
 
         for line_number, row in enumerate(reader):
