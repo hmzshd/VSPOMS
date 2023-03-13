@@ -63,7 +63,13 @@ def parse_csv(filename):
             line_number = line_number + 1
             # skipping 'empty' rows if there are any
             if len(row) == 0:
-                pass
+                continue
+            # checking if all vals are empty str
+            # skipping if so
+            elif row[0] == '':
+                # all performs a check on all rows
+                if all(item in row == '' for item in row):
+                    continue
 
             # checking if the first item is a number
             # if it's not we then check if it's an acceptable first column heading
