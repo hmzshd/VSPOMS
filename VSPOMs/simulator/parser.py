@@ -1,8 +1,10 @@
 """
 Parser.
 
-Simple module with one function parse_csv, which parses a csv file.
-And returns the setting for the simulation, and a dictionary corresponding to the patches
+The parser for the sim, parse_csv, which takes in a csv file,
+validates it, throws an error if need be using row_error_investigator to find the
+invalid data and raise_value_error to raise the correct error.
+If no errors, it returns the setting for the simulation, and a dictionary corresponding to the patches
 """
 
 from math import sqrt, pi
@@ -132,6 +134,21 @@ def parse_csv(filename):
 
 
 def row_error_investigator(row, line_number):
+    """
+    Function to find the unconvertible item in a list.
+
+    Finds which element of a list in not convertible to a float
+    and then calls raise_value_error, with the appropriate case
+    and any values it needs
+
+    Parameters
+        ---
+            row: list
+                the row to be checked
+            line_number: int
+                the line number, only used to call raise_value_error
+    """
+
     unconvertible_items = []
 
     for index, element in enumerate(row):
