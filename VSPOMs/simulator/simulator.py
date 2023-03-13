@@ -327,6 +327,8 @@ class Simulator:
     def end(self):
         """Ends current simulation run"""
 
+        self.calculate_turnover_events()
+
         self.done = True
         print('End.')
 
@@ -497,10 +499,42 @@ class Simulator:
         div_scale = math.ceil(self.steps / 10)
 
         max_time = max(self.data.groupby(level=0).tail(1)['time'].tolist())
-        print(max_time)
 
         plot_range = max_time / div_scale
-        print(plot_range)
+        plot_range = round(plot_range, -int(math.floor(math.log10(abs(plot_range)))))
+
+        # self.data.loc[1, slice(None)]
+
+        # pd dataframe for turnover graph data
+        # print(f'max_time: {max_time}')
+        # print(f'plot_range: {plot_range}')
+        index_array = []
+        for i in range(self.replicates + 1):
+            loop_step = plot_range
+            while loop_step < max_time + plot_range:
+                index_array.append((i, round(loop_step, -int(math.floor(math.log10(abs(loop_step)/100))))))
+                loop_step += plot_range
+
+        # print(index_array)
+
+        self.turnover_frame = pandas.DataFrame(0, columns=["turnovers"],
+            index=pandas.MultiIndex.from_tuples(index_array, names=('replicates', 'time')))
+
+        for replicate in range(self.replicates + 1):
+            replicate_slice = self.data.loc[(replicate, slice(None))]['time']
+            # print(f'    {str(replicate)}')
+            # print(replicate_slice)
+            loop_step = plot_range
+            for time in replicate_slice:
+                # print(f'loop_step: {loop_step}, time: {time}')
+                if time <= loop_step:
+                    self.turnover_frame.loc[(replicate, loop_step)] += 1
+                else:
+                    loop_step = round(loop_step + plot_range,
+                                       -int(math.floor(math.log10(abs(loop_step + plot_range)/100))))
+                    self.turnover_frame.loc[(replicate, loop_step)] += 1
+
+        # print(self.turnover_frame.to_string())
 
     def print_status(self):
         """Temp debug function to observe changes."""
@@ -514,6 +548,12 @@ class Simulator:
     def get_data(self):
         """Returns self.data"""
         return self.data
+
+    def print_turnover_graph_data(self):
+        print(self.turnover_frame.to_string())
+
+    def get_turnover_graph_data(self):
+        return self.turnover_frame
 
     def get_turnovers(self):
         """Returns self.patch_dict containing turnover event data."""
