@@ -8,6 +8,8 @@ If no errors, it returns the setting for the simulation,
 and a dictionary corresponding to the patches
 """
 
+# pylint: disable=line-too-long
+
 from math import sqrt, pi
 import csv
 
