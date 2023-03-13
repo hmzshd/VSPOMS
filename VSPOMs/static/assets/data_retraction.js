@@ -47,9 +47,14 @@ $(document).ready(function() {
         .then(response => {
             (response.text().then(async text => {
                 // Parse returned JSON message
-                const graphData = JSON.parse(text).graphs.data;
-                const graphLayout = JSON.parse(text).graphs.layout;
-                const graphFrames = JSON.parse(text).graphs.frames;
+                const graph1Data = JSON.parse(text).graph1.data;
+                const graph1Layout = JSON.parse(text).graph1.layout;
+                const graph2Data = JSON.parse(text).graph2.data;
+                const graph2Layout = JSON.parse(text).graph2.layout;
+                const graph3Data = JSON.parse(text).graph3.data;
+                const graph3Layout = JSON.parse(text).graph3.layout;
+                const graph4Data = JSON.parse(text).graph4.data;
+                const graph4Layout = JSON.parse(text).graph4.layout;
                 const x = JSON.parse(text).turnovers.statuses;
                 const y = JSON.parse(text).turnovers.x_coords;
                 const status = JSON.parse(text).turnovers.y_coords;
@@ -57,7 +62,10 @@ $(document).ready(function() {
                 const replicates = JSON.parse(text).replicates;
                 const dataTable = Bokeh.documents[0].get_model_by_name("vspoms").data_source;
                 // Animate patch graph
-                Plotly.newPlot('graph1', graphData, graphLayout)
+                Plotly.newPlot('graph1', graph1Data, graph1Layout)
+                Plotly.newPlot('graph2', graph2Data, graph2Layout)
+                Plotly.newPlot('graph3', graph3Data, graph3Layout)
+                Plotly.newPlot('graph4', graph4Data, graph4Layout)
                 $("#progress-bar").css("display", "flex");
                 for (let i = 0; i < status.length  / replicates; i++) {
                     for (let j = 0; j < (dataTable.data["color"].length); j++) {
