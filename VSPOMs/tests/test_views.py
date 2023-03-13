@@ -3,13 +3,13 @@
 Automated tests for views.py
 """
 import json
-from math import pi
 from django.test import TestCase
 from VSPOMsApp.views import status_to_colour, generate_patch_list_random, Patch
 
 class ViewsTestCase(TestCase):
     """
-    Expands upon django TestCase, tests index, test_generate_patch_list_random, test_status_to_colour
+    Expands upon django TestCase, tests index, 
+    test_generate_patch_list_random, test_status_to_colour
     """
 
     def test_index_view(self):
