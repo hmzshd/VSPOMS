@@ -37,7 +37,7 @@ def parse_csv(filename):
     # handled by frontend - in addition to FileNotFound error.
 
     if not filename.lower().endswith("csv"):
-        raise UnicodeDecodeError("unknown", filename, )
+        raise UnicodeDecodeError("unknown", filename,)
 
     with open(filename, encoding="utf-8") as csvfile:
 
@@ -69,19 +69,20 @@ def parse_csv(filename):
                 # most of the lines will pass this test, so we want it to be first.
                 if settings_read:
 
+                    # try except in case one of the elements is
+                    # not a float - in which case we pass the row
+                    # to the error detection
                     try:
                         x_coord = float(row[0])
                         y_coord = float(row[1])
                         area = float(row[2])
                         radius = sqrt(area / pi)
-
-                        # validating patch status
                         status_int = int(row[3])
-                        status_invalid = status_int not in valid_status_set
-                        if status_invalid:
+                        # validating patch status
+                        if status_int not in valid_status_set:
                             raise_value_error(4, row, line_number, row[3], 3)
-                            raise ValueError("error_string")
 
+                        # converting to bool
                         if status_int == 0:
                             status = False
                         else:
@@ -94,7 +95,9 @@ def parse_csv(filename):
                         patch_list.append(Patch(status, x_coord, y_coord, area))
 
                     except ValueError:
-                        invalid_row_item_finder(row[0:4], line_number)
+                        # we only want the 0-3rd items as their may be blank lines
+                        # which we simply don't care about
+                        row_error_investigator(row[0:4], line_number)
 
 
                 # path to take if settings unread
@@ -107,7 +110,9 @@ def parse_csv(filename):
                         settings["patch_area_effect_x"] = float(row[4])
                         settings_read = True
                     except ValueError:
-                        invalid_row_item_finder(row[0:5], line_number)
+                        # similar to above - we only care about the 0-4th els
+                        # in case of any blank items
+                        row_error_investigator(row[0:5], line_number)
 
 
             # big if else here -
@@ -126,7 +131,7 @@ def parse_csv(filename):
     return patch_dict, settings, patch_list
 
 
-def invalid_row_item_finder(row, line_number):
+def row_error_investigator(row, line_number):
     unconvertible_items = []
 
     for index, element in enumerate(row):
@@ -143,6 +148,7 @@ def invalid_row_item_finder(row, line_number):
 
 
 def raise_value_error(case_value, row, line_number, item, column):
+    error_string = "unknown error - try a different CSV - or contact devs for help"
     match case_value:
         case 1:
             error_string = f"Error parsing CSV - may be " \
