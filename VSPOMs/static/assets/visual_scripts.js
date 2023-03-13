@@ -76,6 +76,7 @@ function openCreate() {
         resetNav();
         $("#button-create").addClass("active-page");
         $("#create-panel").fadeIn(200);
+        $(document).prop('title', 'Create | VSPOMS');
     }
 };
 
@@ -84,6 +85,7 @@ function openSimulate() {
         resetNav();
         $("#button-simulate").addClass("active-page");
         $("#simulate-panel").fadeIn(200);
+        $(document).prop('title', 'Simulate | VSPOMS');
     }
 };
 
@@ -92,6 +94,7 @@ function openGraphs() {
         resetNav();
         $("#button-graphs").addClass("active-page");
         $("#graphs-panel").fadeIn(200);
+        $(document).prop('title', 'Graphs | VSPOMS');
     }
 };
 
@@ -100,5 +103,6 @@ function openSettings() {
         resetNav();
         $("#button-settings").addClass("active-page");
         $("#settings-panel").fadeIn(200);
+        $(document).prop('title', 'Parameters | VSPOMS');
     }
 };
