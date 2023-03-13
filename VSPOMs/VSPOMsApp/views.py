@@ -35,7 +35,7 @@ def index(request):
     """
 
     # Prepare Data
-    patch_list = parse_csv('media/bigdan.csv')[0]
+    patch_list = parse_csv('media/demo.csv')[0]
     patches = pd.DataFrame.from_dict(patch_list)
     graph_df = pd.DataFrame(columns=[
         "time",
@@ -294,6 +294,8 @@ def post_patches(request):
     # Graphs
     graph_data = simulation.get_data()
     graph_df = pd.DataFrame(graph_data)
+
+    graph_df = graph_df.reset_index()
 
     graphs = {
         'graph1': '',
