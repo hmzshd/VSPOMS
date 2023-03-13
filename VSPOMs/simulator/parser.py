@@ -105,11 +105,10 @@ def parse_csv(filename):
                             error_string = f"Error parsing CSV, one item is invalid\nError Details:\nItem: {item}, " \
                                            f"Column Number: {column}, Line Number: {line_number}\nRow: {row}"
                         else:
-                            items = [item[0] for item in unconvertible_items]
-                            print(items)
-                            error_string = ""
-                            # error_string = f"Error parsing CSV, multiple items are invalid\nError Details:\nItem: {item}, " \
-                            #                f"Column Number: {column}, Line Number: {line_number}\nRow: {row}"
+                            # extract items, we don't care as much about column numbers in this case
+                            items = [item[1] for item in unconvertible_items]
+                            error_string = f"Error parsing CSV, multiple items are invalid\nError Details:\nItems: {items}\n" \
+                                           f"Line Number: {line_number}\nRow: {row}"
 
                         raise ValueError(error_string)
                 # path to take if settings unread
