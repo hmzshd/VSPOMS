@@ -130,6 +130,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+#idea folder - created by pycharm
+.idea
 # Run script (ask tim)
 VSPOMs/VSPOMS.ps1
 VSPOMs/IloveVSPOMS.bat
