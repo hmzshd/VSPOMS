@@ -52,7 +52,7 @@ def parse_csv(filename):
         radiuses = list()
         settings = dict()
         patch_list = list()
-        first_column_headings = set(('a', 'A', 'x', 'X', 'a ', 'A ', 'x ', 'X '))
+        first_column_headings = set(('a', 'x',))
         settings_read = False
 
         for line_number, row in enumerate(reader):
@@ -98,7 +98,10 @@ def parse_csv(filename):
                     item = row[0]
                     column = 0
                     line_number = line_number + 1
-                    error_text = f"Item: {item} Column Number: {column}, Line Number: {line_number}\nRow: {row}"
+                    error_text = f"Error parsing CSV - may be an issue with column headings, first heading must be " \
+                                 f"'a' or 'x' - case and space insensitive. \nError Details:\nItem: {item} Column " \
+                                 f"Number: {column}, " \
+                                 f"Line Number: {line_number}\nRow: {row}"
                     raise ValueError(error_text)
 
     patch_dict = {"x_coords": x_coords, "y_coords": y_coords,
