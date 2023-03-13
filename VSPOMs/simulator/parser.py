@@ -167,7 +167,7 @@ def parse_csv(filename):
         patch_dict = {"x_coords": x_coords, "y_coords": y_coords,
                       "radiuses": radiuses, "statuses": statuses}
 
-    return patch_dict, settings, patch_list
+    return patch_dict, settings, scaling_factor, patch_list
 
 
 def row_error_investigator(row, line_number):
