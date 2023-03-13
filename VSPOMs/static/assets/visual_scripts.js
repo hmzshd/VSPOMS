@@ -70,7 +70,6 @@ function resetNav() {
     $("#button-create, #button-simulate, #button-graphs, #button-settings").removeClass("active-page");
     $("#create-panel, #simulate-panel, #graphs-panel, #settings-panel").hide(0);
 };
-
 function openCreate() {
     if (!$("#button-create").hasClass("active-page")) {
         resetNav();
@@ -79,7 +78,6 @@ function openCreate() {
         $(document).prop('title', 'Create | VSPOMS');
     }
 };
-
 function openSimulate() {
     if (!$("#button-simulate").hasClass("active-page")) {
         resetNav();
@@ -88,7 +86,6 @@ function openSimulate() {
         $(document).prop('title', 'Simulate | VSPOMS');
     }
 };
-
 function openGraphs() {
     if (!$("#button-graphs").hasClass("active-page")) {
         resetNav();
@@ -97,7 +94,6 @@ function openGraphs() {
         $(document).prop('title', 'Graphs | VSPOMS');
     }
 };
-
 function openSettings() {
     if (!$("#button-settings").hasClass("active-page")) {
         resetNav();
@@ -106,3 +102,19 @@ function openSettings() {
         $(document).prop('title', 'Parameters | VSPOMS');
     }
 };
+
+// Hide the loading frogs
+function resetFrog() {
+    $("#frog1").hide();
+    $("#frog2").hide();
+    $("#frog3").hide();
+    $("#frog4").hide();
+    $("#frog5").hide();
+}
+// Pick the frog to load
+function pickFrog() {
+    let frogArray = ["#frog1","#frog2","#frog3","#frog4","#frog5"];
+    let chosenFrog = frogArray[Math.floor(Math.random()*frogArray.length)];
+    resetFrog();
+    $(chosenFrog).show();
+}
