@@ -33,12 +33,12 @@ def parse_csv(filename):
     with open(filename, encoding="utf-8") as csvfile:
 
         reader = csv.reader(csvfile, delimiter=',')
-        x_coords = list()
-        y_coords = list()
-        statuses = list()
-        radiuses = list()
-        settings = dict()
-        patch_list = list()
+        x_coords = []
+        y_coords = []
+        statuses = []
+        radiuses = []
+        settings = {}
+        patch_list = []
         settings_read = False
 
         for row in reader:

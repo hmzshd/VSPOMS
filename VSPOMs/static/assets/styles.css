@@ -15,6 +15,7 @@ body, html {
     height: calc(100% - 50px);
 	width: 100%;
     min-width: 1400px;
+    min-height: 700px;
 	margin: 0;
     padding: 0;
 	font-size: 18px;
@@ -144,7 +145,7 @@ section.panel {
     padding: 16px 20px;
     box-shadow: 0 0 10px lightgray;
 }
-section.panel h1, section.panel h2, section.panel h3, section.panel h4, section.panel h5, section.panel h6 {
+h1, h2, h3, h4, h5, h6 {
     font-weight: normal;
 }
 
@@ -153,16 +154,16 @@ section.panel#loading-panel {
     background: none;
     box-shadow: none;
 }
-section.panel#loading-panel h1 {
+#loading-panel h1 {
     text-align: center;
     margin-top: 28vh;
 }
-section.panel#loading-panel img {
+#loading-panel img {
     display: block;
     margin: 0 auto;
     width: 30px;
 }
-section.panel#loading-panel p {
+#loading-panel p {
     text-align: center;
     margin-top: 40px;
     color: gray;
@@ -190,8 +191,9 @@ section.panel#loading-panel p {
 /* Graph panel styles */
 section.panel#graphs-panel {
     height: auto;
+    min-height: 800px;
 }
-section.panel .graph-grid {
+.graph-grid {
     display: grid;
     grid-template-columns: calc(50% - 10px) calc(50% - 10px);
     grid-row: auto auto;
@@ -201,7 +203,7 @@ section.panel .graph-grid {
     height: 100%;
     margin: 0;
 }
-section.panel .graph-container {
+.graph-container {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -211,7 +213,7 @@ section.panel .graph-container {
 }
 
 /* Simulate panel styles */
-section.panel .patch-container {
+.patch-container {
     background-color: white;
     height: 82vh;
     width: 55%;
@@ -219,32 +221,80 @@ section.panel .patch-container {
     border-radius: 5px;
     float: left;
 }
-section.panel .patch-settings-container, section.panel .patch-help-container {
+.patch-settings-container, .patch-help-container, .patch-param-container {
     float: right;
     width: 43%;
     border-radius: 5px;
-    margin-bottom: 20px;
+    margin-bottom: 14px;
     background-color: white;
-    padding: 10px 30px;
+    padding: 4px 30px;
 }
-section.panel .patch-settings-container {
-    height: 38vh;
+.patch-settings-container {
+    height: 36%;
 }
-section.panel .patch-help-container {
-    height: 32vh;
+.patch-help-container {
+    height: 22%;
+    line-height: 1.5em;
 }
-section.panel .run-sim-button {
+.patch-param-container {
+    height: 25%;
+}
+.patch-param-container h3 {
+    margin-bottom: 4px;
+}
+.patch-param-container .sim-param_row {
+    display: flex;
+    margin-bottom: 8px;
+}
+.patch-param-container label, .patch-param-container input {
+    padding: 3px 0;
+    flex: 50%;
+}
+.patch-param-container label {
+    float: left;
+    margin-right: 40px;
+}
+.patch-param-container input {
+    float: right;
+}
+.run-sim-button {
     float: right;
     width: 43%;
 }
-section.panel #patch-size-input {
+.run-sim-button button {
+    height: 60px;
+    position: relative;
+}
+.run-sim-button p {
+    position: absolute;
+    text-align: center;
+    height: 100%;
+    width: 100%;
+    top: 50;
+    left: 50;
+    transform: translate(-20px, -50%);
+}
+/* Simulation progress bar */
+#progress-bar {
+    display: none;
+    justify-content: center;
+    height: 100%;
+    width: 0%;
+    background-color: #1DB099;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 5px;
+}
+
+#patch-size-input {
     width: 52%;
     height: 56px;
     overflow: hidden;
     transform: scale(1.9) translate(22%, 20%);
     margin-bottom: 50px;
 }
-section.panel #patch-state-input {
+#patch-state-input {
     transform: scale(1.4) translateX(34%);
     margin-top: 50px;
 }
@@ -253,16 +303,16 @@ section.panel #patch-state-input {
 section.panel#settings-panel {
     height: auto;
 }
-section.panel h2.parameter_heading {
+h2.parameter_heading {
     font-size: 18px;
 }
 /* Box positioning */
-section.panel .box_row::after {
+.box_row::after {
     content: "";
     display: table;
     clear: both;
 }
-section.panel .function_box, section.panel .visualise_box {
+.function_box, .visualise_box {
     border: 1px solid #1C2A3A;
     margin: 20px auto;
     padding: 6px 12px;
@@ -271,28 +321,35 @@ section.panel .function_box, section.panel .visualise_box {
     float: left;
     transition: all 0.1s ease-in-out;
 }
-section.panel .function_box:hover, section.panel .visualise_box:hover {
+.function_box:hover, .visualise_box:hover {
     box-shadow: 0 0 4px gray;
 }
-section.panel .visualise_box {
+.visualise_box {
     height: 100%;
 }
 #box_dispersal-kernel-function, #box_colonization-probability-function, #box_patch-extinction-probability-function, #box_connectivity-function,
 #box_stochasticity-function {
     margin-right: 1%;
 }
-#box_dispersal-kernel-graph, #box_colonization-probability-graph, #box_patch-extinction-probability-graph, #box_rescue-effect-function, #box_other {
+#box_dispersal-kernel-graph, #box_colonization-probability-graph, #box_patch-extinction-probability-graph, #box_rescue-effect-function {
     margin-left: 1%;
 }
 /* Box styles */
-section.panel .function_box .parameter_label {
+.function_box .parameter_label {
     padding: 0 6px;
     font-family:'Times New Roman', Times, serif;
 }
-section.panel .function_box .equation {
+.disabled_function {
+    backdrop-filter: brightness(0.9);
+    filter: brightness(0.9);
+}
+.disabled_function:hover, .disabled_function input:hover {
+    cursor: not-allowed;
+}
+.function_box .equation {
     font-size: 26px;
 }
-section.panel .function_box input {
+.function_box input {
     width: 8vw;
     font-size: 18px;
     font-family: monospace;
@@ -307,12 +364,8 @@ input[type=number] {
     appearance: textfield;
     -moz-appearance: textfield;
 }
-/* "Save Changes" button */
-section.panel .button_submit-settings {
-    margin: 20px auto;
-    width: 400px;
-}
-section.panel button.panel-button {
+/* "Run Simulation" & "Save Parameters" buttons */
+button.panel-button {
     margin: 0;
     width: 100%;
     padding: 20px;
@@ -325,17 +378,26 @@ section.panel button.panel-button {
     text-align: center;
     transition: 0.1s ease-in-out;
 }
-section.panel button.panel-button:hover {
+button.panel-button:hover {
     transform: scale(1.02);
     filter: brightness(1.1);
     cursor: pointer;
+}
+button.panel-button:disabled, button.panel-button:disabled:hover {
+    filter: brightness(1);
+    cursor: not-allowed;
+    transform: none;
+    background-color: #1C2A3A;
+}
+button.panel-button#button-save-parameters {
+    margin: 20px 0;
 }
 
 /* Create panel styles */
 section.panel#create-panel h2 {
     font-size: 20px;
 }
-section.panel .choose-scenario-box, section.panel .random-scenario-box {
+.choose-scenario-box, .random-scenario-box {
     border: 1px solid #1C2A3A;
     width: calc(47% - 10px);
     height: calc(100% - 120px);
@@ -346,7 +408,7 @@ section.panel .choose-scenario-box, section.panel .random-scenario-box {
     filter: brightness(0.95) saturate(0.7);
     transition: all 0.1s ease-in-out;
 }
-section.panel .or-box {
+.or-box {
     width: 6%;
     float: left;
     margin-top: 20px;
@@ -354,22 +416,22 @@ section.panel .or-box {
     padding: 0;
     text-align: center;
 }
-section.panel .or-box h1 {
+.or-box h1 {
     font-size: 40px;
     margin-top: calc(40vh - 100px);
 }
-section.panel .choose-scenario-box:hover, section.panel .random-scenario-box:hover {
+.choose-scenario-box:hover, .random-scenario-box:hover {
     box-shadow: 0 0 4px gray;
     filter: none;
 }
-section.panel .choose-scenario-box {
+.choose-scenario-box {
     margin-right: 10px;
 }
-section.panel .scenario-list {
+.scenario-list {
     height: calc(100% - 80px);
     overflow-y: scroll;
 }
-section.panel .scenario-list li {
+.scenario-list li {
     background-color: white;
     padding: 18px 10px;
     border-radius: 2px;
@@ -381,11 +443,11 @@ section.panel .scenario-list li {
     word-break: break-all;
     opacity: 0.7;
 }
-section.panel .scenario-list li:hover {
+.scenario-list li:hover {
     font-weight: bold;
     opacity: 1;
 }
-section.panel .scenario-list li a {
+.scenario-list li a {
     font-weight: bold;
     color: white;
     background-color: #1DB099;
@@ -395,15 +457,15 @@ section.panel .scenario-list li a {
     transition: all 0.1s ease-in-out;
     margin-top: -10px;
 }
-section.panel .scenario-list li a:hover {
+.scenario-list li a:hover {
     filter: brightness(1.1);
     transform: scale(1.03);
     cursor: pointer;
 }
-section.panel .random-scenario-box {
+.random-scenario-box {
     margin-left: 10px;
 }
-section.panel .random-scenario-box button {
+.random-scenario-box button {
     text-align: center;
     font-size: 24px;
     font-weight: bold;
@@ -416,7 +478,7 @@ section.panel .random-scenario-box button {
     height: 70px;
     margin-top: 20px;
 }
-section.panel .random-scenario-box button:hover {
+.random-scenario-box button:hover {
     filter: brightness(1.1);
     transform: scale(1.02);
     cursor: pointer;
@@ -450,7 +512,7 @@ section.panel .random-scenario-box button:hover {
 .random-parameters .random-parameters_column#random_num input {
     width: 100%;
 }
-section.panel .generate-button-container {
+.generate-button-container {
     display: flex;
     justify-content: center;
     margin-top: 20px;

@@ -61,6 +61,7 @@ coverage.xml
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
+/VSPOMS/VSPOMsApp/migrations/
 
 # Flask stuff:
 instance/
@@ -139,3 +140,4 @@ VSPOMs/IloveVSPOMS.bat
 /VSPOMs/simulator/.demo.csv.kate-swp
 /VSPOMs/simulator/.~lock.demo2.csv#
 /VSPOMs/simulator/ohno.py
+
