@@ -98,8 +98,8 @@ def parse_csv(filename):
                     item = row[0]
                     column = 0
                     line_number = line_number + 1
-                    # return ValueError, item, column, line_number, row
-                    raise InvalidRowError(row[0],0,line_number + 1, row)
+                    error_text = f"Item: {item} Column Number: {column}, Line Number: {line_number}\nRow: {row}"
+                    raise ValueError(error_text)
 
     patch_dict = {"x_coords": x_coords, "y_coords": y_coords,
                   "radiuses": radiuses, "statuses": statuses}
