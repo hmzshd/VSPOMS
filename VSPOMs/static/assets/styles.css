@@ -179,7 +179,7 @@ section.panel#loading-panel {
     margin: 30px auto;
     width: 30px;
 }
-#loading-panel #loading-panel_outline, #loading-panel #loading-panel_outline-2 {
+#loading-panel #loading-panel_outline {
     position: absolute;
     border: 1px solid #26394F;
     height: 40%;
@@ -188,6 +188,7 @@ section.panel#loading-panel {
     left: 15%;
 }
 #loading-panel #loading-panel_outline-2 {
+    position: absolute;
     border: 1px solid #1DB099;
     height: 32%;
     width: 90%;
@@ -299,6 +300,7 @@ section.panel#graphs-panel {
 .patch-param-container input {
     float: right;
 }
+/* Run Simulation button */
 .run-sim-button {
     float: right;
     width: 43%;
@@ -538,7 +540,7 @@ section.panel#create-panel h2 {
     transition: all 0.1s ease-in-out;
 }
 .random-parameters .random-parameters_column#random_num {
-    flex: 10%;
+    flex: 15%;
 }
 .random-parameters .random-parameters_column:hover {
     opacity: 1;
@@ -558,4 +560,12 @@ section.panel#create-panel h2 {
     display: flex;
     justify-content: center;
     margin-top: 20px;
+}
+
+
+/* Media queries */
+@media only screen and (max-width: 1700px) {
+    section.panel {
+        width: 92%;
+    }
 }
