@@ -1,9 +1,16 @@
+"""
+Automated tests for patch.py
+"""
 from django.test import TestCase
 from simulator.patch import Patch
 
 class PatchTestCase(TestCase):
-    "expands upon the django TestCase to see if patch is being properly initialised"
+    """expands upon the django TestCase to see if patch
+    is being properly initialised"""
     def test_patch_init(self):
+        """
+        Create and test a patch
+        """
         x_coord = 10.0
         y_coord = 20.0
         area = 50.0

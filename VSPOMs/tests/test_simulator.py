@@ -1,11 +1,15 @@
+"""
+Automated tests for simulator
+"""
+import pandas
 from django.test import TestCase
 from simulator.patch import Patch
 from simulator.simulator import Simulator
-import pandas
 
 class SimulatorTestCase(TestCase):
     """
-    expands upon django TestCase to see if simulator is being properly initialised and the attributes are the proper datatype."
+    expands upon django TestCase to see if simulator is being
+    properly initialised and the attributes are the proper datatype."
     """
     def setUp(self):
         # create patches
@@ -15,7 +19,7 @@ class SimulatorTestCase(TestCase):
         patch4 = Patch(status="occupied", x_coord=4, y_coord=2, area=12)
         patch5 = Patch(status="occupied", x_coord=5, y_coord=1, area=16)
         patches = [patch1, patch2, patch3, patch4, patch5]
-         
+
         #set simulator parameters
         dispersal_alpha = 0.1
         area_exponent_b = 0.2
@@ -24,9 +28,21 @@ class SimulatorTestCase(TestCase):
         patch_area_effect_x = 0.5
         steps = 100
         replicates = 1
-        self.simulator = Simulator(patches, dispersal_alpha, area_exponent_b, species_specific_constant_y, species_specific_constant_u, patch_area_effect_x, steps, replicates)
+        self.simulator = Simulator(
+            patches,
+            dispersal_alpha,
+            area_exponent_b,
+            species_specific_constant_y,
+            species_specific_constant_u,
+            patch_area_effect_x,
+            steps,
+            replicates
+        )
 
     def test_simulator_attributes(self):
+        """
+        Tests the simulation attributes
+        """
         self.assertIsInstance(self.simulator.patches, list)
         self.assertIsInstance(self.simulator.events, list)
         self.assertIsInstance(self.simulator.patches_backup, list)
@@ -51,6 +67,9 @@ class SimulatorTestCase(TestCase):
         self.assertIsInstance(self.simulator.patch_dict, type(None))
 
     def test_simulator_parameters(self):
+        """
+        Tests the simulation parameters in the parameters page
+        """
         self.assertEqual(len(self.simulator.patches), 5)
         self.assertEqual(self.simulator.steps, 100)
         self.assertEqual(self.simulator.replicates, 0)
