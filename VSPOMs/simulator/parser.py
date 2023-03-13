@@ -56,6 +56,8 @@ def parse_csv(filename):
         settings_read = False
 
         for line_number, row in enumerate(reader):
+            # incrementing line number, as it's not 0 indexed
+            line_number = line_number + 1
             # skipping 'empty' rows if there are any
             if len(row) == 0:
                 pass
@@ -69,31 +71,45 @@ def parse_csv(filename):
                 # checking if settings read - done first for efficiency,
                 # most of the lines will pass this test, so we want it to be first.
                 if settings_read:
+
                     try:
                         x_coord = float(row[0])
                         y_coord = float(row[1])
                         area = float(row[2])
                         radius = sqrt(area / pi)
+                        # validating patch status
+                        status_int = int(row[3])
+                        if status_int != 0 and status_int != 1:
+                            error_string = f"""Error parsing CSV, patch status must be 0 or 1
+                            Line Number: {line_number}, Given item: {row[3]}"""
+                            raise ValueError(error_string)
+
                         if int(row[3]) == 0:
                             status = False
                         else:
                             status = True
+
                         x_coords.append(x_coord)
                         y_coords.append(y_coord)
                         statuses.append(status)
                         radiuses.append(radius)
                         patch_list.append(Patch(status, x_coord, y_coord, area))
+
                     except ValueError:
-                        unconvertible_items = invalid_row_item_finder(row[0:3])
-                        line_number = line_number + 1
-                        print(unconvertible_items)
+                        unconvertible_items = invalid_row_item_finder(row[0:4])
+                        # print(row[0:4])
+                        # print(unconvertible_items)
                         if unconvertible_items[1] == False:
                             item = unconvertible_items[0][0]
                             column = unconvertible_items[0][1]
                             error_string = f"Error parsing CSV, one item is invalid\nError Details:\nItem: {item}, " \
                                            f"Column Number: {column}, Line Number: {line_number}\nRow: {row}"
                         else:
+                            items = [item[0] for item in unconvertible_items]
+                            print(items)
                             error_string = ""
+                            # error_string = f"Error parsing CSV, multiple items are invalid\nError Details:\nItem: {item}, " \
+                            #                f"Column Number: {column}, Line Number: {line_number}\nRow: {row}"
 
                         raise ValueError(error_string)
                 # path to take if settings unread
@@ -104,13 +120,17 @@ def parse_csv(filename):
                     settings["species_specific_constant_u"] = float(row[3])
                     settings["patch_area_effect_x"] = float(row[4])
                     settings_read = True
+
+            # big if else here -
+            # this is the case if the 0th item of the row isn't a float
+            # in which case we check if it's a valid column heading
+            # if it is cool - if not we raise an error
             else:
                 # converting item to lower and stripping whitespace
                 item = row[0].lower().strip()
                 if item not in first_column_headings:
                     item = row[0]
                     column = 0
-                    line_number = line_number + 1
                     error_text = f"Error parsing CSV - may be an issue with column headings, first heading must be " \
                                  f"'a' or 'x' - case and space insensitive. \nError Details:\nItem: {item} Column " \
                                  f"Number: {column}, " \
@@ -127,7 +147,6 @@ def invalid_row_item_finder(row):
     unconvertible_items = list()
 
     for index, el in enumerate(row):
-        print(el)
         if not is_float(el):
             unconvertible_items.append((index, el))
 
