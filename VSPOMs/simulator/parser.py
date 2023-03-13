@@ -4,7 +4,8 @@ Parser.
 The parser for the sim, parse_csv, which takes in a csv file,
 validates it, throws an error if need be using row_error_investigator to find the
 invalid data and raise_value_error to raise the correct error.
-If no errors, it returns the setting for the simulation, and a dictionary corresponding to the patches
+If no errors, it returns the setting for the simulation,
+and a dictionary corresponding to the patches
 """
 
 from math import sqrt, pi
@@ -165,6 +166,30 @@ def row_error_investigator(row, line_number):
 
 
 def raise_value_error(case_value, row, line_number, item, column):
+    """
+    Function to raise a ValueError
+
+    Mostly just a switch case thing, that formats the string to be raised with
+    the ValueError
+
+    Parameters
+        ---
+            case_value : int
+                what 'case' the error is
+                    if 1 - error is on the 0th element of a row - and likely a headings issue
+                    if 2 - error is not on 0th element - needed as we check for headings -
+                        as these can be safely skipped, but something like 10.4x for an x_coord can't
+                    if 3 - error is on multiple elements in row
+                    if 4 - error is that what it's expecting to be a status isn't 1 or 0
+            row: list
+                the row containing the error
+            line_number: int
+                the line number
+            item: unknown
+                the offending item
+            column: int
+                the column number of the offending item.
+    """
     error_string = "unknown error - try a different CSV - or contact devs for help"
     match case_value:
         case 1:
