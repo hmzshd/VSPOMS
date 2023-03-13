@@ -81,7 +81,7 @@ class Simulator:
     # pylint: disable=too-many-instance-attributes,too-many-public-methods
 
     # Initialises Simulator.
-    def __init__(self, patches, dispersal_alpha, area_exponent_b, species_specific_constant_y, species_specific_constant_u, patch_area_effect_x, steps=100, replicates=1):
+    def __init__(self, patches, dispersal_alpha, area_exponent_b, species_specific_constant_y, species_specific_constant_u, patch_area_effect_x, steps=100, replicates=1, debug=False):
         """
         Initialises Simulator object.
 
@@ -151,10 +151,15 @@ class Simulator:
 
         self.patch_dict = None
 
+        if debug:
+            self.debug = True
+        else:
+            self.debug = False
+
         # set all interacting simulation variables
         self.setup()
 
-    def simulate(self, debug=False):
+    def simulate(self):
         """
         Performs self.replicates full simulations with self.steps steps.
 
@@ -165,12 +170,12 @@ class Simulator:
         """
 
         while not self.done:
-            self.step(debug)
+            self.step()
 
         if self.patch_dict is None:
             raise ValueError
 
-    def step(self, debug):
+    def step(self):
         """
         Performs Gillespie process once.
         Increments self.step, or self.replicate if the current replicate ends.
@@ -184,7 +189,7 @@ class Simulator:
 
         self.update_frame()
 
-        if debug:
+        if self.debug:
             if self.completed_steps == 0:
                 print(f'Replicate {self.completed_replicates + 1}:')
             elif self.completed_steps % 20 == 0:
@@ -192,7 +197,7 @@ class Simulator:
                 # self.print_status()
 
         if self.completed_steps < self.steps:  # sim does not need to start new replicate. does one step.
-            selected_patch = self.gillespie_process(debug)
+            selected_patch = self.gillespie_process()
             self.update_patch_lists(selected_patch)
             self.completed_steps += 1
         elif self.completed_replicates < self.replicates:  # starts new replicate.
@@ -203,7 +208,7 @@ class Simulator:
             self.generate_dict()
             self.end()
 
-    def gillespie_process(self, debug):
+    def gillespie_process(self):
         """
         Performs Gillespie process using object attributes.
 
@@ -227,7 +232,7 @@ class Simulator:
 
         self.increment_time(selected_event)  # step 4
 
-        if debug:
+        if self.debug:
             # status is true if occupied, false if unoccupied, so we simply use the status
             # of the patch to figure out the event type
             if selected_event.patch.status:
@@ -251,8 +256,12 @@ class Simulator:
             selected_event: Event
                 event selected to happen by select_event().
         """
-
-        self.time += exponential(1/(self.total_extinction_rate + self.total_colonisation_rate))
+        amount_to_increment = exponential(1/(self.total_extinction_rate + self.total_colonisation_rate))
+        if self.debug:
+            print(f"amount to increment time is: {amount_to_increment}")
+        self.time += amount_to_increment
+        if self.debug:
+            print(f"time is now {self.time}")
 
 
     def update_rates(self):
@@ -317,6 +326,8 @@ class Simulator:
     def end(self):
         """Ends current simulation run"""
 
+        self.calculate_turnover_events()
+
         self.done = True
         print('End.')
 
@@ -337,12 +348,26 @@ class Simulator:
         length = len(self.events)
 
         cum_weights = []
+        if self.debug:
+            print(f"cumulative weights pre accumulate {cum_weights}")
         for event in self.events:
+            if self.debug:
+                pass
+                # print(f"current event is {event}")
             cum_weights.append(event.probability)
         cum_weights = list(accumulate(cum_weights))
 
-        total = cum_weights[-1] + 0.0  # convert to float
+        if self.debug:
+            print(f"cumulative weights post accumulate {cum_weights}")
+            print(f"step number: {self.completed_steps}")
+            # for patch in self.patches:
+            #     print(patch)
+
+        total = float(cum_weights[-1])
         if total <= 0.0:
+            print(f"dying on step number: {self.completed_steps}")
+            for patch in self.patches:
+                print(patch)
             raise ValueError('Total of weights must be greater than zero')
 
         upper = length - 1
@@ -473,10 +498,42 @@ class Simulator:
         div_scale = math.ceil(self.steps / 10)
 
         max_time = max(self.data.groupby(level=0).tail(1)['time'].tolist())
-        print(max_time)
 
         plot_range = max_time / div_scale
-        print(plot_range)
+        plot_range = round(plot_range, -int(math.floor(math.log10(abs(plot_range)))))
+
+        # self.data.loc[1, slice(None)]
+
+        # pd dataframe for turnover graph data
+        # print(f'max_time: {max_time}')
+        # print(f'plot_range: {plot_range}')
+        index_array = []
+        for i in range(self.replicates + 1):
+            loop_step = plot_range
+            while loop_step < max_time + plot_range:
+                index_array.append((i, round(loop_step, -int(math.floor(math.log10(abs(loop_step)/100))))))
+                loop_step += plot_range
+
+        # print(index_array)
+
+        self.turnover_frame = pandas.DataFrame(0, columns=["turnovers"],
+            index=pandas.MultiIndex.from_tuples(index_array, names=('replicates', 'time')))
+
+        for replicate in range(self.replicates + 1):
+            replicate_slice = self.data.loc[(replicate, slice(None))]['time']
+            # print(f'    {str(replicate)}')
+            # print(replicate_slice)
+            loop_step = plot_range
+            for time in replicate_slice:
+                # print(f'loop_step: {loop_step}, time: {time}')
+                if time <= loop_step:
+                    self.turnover_frame.loc[(replicate, loop_step)] += 1
+                else:
+                    loop_step = round(loop_step + plot_range,
+                                       -int(math.floor(math.log10(abs(loop_step + plot_range)/100))))
+                    self.turnover_frame.loc[(replicate, loop_step)] += 1
+
+        # print(self.turnover_frame.to_string())
 
     def print_status(self):
         """Temp debug function to observe changes."""
@@ -490,6 +547,9 @@ class Simulator:
     def get_data(self):
         """Returns self.data"""
         return self.data
+
+    def print_turnover_graph_data(self):
+        print(self.turnover_frame.to_string())
 
     def get_turnovers(self):
         """Returns self.patch_dict containing turnover event data."""
