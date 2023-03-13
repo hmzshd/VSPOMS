@@ -8,17 +8,13 @@ And returns the setting for the simulation, and a dictionary corresponding to th
 from math import sqrt, pi
 import csv
 
-import InvalidRowError
-
 # necessary to wrap this in try except due to the location of manage.py
 try:
     from simulator.float_checker import is_float
     from simulator.patch import Patch
-    from simulator import InvalidRowError
 except ModuleNotFoundError:
     from float_checker import is_float
     from patch import Patch
-    from InvalidRowError import InvalidRowError
 
 
 def parse_csv(filename):
@@ -147,9 +143,9 @@ def parse_csv(filename):
 def invalid_row_item_finder(row):
     unconvertible_items = list()
 
-    for index, el in enumerate(row):
-        if not is_float(el):
-            unconvertible_items.append((index, el))
+    for index, element in enumerate(row):
+        if not is_float(element):
+            unconvertible_items.append((index, element))
 
     if len(unconvertible_items) == 1:
         return [unconvertible_items[0], False]
