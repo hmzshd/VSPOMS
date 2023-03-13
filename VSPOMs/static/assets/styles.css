@@ -176,7 +176,7 @@ section.panel#loading-panel {
 }
 #loading-panel img {
     display: block;
-    margin: 30px auto;
+    margin: 24px auto;
     width: 30px;
 }
 #loading-panel #loading-panel_outline {
@@ -277,12 +277,8 @@ section.panel#graphs-panel {
     padding: 3px 0;
     flex: 50%;
 }
-.patch-param-container label {
-    float: left;
-    margin-right: 40px;
-}
 .patch-param-container input {
-    float: right;
+    padding-left: 4px;
 }
 /* Run Simulation button */
 .run-sim-button {
