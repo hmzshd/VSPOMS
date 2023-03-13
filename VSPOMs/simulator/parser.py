@@ -111,12 +111,15 @@ def parse_csv(filename):
                         raise ValueError(error_string)
                 # path to take if settings unread
                 else:
-                    settings["dispersal_alpha"] = float(row[0])
-                    settings["area_exponent_b"] = float(row[1])
-                    settings["species_specific_constant_y"] = float(row[2])
-                    settings["species_specific_constant_u"] = float(row[3])
-                    settings["patch_area_effect_x"] = float(row[4])
-                    settings_read = True
+                    try:
+                        settings["dispersal_alpha"] = float(row[0])
+                        settings["area_exponent_b"] = float(row[1])
+                        settings["species_specific_constant_y"] = float(row[2])
+                        settings["species_specific_constant_u"] = float(row[3])
+                        settings["patch_area_effect_x"] = float(row[4])
+                        settings_read = True
+                    except ValueError:
+                        invalid_row_item_finder(row)
 
             # big if else here -
             # this is the case if the 0th item of the row isn't a float
