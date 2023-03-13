@@ -1,13 +1,12 @@
 from django.test import TestCase
 from simulator.patch import Patch
 from simulator.simulator import Simulator
-
-from bisect import bisect
 import pandas
-from numpy.random import exponential
-
 
 class SimulatorTestCase(TestCase):
+    """
+    expands upon django TestCase to see if simulator is being properly initialised and the attributes are the proper datatype."
+    """
     def setUp(self):
         # create patches
         patch1 = Patch(status="occupied", x_coord=1, y_coord=5, area=25)
