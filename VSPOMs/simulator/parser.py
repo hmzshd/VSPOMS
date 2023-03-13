@@ -34,6 +34,26 @@ def parse_csv(filename):
         ---
             filename: string
                 filename of csv file to parse_csv
+
+    Returns
+        ---
+            patch_dict: dict
+                dictionary of patch data, for frontend
+                basically a dictionary consisting of lists where
+                the nth item in each list corresponds to the nth patch
+                this unusual format is as that's how the frontend needs them.
+                keys:
+                    "x_coords", "y_coords", "radiuses", "statuses"
+            settings: dict
+                dictionary containing the settings for the sim
+                keys:
+                    "dispersal_alpha", "area_exponent_b",
+                    "species_specific_constant_y" ,"species_specific_constant_u",
+                    "patch_area_effect_x"
+            scaling_factor: float
+                factor the radiuses have been scaled by - so that frontend
+                can scale them back down when creating the simulator
+                needed as bokeh can't display items with radius less than 6
     """
     # checking file ends with csv - if not we'll return an error
     # this doesn't check the file is a valid csv though, just that it ends with
@@ -53,7 +73,6 @@ def parse_csv(filename):
         statuses = []
         radiuses = []
         settings = dict()
-        patch_list = []
         first_column_headings = set(('a', 'x',))
         valid_status_set = set((0, 1))
         settings_read = False
@@ -123,7 +142,6 @@ def parse_csv(filename):
                         y_coords.append(y_coord)
                         statuses.append(status)
                         radiuses.append(radius)
-                        patch_list.append(Patch(status, x_coord, y_coord, area))
 
                     except ValueError:
                         # we only want the 0-3rd items as their may be blank lines
@@ -167,7 +185,7 @@ def parse_csv(filename):
         patch_dict = {"x_coords": x_coords, "y_coords": y_coords,
                       "radiuses": radiuses, "statuses": statuses}
 
-    return patch_dict, settings, scaling_factor, patch_list
+    return patch_dict, settings, scaling_factor
 
 
 def row_error_investigator(row, line_number):
