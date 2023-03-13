@@ -3,8 +3,8 @@
 $(document).ready(function(){
 
     // Initial page load
-    $("#header-wrapper").delay(4000).fadeIn(500);
-    $("#loading-panel").delay(3000).fadeOut(500);
+    $("#header-wrapper").delay(4200).fadeIn(500);
+    $("#loading-panel").delay(3200).fadeOut(500);
     $("#create-panel").fadeOut(1000).delay(3000).fadeIn(500);
     $("#simulate-panel").fadeOut(1000);
     $("#graphs-panel").fadeOut(1000);
