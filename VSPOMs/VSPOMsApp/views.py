@@ -293,15 +293,7 @@ def post_patches(request):
 
     # Graphs
     graph_data = simulation.get_data()
-    graph_df = pd.DataFrame()
-    for i in range(len(graph_data.index)):
-        dfa = graph_data.head(i).copy()
-        dfa['step'] = i
-        graph_df = pd.concat([graph_df, dfa])
-
-    print(graph_df)
-    graph_df = graph_df.reset_index()
-
+    graph_df = pd.DataFrame(graph_data)
 
     graphs = {
         'graph1': '',

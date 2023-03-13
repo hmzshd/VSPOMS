@@ -3,8 +3,8 @@
 $(document).ready(function(){
 
     // Initial page load
-    $("#header-wrapper").delay(4000).fadeIn(500);
-    $("#loading-panel").delay(3000).fadeOut(500);
+    $("#header-wrapper").delay(4200).fadeIn(500);
+    $("#loading-panel").delay(3200).fadeOut(500);
     $("#create-panel").fadeOut(1000).delay(3000).fadeIn(500);
     $("#simulate-panel").fadeOut(1000);
     $("#graphs-panel").fadeOut(1000);
@@ -70,35 +70,51 @@ function resetNav() {
     $("#button-create, #button-simulate, #button-graphs, #button-settings").removeClass("active-page");
     $("#create-panel, #simulate-panel, #graphs-panel, #settings-panel").hide(0);
 };
-
 function openCreate() {
     if (!$("#button-create").hasClass("active-page")) {
         resetNav();
         $("#button-create").addClass("active-page");
         $("#create-panel").fadeIn(200);
+        $(document).prop('title', 'Create | VSPOMS');
     }
 };
-
 function openSimulate() {
     if (!$("#button-simulate").hasClass("active-page")) {
         resetNav();
         $("#button-simulate").addClass("active-page");
         $("#simulate-panel").fadeIn(200);
+        $(document).prop('title', 'Simulate | VSPOMS');
     }
 };
-
 function openGraphs() {
     if (!$("#button-graphs").hasClass("active-page")) {
         resetNav();
         $("#button-graphs").addClass("active-page");
         $("#graphs-panel").fadeIn(200);
+        $(document).prop('title', 'Graphs | VSPOMS');
     }
 };
-
 function openSettings() {
     if (!$("#button-settings").hasClass("active-page")) {
         resetNav();
         $("#button-settings").addClass("active-page");
         $("#settings-panel").fadeIn(200);
+        $(document).prop('title', 'Parameters | VSPOMS');
     }
 };
+
+// Hide the loading frogs
+function resetFrog() {
+    $("#frog1").hide();
+    $("#frog2").hide();
+    $("#frog3").hide();
+    $("#frog4").hide();
+    $("#frog5").hide();
+}
+// Pick the frog to load
+function pickFrog() {
+    let frogArray = ["#frog1","#frog2","#frog3","#frog4","#frog5"];
+    let chosenFrog = frogArray[Math.floor(Math.random()*frogArray.length)];
+    resetFrog();
+    $(chosenFrog).show();
+}

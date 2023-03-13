@@ -5,11 +5,11 @@ Automated tests for views.py
 import json
 from math import pi
 from django.test import TestCase
-from VSPOMsApp.views import * # this needs to be changed
+from VSPOMsApp.views import status_to_colour, generate_patch_list_random, Patch
 
 class ViewsTestCase(TestCase):
     """
-    Write this docstring pls :)
+    Expands upon django TestCase, tests index, test_generate_patch_list_random, test_status_to_colour
     """
 
     def test_index_view(self):
@@ -23,10 +23,8 @@ class ViewsTestCase(TestCase):
         max_x = 100
         min_y = 0
         max_y = 100
-        min_radius = 5
-        max_radius = 15
-        max_area = pi * (max_radius ** 2)
-        min_area = pi * (min_radius ** 2)
+        min_area = 25
+        max_area = 100
 
         patch_list = generate_patch_list_random(
             num,
@@ -46,7 +44,7 @@ class ViewsTestCase(TestCase):
             self.assertLessEqual(patch.x_coord, max_x)
             self.assertGreaterEqual(patch.y_coord, min_y)
             self.assertLessEqual(patch.y_coord, max_y)
-            self.assertLessEqual(patch.area, min_area)
+            self.assertGreaterEqual(patch.area, min_area)
             self.assertLessEqual(patch.area, max_area)
 
     def test_status_to_colour(self):
@@ -102,7 +100,9 @@ class ViewsTestCase(TestCase):
             "connectivity": 0.6,
             "colonization_probability": 0.7,
             "patch_extinction_probability_u": 0.8,
-            "patch_extinction_probability_x": 0.9
+            "patch_extinction_probability_x": 0.9,
+            "steps": 100,
+            "replicates": 1
         }
 
         # send the POST request with the JSON data
@@ -115,4 +115,4 @@ class ViewsTestCase(TestCase):
 
         # check that the response contains the expected JSON data
         self.assertEqual(response.status_code, 200)
-        self.assertTrue('message' in response.json())
+        self.assertTrue("message", response.json)

@@ -6,7 +6,7 @@
 
 <head>
 
-    <title>SPOM Simulator</title>
+    <title>SPOM Simulator | VSPOMS</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -14,7 +14,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/icon.ico' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&family=Oswald:wght@600&display=swap" rel="stylesheet">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{% static 'assets/visual_scripts.js' %}"></script>
@@ -40,7 +40,12 @@
 
 <!-- Loading overlay -->
 <div id="loading-overlay">
-    <img src="{% static 'assets/loading.gif' %}" alt="">
+    <h3>Loading...</h3>
+    <img id="frog1" src="{% static 'assets/loading/frog1.gif' %}" alt="A dancing frog!">
+    <img id="frog2" src="{% static 'assets/loading/frog2.gif' %}" alt="A skipping frog!">
+    <img id="frog3" src="{% static 'assets/loading/frog3.gif' %}" alt="A frustrated frog!">
+    <img id="frog4" src="{% static 'assets/loading/frog4.gif' %}" alt="A loving frog!">
+    <img id="frog5" src="{% static 'assets/loading/frog5.gif' %}" alt="A mischievous frog!">
 </div>
 
 
@@ -69,9 +74,11 @@
 
 <!-- Loading screen -->
 <section id="loading-panel" class="panel">
-    <h1>Loading...</h1>
+    <h1>VSPOMS</h1>
+    <h2>by JH04</h2>
     <img src="{% static 'assets/loading.gif' %}" alt="">
-    <p>Use the arrow keys to navigate between pages</p>
+    <div id="loading-panel_outline"></div>
+    <div id="loading-panel_outline-2"></div>
 </section>
 
 
@@ -169,15 +176,15 @@
     <div class="patch-param-container">
         <h3>Simulation Settings</h3>
         <div class="sim-param_row">
-            <label for="sim_speed">No. of Steps:</label>
-            <input type="number" name="sim_steps" placeholder="No. of Steps..." value="100">
+            <label for="sim_speed">Number of steps:</label>
+            <input type="number" name="sim_steps" placeholder="No. of Steps" value="100">
         </div>
         <div class="sim-param_row">
-            <label for="sim_speed">Time between steps:</label>
-            <input type="number" name="sim_speed" placeholder="Speed in milliseconds" value="100">
+            <label for="sim_speed">Time between steps (ms):</label>
+            <input type="number" name="sim_speed" placeholder="Delay in milliseconds" value="100">
         </div>
         <div class="sim-param_row">
-            <label for="sim_speed">No. of Replicates:</label>
+            <label for="sim_speed">Number of replicates:</label>
             <input type="number" name="sim_replicates" placeholder="No. of Replicates" value="1">
         </div>
     </div>

@@ -7,6 +7,7 @@ $(document).ready(function() {
         $(this).attr("disabled", true);
         $(this).children('p').text("Loading...");
         // Start loading overlay
+        pickFrog();
         $("#loading-overlay").fadeIn(100);
         const csrftoken = getCookie('csrftoken');
         // Get variables from input fields
@@ -102,6 +103,7 @@ $(document).ready(function() {
 
     // On "Generate Scenario" click
     $(".button-populate").click(function() {
+        pickFrog();
         $("#loading-overlay").fadeIn(100);
         const csrftoken = getCookie('csrftoken');
         var message = {};
@@ -179,7 +181,6 @@ function getCookie(name) {
     }
     return cookieValue;
 }
-
 
 // Helper function to sleep before next animation frame
 function sleep(ms) {

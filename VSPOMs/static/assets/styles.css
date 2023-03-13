@@ -14,7 +14,7 @@ Colours:
 body, html {
     height: calc(100% - 50px);
 	width: 100%;
-    min-width: 1400px;
+    min-width: 1200px;
     min-height: 700px;
 	margin: 0;
     padding: 0;
@@ -151,40 +151,71 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Loading panel styles */
 section.panel#loading-panel {
-    background: none;
+    background-color: #1C2A3A;
     box-shadow: none;
+    border-radius: 0;
+    margin: 0;
+    height: calc(100% + 100px);
+    width: 100%;
+    text-align: center;
+    position: relative;
 }
 #loading-panel h1 {
-    text-align: center;
-    margin-top: 28vh;
+    color:#1DB099;
+    font-family: 'Oswald', sans-serif;
+    font-weight: bold;
+    font-size: 90px;
+    margin-top: 32vh;
+    margin-bottom: 0;
+}
+#loading-panel h2 {
+    margin-top: -14px;
+    font-family: 'Lato', sans-serif;
+    font-size: 26px;
+    color: lightgray;
 }
 #loading-panel img {
     display: block;
-    margin: 0 auto;
+    margin: 24px auto;
     width: 30px;
 }
-#loading-panel p {
-    text-align: center;
-    margin-top: 40px;
-    color: gray;
+#loading-panel #loading-panel_outline {
+    position: absolute;
+    border: 2px solid #26394F;
+    height: 40%;
+    width: 70%;
+    top: 26%;
+    left: 15%;
+}
+#loading-panel #loading-panel_outline-2 {
+    position: absolute;
+    border: 2px solid #1DB099;
+    height: 32%;
+    width: 90%;
+    top: 30%;
+    left: 5%;
 }
 
 /* Loading overlay styles */
 #loading-overlay {
     display: none;
     position: fixed;
-    background-color: #1C2A3A;
+    background-color: rgba(28, 42, 58, 0.7);
     height: 100%;
     width: 100%;
     z-index: 100000001;
     top: 0;
     left: 0;
-    opacity: 0.6; 
+}
+#loading-overlay h3 {
+    text-align: center;
+    color: white;
+    margin: 36vh auto 0 auto;
 }
 #loading-overlay img {
     display: block;
-    margin: 46vh auto 0 auto;
-    width: 40px;
+    margin: 20px auto 0 auto;
+    width: 200px;
     text-align: center;
 }
 
@@ -250,13 +281,10 @@ section.panel#graphs-panel {
     padding: 3px 0;
     flex: 50%;
 }
-.patch-param-container label {
-    float: left;
-    margin-right: 40px;
-}
 .patch-param-container input {
-    float: right;
+    padding-left: 4px;
 }
+/* Run Simulation button */
 .run-sim-button {
     float: right;
     width: 43%;
@@ -496,7 +524,7 @@ section.panel#create-panel h2 {
     transition: all 0.1s ease-in-out;
 }
 .random-parameters .random-parameters_column#random_num {
-    flex: 10%;
+    flex: 15%;
 }
 .random-parameters .random-parameters_column:hover {
     opacity: 1;
@@ -516,4 +544,12 @@ section.panel#create-panel h2 {
     display: flex;
     justify-content: center;
     margin-top: 20px;
+}
+
+
+/* Media queries */
+@media only screen and (max-width: 1700px) {
+    section.panel {
+        width: 92%;
+    }
 }
