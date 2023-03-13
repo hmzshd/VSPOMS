@@ -44,7 +44,8 @@ django-tests:
     - export PYTHONPATH="$PYTHONPATH:."
     - python -c "import sys;print(sys.path)"
     - bokeh sampledata
-    - python3 ./VSPOMs/manage.py test
+    - cd VSPOMs
+    - python manage.py test
 
 lint:
   stage: lint
