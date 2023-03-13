@@ -35,7 +35,7 @@ def index(request):
     """
 
     # Prepare Data
-    patch_list = parse_csv('static/data/demo.csv')[0]
+    patch_list = parse_csv('media/bigdan.csv')[0]
     patches = pd.DataFrame.from_dict(patch_list)
     graph_df = pd.DataFrame(columns=[
         "time",
@@ -300,6 +300,8 @@ def post_patches(request):
         graph_df = pd.concat([graph_df, dfa])
 
     print(graph_df)
+    graph_df = graph_df.reset_index()
+
 
     graphs = {
         'graph1': '',
@@ -319,6 +321,7 @@ def post_patches(request):
             graph_df,
             x='time',
             y=graph_labels[idx],
+            color='replicates',
             #animation_frame='step',
             width=1000,
             height=600,
@@ -338,7 +341,10 @@ def post_patches(request):
     #graphs = json.dumps(graphs)
 
     return JsonResponse({
-        "graphs": json.loads(graphs["graph3"]),
+        "graph1": json.loads(graphs["graph1"]),
+        "graph2": json.loads(graphs["graph2"]),
+        "graph3": json.loads(graphs["graph3"]),
+        "graph4": json.loads(graphs["graph4"]),
         "turnovers": json.loads(turnovers),
         "replicates": json.loads(replicates)
     }, status=200)
