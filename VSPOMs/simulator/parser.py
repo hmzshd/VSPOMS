@@ -76,9 +76,8 @@ def parse_csv(filename):
                         # validating patch status
                         status_int = int(row[3])
                         if status_int != 0 and status_int != 1:
-                            error_string = f"""Error parsing CSV, patch status must be 0 or 1
-                            Line Number: {line_number}, Given item: {row[3]}"""
-                            raise ValueError(error_string)
+                            raise_value_error(4, row, line_number, row[3], 3)
+                            raise ValueError("error_string")
 
                         if int(row[3]) == 0:
                             status = False
@@ -100,15 +99,13 @@ def parse_csv(filename):
                         if unconvertible_items[1] == False:
                             item = unconvertible_items[0][0]
                             column = unconvertible_items[0][1]
-                            error_string = f"Error parsing CSV, one item is invalid\nError Details:\nItem: {item}, " \
-                                           f"Column Number: {column}, Line Number: {line_number}\nRow: {row}"
+                            raise_value_error(2, row, line_number, item, column)
+
                         else:
                             # extract items, we don't care as much about column numbers in this case
                             items = [item[1] for item in unconvertible_items]
-                            error_string = f"Error parsing CSV, multiple items are invalid\nError Details:\nItems: {items}\n" \
-                                           f"Line Number: {line_number}\nRow: {row}"
+                            raise_value_error(2, row, line_number, items, 0)
 
-                        raise ValueError(error_string)
                 # path to take if settings unread
                 else:
                     try:
@@ -129,13 +126,7 @@ def parse_csv(filename):
                 # converting item to lower and stripping whitespace
                 item = row[0].lower().strip()
                 if item not in first_column_headings:
-                    item = row[0]
-                    column = 0
-                    error_text = f"Error parsing CSV - may be an issue with column headings, first heading must be " \
-                                 f"'a' or 'x' - case and space insensitive. \nError Details:\nItem: {item} Column " \
-                                 f"Number: {column}, " \
-                                 f"Line Number: {line_number}\nRow: {row}"
-                    raise ValueError(error_text)
+                    raise_value_error(1, row, line_number, row[0], 0)
 
     patch_dict = {"x_coords": x_coords, "y_coords": y_coords,
                   "radiuses": radiuses, "statuses": statuses}
@@ -154,3 +145,27 @@ def invalid_row_item_finder(row):
         return [unconvertible_items[0], False]
     else:
         return unconvertible_items
+
+
+def raise_value_error(case_value, row, line_number, item, column):
+    match case_value:
+        case 1:
+            error_string = f"Error parsing CSV - may be " \
+                           f"an issue with column headings, first heading must be " \
+                           f"'a' or 'x' - case and space insensitive. \nError Details:\nItem: {item} Column " \
+                           f"Number: {column}, " \
+                           f"Line Number: {line_number}\nRow: {row}"
+
+        case 2:
+            error_string = f"Error parsing CSV, one item is invalid\nError Details:\nItem: {item}, " \
+                           f"Column Number: {column}, Line Number: {line_number}\nRow: {row}"
+
+        case 3:
+            error_string = f"Error parsing CSV, multiple items are invalid\nError Details:\nItems: {item}\n" \
+                           f"Line Number: {line_number}\nRow: {row}"
+
+        case 4:
+            error_string = f"""Error parsing CSV, patch status must be 0 or 1
+                            Line Number: {line_number}, Given item: {row[3]}"""
+
+    raise ValueError(error_string)
