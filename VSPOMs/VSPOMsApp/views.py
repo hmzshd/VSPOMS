@@ -322,13 +322,11 @@ def post_patches(request):
             x='time',
             y=graph_labels[idx],
             color='replicates',
-            #animation_frame='step',
             width=1000,
             height=600,
         )
 
         # Attribute adjustments
-        #fig.layout.updatemenus[0].buttons[0]['args'][1]['frame']['redraw'] = True
         fig.update_traces(line_width= 1)
         fig.update_layout(
             autosize=False,
@@ -338,7 +336,6 @@ def post_patches(request):
         graphs[graph] = fig.to_json()
     turnovers = json.dumps(simulation.get_turnovers())
     replicates = json.dumps(simulation.replicates + 1)
-    #graphs = json.dumps(graphs)
 
     return JsonResponse({
         "graph1": json.loads(graphs["graph1"]),
