@@ -83,8 +83,19 @@ def parse_csv(filename):
                         statuses.append(status)
                         radiuses.append(radius)
                         patch_list.append(Patch(status, x_coord, y_coord, area))
-                    except:
-                        pass
+                    except ValueError:
+                        unconvertible_items = invalid_row_item_finder(row[0:3])
+                        line_number = line_number + 1
+                        print(unconvertible_items)
+                        if unconvertible_items[1] == False:
+                            item = unconvertible_items[0][0]
+                            column = unconvertible_items[0][1]
+                            error_string = f"Error parsing CSV, one item is invalid\nError Details:\nItem: {item}, " \
+                                           f"Column Number: {column}, Line Number: {line_number}\nRow: {row}"
+                        else:
+                            error_string = ""
+
+                        raise ValueError(error_string)
                 # path to take if settings unread
                 else:
                     settings["dispersal_alpha"] = float(row[0])
@@ -94,7 +105,9 @@ def parse_csv(filename):
                     settings["patch_area_effect_x"] = float(row[4])
                     settings_read = True
             else:
-                if row[0] not in first_column_headings:
+                # converting item to lower and stripping whitespace
+                item = row[0].lower().strip()
+                if item not in first_column_headings:
                     item = row[0]
                     column = 0
                     line_number = line_number + 1
@@ -108,3 +121,17 @@ def parse_csv(filename):
                   "radiuses": radiuses, "statuses": statuses}
 
     return patch_dict, settings, patch_list
+
+
+def invalid_row_item_finder(row):
+    unconvertible_items = list()
+
+    for index, el in enumerate(row):
+        print(el)
+        if not is_float(el):
+            unconvertible_items.append((index, el))
+
+    if len(unconvertible_items) == 1:
+        return [unconvertible_items[0], False]
+    else:
+        return unconvertible_items
