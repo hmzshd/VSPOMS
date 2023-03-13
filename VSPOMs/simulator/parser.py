@@ -97,8 +97,10 @@ def parse_csv(filename):
 
                     except ValueError:
                         unconvertible_items = invalid_row_item_finder(row[0:4])
-                        # print(row[0:4])
-                        # print(unconvertible_items)
+
+                        # invalid_row_item_finder will return False as the 1st element
+                        # of the list if there is only one incorrect element, otherwise
+                        # it just returns the second invalid element in the 1st item
                         if unconvertible_items[1] == False:
                             item = unconvertible_items[0][0]
                             column = unconvertible_items[0][1]
