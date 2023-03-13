@@ -61,15 +61,16 @@ def parse_csv(filename):
         # the following vars are needed to check if we need to
         # scale the values when sending to frontend - if we have
         # radius < 6 we do - as bokeh cannot display this
-        min_radius = 6
-        scaling_factor = 1
-        # we set the smallest radius to be min_radius +1
+        min_radius = 6.0
+        scaling_factor = 1.0
+        # we set the smallest radius to be min_radius  -
+        # using float to ensure it's the same value not the same reference.
         # we could also set it to none - but then we'd be performing
         # two checks each time - if it's != none and then
         # if it's less than the min. this way we just have to check once
-        # and if it never gets smaller than 7 that's fine - we don't have to
+        # and if it never gets smaller than 6 that's fine - we don't have to
         # do anything!
-        smallest_radius_seen = min_radius + 1
+        smallest_radius_seen = float(min_radius)
 
         for line_number, row in enumerate(reader):
             # incrementing line number, as it's not 0 indexed
@@ -104,7 +105,8 @@ def parse_csv(filename):
                         radius = sqrt(area / pi)
 
                         if radius < smallest_radius_seen:
-                            scaling_factor = smallest_radius_seen / min_radius
+                            smallest_radius_seen = radius
+                            scaling_factor = min_radius / smallest_radius_seen
 
                         status_int = int(row[3])
                         # validating patch status
@@ -155,7 +157,8 @@ def parse_csv(filename):
 
     # if scaling factor is 1 - it's not been changed, therefore
     # we do not need to scale up the radiuses to send to frontend.
-    if scaling_factor != 1:
+    # print(scaling_factor)
+    if scaling_factor != 1.0:
         radiuses_scaled = [radius * scaling_factor for radius in radiuses]
         patch_dict = {"x_coords": x_coords, "y_coords": y_coords,
                       "radiuses": radiuses_scaled, "statuses": statuses}
