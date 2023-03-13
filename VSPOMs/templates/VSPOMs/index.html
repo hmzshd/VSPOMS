@@ -17,7 +17,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="{% static 'assets/scripts.js' %}"></script>
+    <script src="{% static 'assets/visual_scripts.js' %}"></script>
     <script src="{% static 'assets/data_retraction.js' %}"></script>
 
 
@@ -25,7 +25,6 @@
      <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
     <!-- Bokeh Links -->
-
     <script src="https://cdn.bokeh.org/bokeh/release/bokeh-3.0.0.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-3.0.0.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-3.0.0.min.js" crossorigin="anonymous"></script>
@@ -112,8 +111,8 @@
                 </p>
                 <p class="random-parameters_column">
                     <a>Patch Area Range</a><br>
-                    <input type="number" name="random_min-radius" placeholder="Min radius" value="10"> -
-                    <input type="number" name="random_max-radius" placeholder="Max radius" value="100">
+                    <input type="number" name="random_min-area" placeholder="Min area" value="10"> -
+                    <input type="number" name="random_max-area" placeholder="Max area" value="100">
                 </p>
             </div>
             <div class="random-parameters_row">
@@ -151,25 +150,44 @@
     
     <!-- Patch settings -->
     <div class="patch-settings-container">
-        <h2>Selected Patch</h2>
+        <h3>Selected Patch</h3>
         <div id="patch-size-input">{{bokeh_div.display | safe}}</div> <!-- Size input -->
         <div id="patch-state-input">{{bokeh_div.button | safe}}</div> <!-- Colonised/extinct buttons -->
     </div>
 
     <!-- Patch settings help -->
     <div class="patch-help-container">
-        <h2>How to Use</h2>
-        <p>Drag patches to change their position.</p>
-        <p>Click on a patch to change its size and state.</p>
-        <p>Use ESCAPE to deselect a patch.</p>
-        <p>Use BACKSPACE to delete the selected patch.</p>
+        <p>
+            Drag patches to change their position.<br>
+            Click on a patch to change its size and state.<br>
+            Use ESCAPE to deselect a patch.<br>
+            Use BACKSPACE to delete the selected patch.
+        </p>
+    </div>
+
+    <!-- Simulation parameters -->
+    <div class="patch-param-container">
+        <h3>Simulation Settings</h3>
+        <div class="sim-param_row">
+            <label for="sim_speed">No. of Steps:</label>
+            <input type="number" name="sim_steps" placeholder="No. of Steps..." value="100">
+        </div>
+        <div class="sim-param_row">
+            <label for="sim_speed">Time between steps:</label>
+            <input type="number" name="sim_speed" placeholder="Speed in milliseconds" value="100">
+        </div>
+        <div class="sim-param_row">
+            <label for="sim_speed">No. of Replicates:</label>
+            <input type="number" name="sim_replicates" placeholder="No. of Replicates" value="1">
+        </div>
     </div>
 
     <!-- Run button -->
     <div class="run-sim-button">
         <button id="button-run" class="panel-button">
             {% csrf_token %}
-            Run Simulation
+            <div id="progress-bar"></div>
+            <p>Run Simulation</p>
         </button>
     </div>
 
@@ -179,29 +197,29 @@
 <!-- Graphs panel -->
 <section id="graphs-panel" class="panel">
     
-    <div class="graph-grid", id = "graph1">
-        <div class="graph-container">
+    <div class="graph-grid">
+        <div class="graph-container" id="graph1">
             {% if graphs.graph1 %}
             {{ graphs.graph1|safe }}
             {% else %}
             <p>No graph was provided.</p>
             {% endif %}
         </div>
-        <div class="graph-container", id = "graph2">
+        <div class="graph-container" id="graph2">
             {% if graphs.graph2 %}
             {{ graphs.graph2|safe }}
             {% else %}
             <p>No graph was provided.</p>
             {% endif %}
         </div>
-        <div class="graph-container", id = "graph3">
+        <div class="graph-container" id="graph3">
             {% if graphs.graph3 %}
             {{ graphs.graph3|safe }}
             {% else %}
             <p>No graph was provided.</p>
             {% endif %}
         </div>
-        <div class="graph-container", id = "graph4">
+        <div class="graph-container" id="graph4">
             {% if graphs.graph4 %}
             {{ graphs.graph4|safe }}
             {% else %}
@@ -217,70 +235,66 @@
 <section id="settings-panel" class="panel">
     <h1>Define SPOM Parameters</h1>
     <hr>
+    
+    <div class="box_row">
+        <div class="function_box" id="box_dispersal-kernel-function">
+            <h2 class="parameter_heading">Dispersal Kernel</h2>
+            <div class="equation">$$K_{ij} = \text{exp}(-\bbox[#F5A9AD, 6px]{a} \times d_{ij})$$</div>
+            <p><a class="parameter_label" style="background-color: #F5A9AD;">\(a\)</a> = <input type="number" id="dispersal-kernel-input" name="dispersal-kernel" placeholder="Enter value..." value="1"></p>
+        </div>
+        <div class="visualise_box" id="box_dispersal-kernel-graph">
+            <p>Graph will go here</p>
+        </div>
+    </div>
 
-    <form action="">
+    <div class="box_row">
+        <div class="function_box" id="box_colonization-probability-function">
+            <h2 class="parameter_heading">Colonization Probability</h2>
+            <div class="equation">$$C_{i}(t) = 1 - \text{exp}(-\bbox[#90F5AA, 6px]{y} \times S_{i}(t))$$</div>
+            <p><a class="parameter_label" style="background-color: #90F5AA;">\(y\)</a> = <input type="number" id="colonization-probability-input" name="colonization-probability" placeholder="Enter value..." value="2"></p>
+        </div>
+        <div class="visualise_box" id="box_colonization-probability-graph">
+            <p>Graph will go here</p>
+        </div>
+    </div>
     
-        <div class="box_row">
-            <div class="function_box" id="box_dispersal-kernel-function">
-                <h2 class="parameter_heading">Dispersal Kernel</h2>
-                <div class="equation">$$K_{ij} = \text{exp}(-\bbox[#F5A9AD, 6px]{a} \times d_{ij})$$</div>
-                <p><a class="parameter_label" style="background-color: #F5A9AD;">\(a\)</a> = <input type="number" id="dispersal-kernel-input" name="dispersal-kernel" placeholder="Enter value..." value="1"></p>
-            </div>
-            <div class="visualise_box" id="box_dispersal-kernel-graph">
-                <p>Graph will go here</p>
-            </div>
+    <div class="box_row">
+        <div class="function_box" id="box_patch-extinction-probability-function">
+            <h2 class="parameter_heading">Patch Extinction Probability</h2>
+            <div class="equation">$$E_{i} = \text{min}(1, {\bbox[#9DD1F5, 6px]{u} \over A_{i}^{\bbox[#F5E0C1, 3px]{x}}})$$</div>
+            <p>
+                <a class="parameter_label" style="background-color: #9DD1F5;">\(u\)</a> = <input type="number" id="patch-extinction-probability-u-input" name="patch-extinction-probability-u" placeholder="Enter value..." value="3">,
+                <a class="parameter_label" style="background-color: #F5E0C1;">\(x\)</a> = <input type="number" id="patch-extinction-probability-x-input" name="patch-extinction-probability-a" placeholder="Enter value..." value="4">
+            </p>
         </div>
-    
-        <div class="box_row">
-            <div class="function_box" id="box_colonization-probability-function">
-                <h2 class="parameter_heading">Colonization Probability</h2>
-                <div class="equation">$$C_{i}(t) = 1 - \text{exp}(-\bbox[#90F5AA, 6px]{y} \times S_{i}(t))$$</div>
-                <p><a class="parameter_label" style="background-color: #90F5AA;">\(y\)</a> = <input type="number" id="colonization-probability-input" name="colonization-probability" placeholder="Enter value..." value="2"></p>
-            </div>
-            <div class="visualise_box" id="box_colonization-probability-graph">
-                <p>Graph will go here</p>
-            </div>
+        <div class="visualise_box" id="box_patch-extinction-probability-graph">
+            <p>Graph will go here</p>
         </div>
-        
-        <div class="box_row">
-            <div class="function_box" id="box_patch-extinction-probability-function">
-                <h2 class="parameter_heading">Patch Extinction Probability</h2>
-                <div class="equation">$$E_{i} = \text{min}(1, {\bbox[#9DD1F5, 6px]{u} \over A_{i}^{\bbox[#F5E0C1, 3px]{x}}})$$</div>
-                <p>
-                    <a class="parameter_label" style="background-color: #9DD1F5;">\(u\)</a> = <input type="number" id="patch-extinction-probability-u-input" name="patch-extinction-probability-u" placeholder="Enter value..." value="3">,
-                    <a class="parameter_label" style="background-color: #F5E0C1;">\(x\)</a> = <input type="number" id="patch-extinction-probability-x-input" name="patch-extinction-probability-a" placeholder="Enter value..." value="4">
-                </p>
-            </div>
-            <div class="visualise_box" id="box_patch-extinction-probability-graph">
-                <p>Graph will go here</p>
-            </div>
-        </div>
-    
-        <div class="box_row">
-            <div class="function_box" id="box_connectivity-function">
-                <h2 class="parameter_heading">Connectivity Function</h2>
-                <div class="equation">$$S_{i}(t) = \sum_{j=1,j \neq i}^{n}(p_{j}(t) \times k_{j}(d_{ij}) \times A_{j}^{\bbox[#CBA9F5, 3px]{b}})$$</div>
-                <p><a class="parameter_label" style="background-color: #CBA9F5;">\(b\)</a> = <input type="number" id="connectivity-input" name="connectivity" placeholder="Enter value..." value="5"></p>
-            </div>
-            <div class="function_box" id="box_rescue-effect-function">
-                <h2 class="parameter_heading">Extinction Probability with Rescue Effect</h2>
-                <div class="equation">$$E_{i}(t) = E_{i}(1-C_{i}(t))^{\bbox[#DEF5A4, 3px]{r}}$$</div>
-                <p><a class="parameter_label" style="background-color: #DEF5A4;">\(r\)</a> = <input type="number" id="rescue-effect-input" name="rescue-effect" placeholder="Enter value..." value="6"></p>
-            </div>
-        </div>
-    
-        <div class="box_row">
-            <div class="function_box" id="box_stochasticity-function">
-                <h2 class="parameter_heading">Stochasticity</h2>
-                <p><a class="parameter_label" style="background-color: #F5A69E;">\(ss\)</a> = <input type="number" id="stochasticity-input" name="stochasticity" placeholder="Enter value..." value="7"></p>
-            </div>
-            <div class="function_box" id="box_other">
-                <h2 class="parameter_heading">Other Parameters</h2>
-                <p><a class="parameter_label">No. of Steps</a> = <input type="number" id="" name="" placeholder="Enter value...">, <a class="parameter_label">No. of Replicates</a> = <input type="number" id="" name="" placeholder="Enter value..."></p>
-            </div>
-        </div>
+    </div>
 
-    </form>
+    <div class="box_row">
+        <div class="function_box" id="box_connectivity-function">
+            <h2 class="parameter_heading">Connectivity Function</h2>
+            <div class="equation">$$S_{i}(t) = \sum_{j=1,j \neq i}^{n}(p_{j}(t) \times k_{j}(d_{ij}) \times A_{j}^{\bbox[#CBA9F5, 3px]{b}})$$</div>
+            <p><a class="parameter_label" style="background-color: #CBA9F5;">\(b\)</a> = <input type="number" id="connectivity-input" name="connectivity" placeholder="Enter value..." value="5"></p>
+        </div>
+        <div class="function_box disabled_function" id="box_rescue-effect-function">
+            <h2 class="parameter_heading">Extinction Probability with Rescue Effect</h2>
+            <div class="equation">$$E_{i}(t) = E_{i}(1-C_{i}(t))^{\bbox[#DEF5A4, 3px]{r}}$$</div>
+            <p><a class="parameter_label" style="background-color: #DEF5A4;">\(r\)</a> = <input disabled type="number" id="rescue-effect-input" name="rescue-effect" placeholder="Enter value..." value="6"></p>
+        </div>
+    </div>
+
+    <div class="box_row">
+        <div class="function_box disabled_function" id="box_stochasticity-function">
+            <h2 class="parameter_heading">Stochasticity</h2>
+            <p><a class="parameter_label" style="background-color: #F5A69E;">\(ss\)</a> = <input disabled type="number" id="stochasticity-input" name="stochasticity" placeholder="Enter value..." value="7"></p>
+        </div>
+    </div>
+
+    <button id="button-save-parameters" class="panel-button">
+        Save Parameters
+    </button>
 
 </section>
 

@@ -1,6 +1,6 @@
 # pylint: disable=no-member, too-many-locals
 """
-Disables no-member and too-many-locals warnings.
+Django views for VSPOMs
 """
 import math
 import os
@@ -37,10 +37,13 @@ def index(request):
     # Prepare Data
     patch_list = parse_csv('static/data/demo.csv')[0]
     patches = pd.DataFrame.from_dict(patch_list)
-    graph_df = pd.DataFrame(columns=["time",
-                                     "proportion occupied patches",
-                                     "proportion occupied area",
-                                     "extinction", "step"])
+    graph_df = pd.DataFrame(columns=[
+        "time",
+        "proportion occupied patches",
+        "proportion occupied area",
+        "extinction",
+        "step"
+        ])
 
     graphs = {
         'graph1': '',
@@ -66,7 +69,7 @@ def index(request):
         )
 
         # Attribute adjustments
-        fig.update_traces(line_width=3)
+        fig.update_traces(line_width=1)
         fig.update_layout(
             autosize=False,
             width=500,
@@ -126,39 +129,38 @@ def index(request):
 
     # Custom JS callbacks
     callback_select = """
-    if(source.selected.indices.length > 0){
+    if(source.selected.indices.length > 0) {
         radio_button_group.visible = true;
         table.visible = true;
-        if (source.data.color[source.selected.indices[0]] == 'green'){
+        if (source.data.color[source.selected.indices[0]] == 'green') {
             radio_button_group.active = 0;
         }
-        if (source.data.color[source.selected.indices[0]] == 'red'){
+        if (source.data.color[source.selected.indices[0]] == 'red') {
             radio_button_group.active = 1;
         }
         const size = []
-        for(let i = 0; i < source.selected.indices.length; i++) {
+        for(let i=0;i<source.selected.indices.length;i++) {
             size[i] = source.data.size[source.selected.indices[i]];
         }
         size_source.data.size = size;
     }
-    if (source.selected.indices.length == 0){
+    if (source.selected.indices.length == 0) {
         radio_button_group.visible = false;  
         radio_button_group.active = null;
         size_source.data.size = [];
         table.visible = false;
-         
     }
     source.change.emit();
     size_source.change.emit();
     """
 
     callback_button = """
-    if(radio_button_group.active == 0){
+    if(radio_button_group.active == 0) {
         for(const index of source.selected.indices) {
             source.data.color[index] = 'green';
         }
     }
-    if(radio_button_group.active == 1){
+    if(radio_button_group.active == 1) {
         for(const index of source.selected.indices) {
             source.data.color[index] = 'red';
         }
@@ -168,7 +170,7 @@ def index(request):
 
     callback_resize = """
     for(const index of source.selected.indices) {
-        let size_float = parseFloat(size_source.data.size[0])
+        let size_float = parseFloat(size_source.data.size[0]);
         let is_valid = !isNaN(size_float);
         if (is_valid){
             source.data.size[index] = size_float;
@@ -274,16 +276,19 @@ def post_patches(request):
             patch_data["x"][i],
             patch_data["y"][i],
             colour_to_status(patch_data["color"][i]),
-            patch_data["size"][i]
+            math.pi * (patch_data["size"][i] ** 2)
         ))
 
-    # Simulate
+    # Run simulation
     simulation = Simulator(patch_list,
         dispersal_alpha=float(data["dispersal_kernel"]),
         area_exponent_b=float(data["connectivity"]),
         species_specific_constant_y=float(data["colonization_probability"]),
         species_specific_constant_u=float(data["patch_extinction_probability_u"]),
-        patch_area_effect_x=float(data["patch_extinction_probability_x"]))
+        patch_area_effect_x=float(data["patch_extinction_probability_x"]),
+        steps=int(data["steps"]),
+        replicates=int(data["replicates"])
+    )
     simulation.simulate()
 
     # Graphs
@@ -293,6 +298,8 @@ def post_patches(request):
         dfa = graph_data.head(i).copy()
         dfa['step'] = i
         graph_df = pd.concat([graph_df, dfa])
+
+    print(graph_df)
 
     graphs = {
         'graph1': '',
@@ -312,25 +319,32 @@ def post_patches(request):
             graph_df,
             x='time',
             y=graph_labels[idx],
-            animation_frame='step',
+            #animation_frame='step',
             width=1000,
             height=600,
         )
 
         # Attribute adjustments
-        fig.layout.updatemenus[0].buttons[0]['args'][1]['frame']['redraw'] = True
-        fig.update_traces(line_width=3)
+        #fig.layout.updatemenus[0].buttons[0]['args'][1]['frame']['redraw'] = True
+        fig.update_traces(line_width= 1)
         fig.update_layout(
             autosize=False,
             width=500,
             height=400,
         )
         graphs[graph] = fig.to_json()
+    turnovers = json.dumps(simulation.get_turnovers())
+    replicates = json.dumps(simulation.replicates + 1)
+    #graphs = json.dumps(graphs)
 
-    return JsonResponse({"message": json.loads(graphs["graph1"])}, status=200)
+    return JsonResponse({
+        "graphs": json.loads(graphs["graph3"]),
+        "turnovers": json.loads(turnovers),
+        "replicates": json.loads(replicates)
+    }, status=200)
 
 
-def generate_patch_list_random(num, min_x, max_x, min_y, max_y, min_radius, max_radius):
+def generate_patch_list_random(num, min_x, max_x, min_y, max_y, min_area, max_area):
     """
     Generates a list of patches.
     The patches with random parameters  for [status, x, y, radius]
@@ -341,8 +355,8 @@ def generate_patch_list_random(num, min_x, max_x, min_y, max_y, min_radius, max_
         max_x (int): Max value for x axis
         min_y (int): Min value for y axis
         max_y (int): Max value for y axis
-        min_radius (int): Min value for patch radius
-        max_radius (int): Max value for patch radius
+        min_area (int): Min value for patch area
+        max_area (int): Max value for patch area
 
     Returns:
         patch_list (list): A list of the generated patches
@@ -354,7 +368,7 @@ def generate_patch_list_random(num, min_x, max_x, min_y, max_y, min_radius, max_
                 bool(random.randint(0, 1)),
                 random.uniform(min_x, max_x),
                 random.uniform(min_y, max_y),
-                random.uniform(min_radius, max_radius)
+                random.uniform(min_area, max_area)
             )
         )
     return patch_list
@@ -412,8 +426,8 @@ def post_create(request):
             fields["max_x"],
             fields["min_y"],
             fields["max_y"],
-            fields["min_radius"],
-            fields["max_radius"]
+            fields["min_area"],
+            fields["max_area"]
         )
 
         random_patch_source = json.dumps({
@@ -423,14 +437,21 @@ def post_create(request):
             'size': [patch.get_area() for patch in patch_list]
             })
 
+        # Calculate scenario parameters
+        param_u = ((fields["min_area"] + fields["max_area"]) / 2) / 10
+        param_a = ( ( (fields["max_x"] - fields["min_x"]) + (fields["max_y"] - fields["min_y"]) ) / 40 ) / 50
+        param_x = 1
+        param_b = 1
+        param_y = 3 # not sure if this is suitable
+
         parameters = json.dumps({
-            "dispersal_kernel": random.uniform(0, 10),
-            "connectivity": random.uniform(0, 10),
-            "colonization_probability": random.uniform(0, 10),
-            "patch_extinction_probability_u": random.uniform(0, 10),
-            "patch_extinction_probability_x": random.uniform(0, 10),
-            "rescue_effect": 0,
-            "stochasticity": 0
+            "dispersal_kernel": param_a, # a
+            "connectivity": param_b, # b
+            "colonization_probability": param_y, # y
+            "patch_extinction_probability_u": param_u, # u
+            "patch_extinction_probability_x": param_x, # x
+            #"rescue_effect": 0,
+            #"stochasticity": 0
         })
 
     return JsonResponse(
