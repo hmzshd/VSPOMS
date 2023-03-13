@@ -49,7 +49,7 @@ def parse_csv(filename):
         y_coords = []
         statuses = []
         radiuses = []
-        settings = []
+        settings = dict()
         patch_list = []
         first_column_headings = set(('a', 'x',))
         valid_status_set = set((0,1))
