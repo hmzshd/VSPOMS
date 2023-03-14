@@ -36,6 +36,7 @@ def index(request):
 
     # Prepare Data
     patch_list = parse_csv('media/demo.csv')[0]
+    scaling_factor = parse_csv('media/demo.csv')[2]
     patches = pd.DataFrame.from_dict(patch_list)
     graph_df = pd.DataFrame(columns=[
         "time",
@@ -43,7 +44,7 @@ def index(request):
         "proportion occupied area",
         "extinction",
         "step"
-        ])
+    ])
 
     graphs = {
         'graph1': '',
@@ -83,14 +84,15 @@ def index(request):
         'x': patches["x_coords"].values.tolist(),
         'y': patches["y_coords"].values.tolist(),
         'color': status_to_colour(patches["statuses"]),
-        'size': patches["radiuses"].values.tolist()},
+        'size': patches["radiuses"].values.tolist(),
+        'scaling': scale_per_patch(patches["radiuses"], scaling_factor)},
         name='patch_data_source'
     )
     max_radius = max(source.data['size'])
-    #max_diameter = max_radius + min(source.data['x']) / 500
+    # max_diameter = max_radius + min(source.data['x']) / 500
     plot = figure(
-        #x_range=((min(source.data['x']) - max_diameter), (max(source.data['x']) + max_diameter)),
-        #y_range=((min(source.data['y']) - max_diameter), (max(source.data['y']) + max_diameter)),
+        # x_range=((min(source.data['x']) - max_diameter), (max(source.data['x']) + max_diameter)),
+        # y_range=((min(source.data['y']) - max_diameter), (max(source.data['y']) + max_diameter)),
         tools=[]
     )
     plot.sizing_mode = "scale_both"
@@ -254,6 +256,20 @@ def colour_to_status(colour):
     return colour == "green"
 
 
+def scale_per_patch(sizes, scale):
+    """
+    Creates a list of how much each patch was scaled by, stored alongside it in a ColumnDataSource.
+
+    Args:
+        sizes: A list of sizes
+        scale: The factor by which to scale by
+
+    Returns:
+        :(float): Returns the scaling aplied
+    """
+    return [scale for _ in sizes]
+
+
 def post_patches(request):
     """
     Catches request from ajax and runs the simulation with the data extracted from the client.
@@ -276,19 +292,21 @@ def post_patches(request):
             patch_data["x"][i],
             patch_data["y"][i],
             colour_to_status(patch_data["color"][i]),
-            math.pi * (patch_data["size"][i] ** 2)
+            math.pi * ((patch_data["size"][i]/patch_data["scaling"][i]) ** 2)
         ))
+
+    print(patch_data)
 
     # Run simulation
     simulation = Simulator(patch_list,
-        dispersal_alpha=float(data["dispersal_kernel"]),
-        area_exponent_b=float(data["connectivity"]),
-        species_specific_constant_y=float(data["colonization_probability"]),
-        species_specific_constant_u=float(data["patch_extinction_probability_u"]),
-        patch_area_effect_x=float(data["patch_extinction_probability_x"]),
-        steps=int(data["steps"]),
-        replicates=int(data["replicates"])
-    )
+                           dispersal_alpha=float(data["dispersal_kernel"]),
+                           area_exponent_b=float(data["connectivity"]),
+                           species_specific_constant_y=float(data["colonization_probability"]),
+                           species_specific_constant_u=float(data["patch_extinction_probability_u"]),
+                           patch_area_effect_x=float(data["patch_extinction_probability_x"]),
+                           steps=int(data["steps"]),
+                           replicates=int(data["replicates"])
+                           )
     simulation.simulate()
 
     # Graphs
@@ -321,7 +339,7 @@ def post_patches(request):
         )
 
         # Attribute adjustments
-        fig.update_traces(line_width= 1)
+        fig.update_traces(line_width=1)
         fig.update_layout(
             autosize=False,
             width=500,
@@ -390,16 +408,18 @@ def post_create(request):
 
     # Read Scenario
     if data["command"] == "load":
-        address = 'media/'+data["address"]
+        address = 'media/' + data["address"]
         patch_list = parse_csv(address)[0]
         scenario_settings = parse_csv(address)[1]
+        scaling_factor = parse_csv(address)[2]
 
         patches = pd.DataFrame.from_dict(patch_list)
         random_patch_source = json.dumps({
             'x': patches["x_coords"].values.tolist(),
             'y': patches["y_coords"].values.tolist(),
             'color': status_to_colour(patches["statuses"]),
-            'size': patches["radiuses"].values.tolist()}
+            'size': patches["radiuses"].values.tolist(),
+            'scaling': scale_per_patch(patches["radiuses"], scaling_factor)}
         )
         print(patches["x_coords"])
 
@@ -431,29 +451,30 @@ def post_create(request):
             'x': [patch.get_coords()[0] for patch in patch_list],
             'y': [patch.get_coords()[1] for patch in patch_list],
             'color': status_to_colour([patch.is_occupied() for patch in patch_list]),
-            'size': [patch.get_area() for patch in patch_list]
-            })
+            'size': [patch.get_area() for patch in patch_list],
+            'scaling': [1 for _ in patch_list]
+        })
 
         # Calculate scenario parameters
         param_u = ((fields["min_area"] + fields["max_area"]) / 2) / 10
-        param_a = ( ( (fields["max_x"] - fields["min_x"]) + (fields["max_y"] - fields["min_y"]) ) / 40 ) / 50
+        param_a = (((fields["max_x"] - fields["min_x"]) + (fields["max_y"] - fields["min_y"])) / 40) / 50
         param_x = 1
         param_b = 1
-        param_y = 3 # not sure if this is suitable
+        param_y = 3  # not sure if this is suitable
 
         parameters = json.dumps({
-            "dispersal_kernel": param_a, # a
-            "connectivity": param_b, # b
-            "colonization_probability": param_y, # y
-            "patch_extinction_probability_u": param_u, # u
-            "patch_extinction_probability_x": param_x, # x
-            #"rescue_effect": 0,
-            #"stochasticity": 0
+            "dispersal_kernel": param_a,  # a
+            "connectivity": param_b,  # b
+            "colonization_probability": param_y,  # y
+            "patch_extinction_probability_u": param_u,  # u
+            "patch_extinction_probability_x": param_x,  # x
+            # "rescue_effect": 0,
+            # "stochasticity": 0
         })
 
     return JsonResponse(
         {"patch_source": json.loads(random_patch_source),
-        "parameters": json.loads(parameters)
-        },
+         "parameters": json.loads(parameters)
+         },
         status=200
     )
