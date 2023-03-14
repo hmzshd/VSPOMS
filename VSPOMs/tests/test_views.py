@@ -50,7 +50,7 @@ class ViewsTestCase(TestCase):
     def test_status_to_colour(self):
         statuses = [True, False, True]
         colours = status_to_colour(statuses)
-        self.assertEqual(colours, ['green', 'red', 'green'])
+        self.assertEqual(colours, ["green", "red", "green"])
 
     def test_index_graphs(self):
         response = self.client.get("/")
@@ -116,8 +116,13 @@ class ViewsTestCase(TestCase):
 
         # check that the response contains the expected JSON data
         self.assertEqual(response.status_code, 200)
-        self.assertTrue("message", response.json)
-    
+        self.assertIn("graph1", response.json())
+        self.assertIn("graph2", response.json())
+        self.assertIn("graph3", response.json())
+        self.assertIn("graph4", response.json())
+        self.assertIn("turnovers", response.json())
+        self.assertIn("replicates", response.json())
+
     def test_load_command(self):
         # prepare file to be loaded
         load = {
@@ -126,12 +131,18 @@ class ViewsTestCase(TestCase):
         }
 
         # make POST request
-        response = self.client.post('/post_create', data=json.dumps(load), content_type='application/json', HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        response = self.client.post(
+            '/post_create', 
+            data=json.dumps(load), 
+            content_type='application/json', 
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest'
+        )
 
         # check response
         self.assertEqual(response.status_code, 200)
         response_data = json.loads(response.content)
-        self.assertIn('patch_source', response_data)
-        self.assertIn('parameters', response_data)
-        self.assertIsNotNone(response_data['patch_source'])
-        self.assertIsNotNone(response_data['parameters'])
+        self.assertIn("patch_source", response_data)
+        self.assertIn("parameters", response_data)
+        self.assertIsNotNone(response_data["patch_source"])
+        self.assertIsNotNone(response_data["parameters"])
+    
