@@ -101,7 +101,7 @@ $(document).ready(function() {
     });
 
 
-    // On "Generate Scenario" click
+    // On "Load" or "Generate Scenario" click
     $(".button-populate").click(function() {
         pickFrog();
         $("#loading-overlay").fadeIn(100);
@@ -140,11 +140,15 @@ $(document).ready(function() {
             },
             body: message
         })
+        // Check if response throws error
         .then(response => {
             // Hide loading and navigate to simulate page
             $("#loading-overlay").fadeOut(200);
-            openSimulate();
             (response.text().then(text => {
+                if (!response.ok) {
+                    throw new Error(JSON.parse(text).error);
+                }
+                openSimulate();
                 // Set patch graph
                 const patch_source = JSON.parse(text).patch_source;
                 const parameters = JSON.parse(text).parameters;
@@ -159,7 +163,12 @@ $(document).ready(function() {
                 document.getElementsByName("connectivity")[0].value = parameters["connectivity"];
                 document.getElementsByName("rescue-effect")[0].value = parameters["rescue_effect"];
                 document.getElementsByName("stochasticity")[0].value = parameters["stochasticity"];
-            }));
+            }))// Catch if error is thrown
+            .catch(function(error) {
+                $("#loading-overlay").fadeOut(200);
+                console.log(error);
+                $("#popup_load-error").fadeIn(200).children("p").text(error);
+            });
         })
     });
 

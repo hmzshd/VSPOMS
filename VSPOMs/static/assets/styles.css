@@ -42,7 +42,7 @@ header {
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 1000;
+    z-index: 100;
 }
 header:hover {
     height: 120px;
@@ -200,23 +200,56 @@ section.panel#loading-panel {
 #loading-overlay {
     display: none;
     position: fixed;
+    z-index: 1000;
     background-color: rgba(28, 42, 58, 0.7);
     height: 100%;
     width: 100%;
-    z-index: 100000001;
     top: 0;
     left: 0;
 }
 #loading-overlay h3 {
     text-align: center;
     color: white;
-    margin: 36vh auto 0 auto;
+    margin: 12px auto 0 auto;
 }
 #loading-overlay img {
     display: block;
-    margin: 20px auto 0 auto;
-    width: 200px;
+    margin: 40vh auto 0 auto;
+    width: 100px;
     text-align: center;
+}
+
+/* Load error popup styles */
+#popup_load-error {
+    display: none;
+    position: fixed;
+    z-index: 1001;
+    background-color: #1C2A3A;
+    color: white;
+    height: auto;
+    width: 500px;
+    top: 46%;
+    left: 50%;
+    border-radius: 10px;
+    transform: translate(-50%, -50%);
+    padding: 10px 20px 20px 20px;
+}
+#popup_load-error button {
+    background-color: #1DB099;
+    padding: 10px;
+    border-radius: 4px;
+    width: 200px;
+    margin: 0 calc(50% - 100px);
+    border: none;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    transition: all 0.1s ease-in-out;
+}
+#popup_load-error button:hover {
+    transform: scale(1.02);
+    filter: brightness(1.1);
+    cursor: pointer;
 }
 
 /* Graph panel styles */
