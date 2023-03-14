@@ -117,3 +117,21 @@ class ViewsTestCase(TestCase):
         # check that the response contains the expected JSON data
         self.assertEqual(response.status_code, 200)
         self.assertTrue("message", response.json)
+    
+    def test_load_command(self):
+        # prepare file to be loaded
+        load = {
+            'command': 'load',
+            'address': 'bigdan.csv'
+        }
+
+        # make POST request
+        response = self.client.post('/post_create', data=json.dumps(load), content_type='application/json', HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+
+        # check response
+        self.assertEqual(response.status_code, 200)
+        response_data = json.loads(response.content)
+        self.assertIn('patch_source', response_data)
+        self.assertIn('parameters', response_data)
+        self.assertIsNotNone(response_data['patch_source'])
+        self.assertIsNotNone(response_data['parameters'])
