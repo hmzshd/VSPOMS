@@ -94,7 +94,8 @@ class ViewsTestCase(TestCase):
                 "x": [1, 2, 3],
                 "y": [4, 5, 6],
                 "color": ["red", "green", "blue"],
-                "size": [1.0, 2.0, 3.0]
+                "size": [1.0, 2.0, 3.0],
+                "scaling": [1, 2, 3]
             },
             "dispersal_kernel": 0.5,
             "connectivity": 0.6,
