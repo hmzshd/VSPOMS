@@ -299,11 +299,11 @@ def post_patches(request):
 
     # Run simulation
     simulation = Simulator(patch_list,
-                           dispersal_alpha=float(data["dispersal_kernel"]),
-                           area_exponent_b=float(data["connectivity"]),
-                           species_specific_constant_y=float(data["colonization_probability"]),
-                           species_specific_constant_u=float(data["patch_extinction_probability_u"]),
-                           patch_area_effect_x=float(data["patch_extinction_probability_x"]),
+                           species_specific_dispersal_constant=float(data["dispersal_kernel"]),
+                           area_exponent_connectivity_b=float(data["connectivity"]),
+                           species_specific_constant_colonisation_y=float(data["colonization_probability"]),
+                           species_specific_extinction_constant_u=float(data["patch_extinction_probability_u"]),
+                           patch_area_effect_extinction_x=float(data["patch_extinction_probability_x"]),
                            steps=int(data["steps"]),
                            replicates=int(data["replicates"])
                            )
@@ -427,11 +427,11 @@ def post_create(request):
         print(patches["x_coords"])
 
         parameters = json.dumps({
-            "dispersal_kernel": scenario_settings["dispersal_alpha"],
-            "connectivity": scenario_settings["area_exponent_b"],
-            "colonization_probability": scenario_settings["species_specific_constant_y"],
-            "patch_extinction_probability_u": scenario_settings["species_specific_constant_u"],
-            "patch_extinction_probability_x": scenario_settings["patch_area_effect_x"],
+            "dispersal_kernel": scenario_settings["species_specific_dispersal_constant"],
+            "connectivity": scenario_settings["area_exponent_connectivity_b"],
+            "colonization_probability": scenario_settings["species_specific_constant_colonisation_y"],
+            "patch_extinction_probability_u": scenario_settings["species_specific_extinction_constant_u"],
+            "patch_extinction_probability_x": scenario_settings["patch_area_effect_extinction_x"],
             "rescue_effect": random.uniform(0, 10),
             "stochasticity": random.uniform(0, 10)
         })
