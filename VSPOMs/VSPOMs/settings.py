@@ -25,9 +25,16 @@ SIMULATOR_DIR = BASE_DIR.parent
 # key used located in dir above jh04-main folder,
 # first line gets that dir
 parent_dir = d = Path(__file__).resolve().parents[3]
-key_file = os.path.join(d, 'keys.pub')
-with open(key_file) as f:
-    SECRET_KEY = f.read()
+
+# try except for those who don't yet have the secret key -
+# will be removed before full deploy, only to make CI/CD
+# play nice for now!
+try:
+    key_file = os.path.join(d, 'keys.pub')
+    with open(key_file) as f:
+        SECRET_KEY = f.read()
+except FileNotFoundError:
+    SECRET_KEY = 'django-insecure-k*4p=1h4u*d(g2qsg8pntxmj)1rbpiocsy9rt8p-x&i9h07hy)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
