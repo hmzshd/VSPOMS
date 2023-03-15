@@ -1,4 +1,4 @@
-simulation = Simulator(c,
+simulation = Simulator(patch_list,
                        species_specific_dispersal_constant=float(b["species_specific_dispersal_constant"]),
                        area_exponent_connectivity_b=float(b["area_exponent_connectivity_b"]),
                        species_specific_constant_colonisation_y=float(b["species_specific_constant_colonisation_y"]),
