@@ -166,11 +166,7 @@ class Simulator:
 
         self.patch_dict = None
 
-        if debug:
-            self.debug = True
-        else:
-            self.debug = False
-
+        self.debug = debug
         # set all interacting simulation variables
         self.setup()
 
