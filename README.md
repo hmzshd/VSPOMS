@@ -17,15 +17,6 @@ VSPOMS is developed by:
 - Timothy Wang
 - Angus Wilson
 
-## Authors and acknowledgment
-VSPOMS is developed by:
-- Max Bell
-- Roger Luo
-- Hamza Shahid
-- Daniel Szittya
-- Timothy Wang
-- Angus Wilson
-
 ## License
 VSPOMS is licensed under a
 Creative Commons Attribution-NonCommercial 4.0 International License.
