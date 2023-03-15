@@ -233,7 +233,7 @@ section.panel#loading-panel {
 }
 
 /* Scenatio load error popup */
-#popup_load-error {
+#error-popup {
     display: none;
     position: fixed;
     z-index: 1001;
@@ -252,13 +252,13 @@ section.panel#loading-panel {
     box-shadow: 0 0 4px gray;
     transition: all 0.1s ease-in-out;
 }
-#popup_load-error:hover {
+#error-popup:hover {
     background-color: rgba(28, 42, 58, 0.8);
 }
-#popup_load-error h3 {
+#error-popup h3 {
     margin-bottom: 0;
 }
-#popup_load-error button {
+#error-popup button {
     background-color: rgba(29, 176, 153, 0.6);
     padding: 10px;
     border-radius: 4px;
@@ -270,12 +270,12 @@ section.panel#loading-panel {
     font-size: 14px;
     transition: all 0.1s ease-in-out;
 }
-#popup_load-error button:hover {
+#error-popup button:hover {
     transform: scale(1.02);
     filter: brightness(1.1);
     cursor: pointer;
 }
-#popup_load-error:hover button {
+#error-popup:hover button {
     background-color: #1DB099;
 }
 

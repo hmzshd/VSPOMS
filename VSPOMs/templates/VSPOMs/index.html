@@ -38,6 +38,15 @@
 
 <body>
 
+
+<!-- Loading Error Popup -->
+<div id="error-popup">
+    <h3>[Error heading]</h3>
+    <p>[Error text]</p>
+    <button>Close</button>
+</div>
+
+
 <!-- Loading overlay -->
 <div id="loading-overlay">
     <img id="frog1" src="{% static 'assets/loading/frog1.gif' %}" alt="A dancing frog!">
@@ -47,6 +56,16 @@
     <img id="frog5" src="{% static 'assets/loading/frog5.gif' %}" alt="A mischievous frog!">
     <h3>Loading...</h3>
 </div>
+
+
+<!-- Loading screen -->
+<section id="loading-panel" class="panel">
+    <h1>VSPOMS</h1>
+    <h2>by JH04</h2>
+    <img src="{% static 'assets/loading.gif' %}" alt="">
+    <div id="loading-panel_outline"></div>
+    <div id="loading-panel_outline-2"></div>
+</section>
 
 
 <!-- Navigation -->
@@ -71,23 +90,6 @@
     </div>
 </header></div>
 
-
-<!-- Loading screen -->
-<section id="loading-panel" class="panel">
-    <h1>VSPOMS</h1>
-    <h2>by JH04</h2>
-    <img src="{% static 'assets/loading.gif' %}" alt="">
-    <div id="loading-panel_outline"></div>
-    <div id="loading-panel_outline-2"></div>
-</section>
-
-
-<!-- Loading Error Popup -->
-<div id="popup_load-error">
-    <h3>Failed to Load Scenario</h3>
-    <p>[Error text]</p>
-    <button id="button_load-error">Close</button>
-</div>
 
 <!-- Create panel -->
 <section id="create-panel" class="panel">

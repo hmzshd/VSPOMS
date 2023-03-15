@@ -19,9 +19,29 @@ $(document).ready(function() {
         var area_exponent_connectivity_b = document.getElementsByName("connectivity")[0].value;
         var rescue_effect = document.getElementsByName("rescue-effect")[0].value;
         var stochasticity = document.getElementsByName("stochasticity")[0].value;
-        var steps = document.getElementsByName("sim_steps")[0].value;
-        var replicates = document.getElementsByName("sim_replicates")[0].value;
 
+        // Simulation settings inputs
+        let steps = parseInt(document.getElementsByName("sim_steps")[0].value);
+        let replicates = parseInt(document.getElementsByName("sim_replicates")[0].value);
+        let simulation_speed = parseInt(document.getElementsByName("sim_speed")[0].value);
+
+        // Validate simulation settings
+        if (isNaN(steps) || steps < 1) {
+            invalidSettings("Number of Steps must be a number greater than 0.");
+            return null;
+        } else if (steps > 10000) {
+            invalidSettings("Number of Steps must be at most 10000");
+            return null;
+        } else if (isNaN(replicates) || replicates < 1) {
+            invalidSettings("Number of Replicates must be a number greater than 0.");
+            return null;
+        } else if (replicates > 100) {
+            invalidSettings("Number of Replicates must be at most 100");
+        } else if (isNaN(simulation_speed)) {
+            invalidSettings("Time between Steps must be a number.");
+            return null;
+        }
+        
         // Post to post_patches
         fetch("post_patches", {
             method: 'POST',
@@ -80,7 +100,7 @@ $(document).ready(function() {
                         }
                     }
                     // Set animation speed
-                    let simulation_speed = parseInt(document.getElementsByName("sim_speed")[0].value);
+                    simulation_speed = parseInt(document.getElementsByName("sim_speed")[0].value);
                     await sleep(simulation_speed);
                     dataTable.change.emit();  
                     let percent_done = Math.round(i / (status.length / replicates) * 100) + "%";
@@ -167,7 +187,8 @@ $(document).ready(function() {
             // Catch if error is thrown - show popup
             .catch(function(error) {
                 $("#loading-overlay").fadeOut(200);
-                $("#popup_load-error").fadeIn(200).children("p").text(error);
+                $("#error-popup").children("h3").text("Failed to Load Scenario");
+                $("#error-popup").fadeIn(200).children("p").text(error);
             });
         })
     });
@@ -194,4 +215,13 @@ function getCookie(name) {
 // Helper function to sleep before next animation frame
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// Raise error for invalid simulation setting values
+function invalidSettings(message) {
+    $("#loading-overlay").fadeOut(200);
+    $("#error-popup").children("h3").text("Failed to Run Simulation");
+    $("#error-popup").fadeIn(200).children("p").text(message);
+    $("#button-run").attr("disabled", false);
+    $("#button-run").children('p').text("Run Simulation");
 }
