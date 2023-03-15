@@ -30,7 +30,7 @@ with open(key_file) as f:
     SECRET_KEY = f.read()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['vspoms.mvls.gla.ac.uk', # remote
                  '130.209.75.37', # remote
