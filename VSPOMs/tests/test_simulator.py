@@ -13,11 +13,11 @@ class SimulatorTestCase(TestCase):
     """
     def setUp(self):
         # create patches
-        patch1 = Patch(status="occupied", x_coord=1, y_coord=5, area=25)
-        patch2 = Patch(status="occupied", x_coord=2, y_coord=4, area=25)
-        patch3 = Patch(status="occupied", x_coord=3, y_coord=3, area=30)
-        patch4 = Patch(status="occupied", x_coord=4, y_coord=2, area=12)
-        patch5 = Patch(status="occupied", x_coord=5, y_coord=1, area=16)
+        patch1 = Patch(status=True, x_coord=1, y_coord=5, area=25)
+        patch2 = Patch(status=True, x_coord=2, y_coord=4, area=25)
+        patch3 = Patch(status=False, x_coord=3, y_coord=3, area=30)
+        patch4 = Patch(status=False, x_coord=4, y_coord=2, area=12)
+        patch5 = Patch(status=True, x_coord=5, y_coord=1, area=16)
         patches = [patch1, patch2, patch3, patch4, patch5]
 
         #set simulator parameters
