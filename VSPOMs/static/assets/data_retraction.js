@@ -159,7 +159,7 @@ $(document).ready(function() {
                 document.getElementsByName("dispersal-kernel")[0].value = parameters["species_specific_dispersal_constant"];
                 document.getElementsByName("colonization-probability")[0].value = parameters["species_specific_constant_colonisation_y"];
                 document.getElementsByName("patch-extinction-probability-u")[0].value = parameters["species_specific_extinction_constant_u"];
-                document.getElementsByName("patch-extinction-probability-a")[0].value = parameters["patch_extinction_probability_x"];
+                document.getElementsByName("patch-extinction-probability-a")[0].value = parameters["patch_area_effect_extinction_x"];
                 document.getElementsByName("connectivity")[0].value = parameters["area_exponent_connectivity_b"];
                 document.getElementsByName("rescue-effect")[0].value = parameters["rescue_effect"];
                 document.getElementsByName("stochasticity")[0].value = parameters["stochasticity"];
