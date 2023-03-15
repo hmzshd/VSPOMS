@@ -12,11 +12,11 @@ $(document).ready(function() {
         const csrftoken = getCookie('csrftoken');
         // Get variables from input fields
         var ds = Bokeh.documents[0].get_model_by_name('patch_data_source');
-        var dispersal_kernel= document.getElementsByName("dispersal-kernel")[0].value;
-        var colonization_probability = document.getElementsByName("colonization-probability")[0].value;
-        var patch_extinction_probability_u = document.getElementsByName("patch-extinction-probability-u")[0].value;
-        var patch_extinction_probability_x = document.getElementsByName("patch-extinction-probability-a")[0].value;
-        var connectivity = document.getElementsByName("connectivity")[0].value;
+        var species_specific_dispersal_constant= document.getElementsByName("dispersal-kernel")[0].value;
+        var species_specific_constant_colonisation_y = document.getElementsByName("colonization-probability")[0].value;
+        var species_specific_extinction_constant_u = document.getElementsByName("patch-extinction-probability-u")[0].value;
+        var patch_area_effect_extinction_x = document.getElementsByName("patch-extinction-probability-a")[0].value;
+        var area_exponent_connectivity_b = document.getElementsByName("connectivity")[0].value;
         var rescue_effect = document.getElementsByName("rescue-effect")[0].value;
         var stochasticity = document.getElementsByName("stochasticity")[0].value;
         var steps = document.getElementsByName("sim_steps")[0].value;
@@ -33,11 +33,11 @@ $(document).ready(function() {
             },
             // Set and send dictionary
             body: JSON.stringify({
-                "bokeh":ds.data,"dispersal_kernel":dispersal_kernel,
-                "colonization_probability":colonization_probability,
-                "patch_extinction_probability_u":patch_extinction_probability_u,
-                "patch_extinction_probability_x":patch_extinction_probability_x,
-                "connectivity":connectivity,
+                "bokeh":ds.data,"species_specific_dispersal_constant":species_specific_dispersal_constant,
+                "area_exponent_connectivity_b":area_exponent_connectivity_b,
+                "species_specific_extinction_constant_u":species_specific_extinction_constant_u,
+                "patch_area_effect_extinction_x":patch_area_effect_extinction_x,
+                "species_specific_constant_colonisation_y":species_specific_constant_colonisation_y,
                 "rescue_effect":rescue_effect,
                 "stochasticity":stochasticity,
                 "steps" : steps,
@@ -156,11 +156,11 @@ $(document).ready(function() {
                 ds.data = patch_source;
                 ds.change.emit();
                 // Set parameters
-                document.getElementsByName("dispersal-kernel")[0].value = parameters["dispersal_kernel"];
-                document.getElementsByName("colonization-probability")[0].value = parameters["colonization_probability"];
-                document.getElementsByName("patch-extinction-probability-u")[0].value = parameters["patch_extinction_probability_u"];
+                document.getElementsByName("dispersal-kernel")[0].value = parameters["species_specific_dispersal_constant"];
+                document.getElementsByName("colonization-probability")[0].value = parameters["species_specific_constant_colonisation_y"];
+                document.getElementsByName("patch-extinction-probability-u")[0].value = parameters["species_specific_extinction_constant_u"];
                 document.getElementsByName("patch-extinction-probability-a")[0].value = parameters["patch_extinction_probability_x"];
-                document.getElementsByName("connectivity")[0].value = parameters["connectivity"];
+                document.getElementsByName("connectivity")[0].value = parameters["area_exponent_connectivity_b"];
                 document.getElementsByName("rescue-effect")[0].value = parameters["rescue_effect"];
                 document.getElementsByName("stochasticity")[0].value = parameters["stochasticity"];
             }))
