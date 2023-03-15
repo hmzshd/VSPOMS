@@ -27,6 +27,8 @@ from itertools import accumulate
 from bisect import bisect
 import pandas
 from numpy.random import exponential
+from events import DeadScenarioEvent
+from patch import Patch
 
 
 class Simulator:
@@ -156,6 +158,14 @@ class Simulator:
             "proportion occupied area", "extinction"],
             index=pandas.MultiIndex.from_tuples(index_array, names=('replicates', 'steps')))
 
+        # frame to store number of turnover events over time
+        index_array = []
+        for i in range(replicates):
+            index_array.append((i,0))
+
+        self.turnover_frame = pandas.DataFrame(0, columns=["turnovers"],
+            index=pandas.MultiIndex.from_tuples(index_array, names=('replicates', 'time')))
+
         # lists for storing x,y coords of patches that
         # have had events happen to them, and the status of said patches
         # used to create a CDS for communication with the backend
@@ -163,10 +173,14 @@ class Simulator:
         self.y_coords = []
         self.statuses = []
 
+        # placeholder patch for dead scenario event
+        self.dead_patch = Patch(True, -1.0, -1.0, -1.0)
+        # boolean records whether scenario in current replicate is extinct
+        self.replicate_extinct = False
+
         # dict for storing the data the frontend needs, in the format
         # the frontend needs, to display the patches getting
         # colonised or going extinct.
-
         self.patch_dict = None
 
         self.debug = debug
@@ -206,6 +220,7 @@ class Simulator:
             self.update_patch_lists(selected_patch)
             self.completed_steps += 1
         elif self.completed_replicates < self.replicates:  # starts new replicate.
+            self.replicate_extinct = False
             self.completed_steps = 0
             self.completed_replicates += 1
             self.setup()
@@ -231,7 +246,7 @@ class Simulator:
         selected_event = self.select_event()  # step 2
         selected_event.do_event()
 
-        self.increment_time(selected_event)  # step 4
+        self.increment_time()  # step 4
 
         if self.debug:
             # status is true if occupied, false if unoccupied, so we simply use the status
@@ -247,7 +262,7 @@ class Simulator:
 
         return selected_event.patch
 
-    def increment_time(self, selected_event):
+    def increment_time(self):
         """
         Increments self.time. The waiting time to the next event is an exponentially distributed random variable with
         mean equal to the inverse of the sum of the rates. So the faster everything is happening the less time between
@@ -257,6 +272,9 @@ class Simulator:
             selected_event: Event
                 event selected to happen by select_event().
         """
+        if self.replicate_extinct:
+            return
+
         amount_to_increment = exponential(1/(self.total_extinction_rate + self.total_colonisation_rate))
         if self.debug:
             print(f"amount to increment time is: {amount_to_increment}")
@@ -366,10 +384,15 @@ class Simulator:
 
         total = float(cum_weights[-1])
         if total <= 0.0:
+            """
             print(f"dying on step number: {self.completed_steps}")
             for patch in self.patches:
                 print(patch)
-            raise ValueError('Total of weights must be greater than zero')
+            """
+            # print('extinctionextinctionextinctionextinctionextinctionextinctionextinctionextinctionextinction')
+            self.replicate_extinct = True
+            return DeadScenarioEvent(self.dead_patch)
+            # raise ValueError('Total of weights must be greater than zero')
 
         upper = length - 1
         return self.events[bisect(cum_weights, random.random() * total, 0, upper)]
@@ -493,12 +516,18 @@ class Simulator:
 
     def calculate_turnover_events(self):
         """
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAh
+        Calculates turnover events per sensible time step, for use in turnover events per time graph.
+
+        Return results using .
         """
 
         div_scale = math.ceil(self.steps / 10)
 
         max_time = max(self.data.groupby(level=0).tail(1)['time'].tolist())
+
+        if max_time <= 0:
+            print('Scenario started as extinct.')
+            return -1
 
         plot_range = max_time / div_scale
         plot_range = round(plot_range, -int(math.floor(math.log10(abs(plot_range)))))
@@ -517,9 +546,6 @@ class Simulator:
 
         # print(index_array)
 
-        self.turnover_frame = pandas.DataFrame(0, columns=["turnovers"],
-            index=pandas.MultiIndex.from_tuples(index_array, names=('replicates', 'time')))
-
         for replicate in range(self.replicates + 1):
             replicate_slice = self.data.loc[(replicate, slice(None))]['time']
             # print(f'    {str(replicate)}')
@@ -534,8 +560,6 @@ class Simulator:
                                        -int(math.floor(math.log10(abs(loop_step + plot_range)/100))))
                     self.turnover_frame.loc[(replicate, loop_step)] += 1
 
-        # print(self.turnover_frame.to_string())
-
     def print_status(self):
         """Temp debug function to observe changes."""
 
@@ -548,6 +572,10 @@ class Simulator:
     def get_data(self):
         """Returns self.data"""
         return self.data
+
+    def get_turnover_graph_data(self):
+        """Returns turnover graph data in a pd dataframe."""
+        return self.turnover_frame
 
     def print_turnover_graph_data(self):
         print(self.turnover_frame.to_string())
