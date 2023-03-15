@@ -257,18 +257,18 @@
             <p><a class="parameter_label" style="background-color: #F5A9AD;">\(a\)</a> = <input type="number" id="dispersal-kernel-input" name="dispersal-kernel" placeholder="Enter value..." value="1"></p>
         </div>
         <div class="visualise_box" id="box_dispersal-kernel-graph">
-            <p>Graph will go here</p>
+            <img id="" src="{% static 'assets/graphs/dispersal-kernal_function.png' %}" alt="Dispersal kernal function graph">
         </div>
     </div>
 
     <div class="box_row">
         <div class="function_box" id="box_colonization-probability-function">
-            <h2 class="parameter_heading">Colonization Probability</h2>
+            <h2 class="parameter_heading">Colonisation Probability</h2>
             <div class="equation">$$C_{i}(t) = 1 - \text{exp}(-\bbox[#90F5AA, 6px]{y} \times S_{i}(t))$$</div>
             <p><a class="parameter_label" style="background-color: #90F5AA;">\(y\)</a> = <input type="number" id="colonization-probability-input" name="colonization-probability" placeholder="Enter value..." value="2"></p>
         </div>
         <div class="visualise_box" id="box_colonization-probability-graph">
-            <p>Graph will go here</p>
+            <img id="" src="{% static 'assets/graphs/colonisation_function.png' %}" alt="Colonisation function graph">
         </div>
     </div>
     
@@ -282,7 +282,7 @@
             </p>
         </div>
         <div class="visualise_box" id="box_patch-extinction-probability-graph">
-            <p>Graph will go here</p>
+            <img id="" src="{% static 'assets/graphs/extinction_function.png' %}" alt="Extinction function graph">
         </div>
     </div>
 
