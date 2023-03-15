@@ -14,6 +14,9 @@ Should output:
 
 Classes:
     Simulator
+
+See sim_calling_example.txt for example on how to call simulator
+with the settings dict returned by the parser.
 """
 
 # pylint: disable=line-too-long
