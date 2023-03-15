@@ -249,7 +249,7 @@ def raise_value_error(case_value, row, line_number, item, column):
         case 1:
             error_string = f"Error parsing CSV - may be " \
                            f"an issue with column headings, first heading must be " \
-                           f"'a' or 'x' - case and space insensitive. \nError Details:\nItem: {item} Column " \
+                           f"'a' or 'x' - case and space insensitive. Error Details:\nItem: {item} Column " \
                            f"Number: {column}, " \
                            f"Line Number: {line_number}\nRow: {row}"
 
