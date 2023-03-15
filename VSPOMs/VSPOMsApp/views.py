@@ -36,6 +36,7 @@ def index(request):
 
     # Prepare Data
     patch_list = parse_csv('media/demo.csv')[0]
+    scenario_settings = parse_csv('media/demo.csv')[1]
     scaling_factor = parse_csv('media/demo.csv')[2]
     patches = pd.DataFrame.from_dict(patch_list)
     graph_df = pd.DataFrame(columns=[
@@ -230,7 +231,8 @@ def index(request):
         'bokeh_div': div,
         'table': table,
         'graphs': graphs,
-        'media_files': media_files
+        'media_files': media_files,
+        'scenario_settings' : scenario_settings
     }
 
     return render(request, 'VSPOMs/index.html', context=context_dict)
