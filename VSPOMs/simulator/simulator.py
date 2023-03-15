@@ -14,6 +14,9 @@ Should output:
 
 Classes:
     Simulator
+
+See sim_calling_example.txt for example on how to call simulator
+with the settings dict returned by the parser.
 """
 
 # pylint: disable=line-too-long
@@ -76,6 +79,9 @@ class Simulator:
 
         patch_dict: dict
             Stores data for displaying patch map.
+
+        debug: bool
+            whether sim info is printed to console
     """
 
     # pylint: disable=too-many-instance-attributes,too-many-public-methods
@@ -91,10 +97,22 @@ class Simulator:
         ---
             patches: list
                 a list of patch.py Patch objects to be simulated over.
+            dispersal_alpha: float
+                species specific dispersal constant, for dispersal kernel
+            area_exponent_b: float
+                for connectivity
+            species_specific_constant_y: float
+                for colonisation
+            species_specific_constant_u: float
+                for extinction
+            patch_area_effect_x: float
+                for extinction
             steps: int
-                number of steps to be completed in each replicate.
+                number of steps to be completed in each replicate. (defaults to 100)
             replicates: int
-                number of replicate simulations to complete.
+                number of replicate simulations to complete. (defaults to 1)
+                debug: boolean
+                if true sim will print information to console, used for debugging. (defaults to False
         """
 
         # list of patches, list of events.
@@ -151,11 +169,7 @@ class Simulator:
 
         self.patch_dict = None
 
-        if debug:
-            self.debug = True
-        else:
-            self.debug = False
-
+        self.debug = debug
         # set all interacting simulation variables
         self.setup()
 
@@ -163,10 +177,6 @@ class Simulator:
         """
         Performs self.replicates full simulations with self.steps steps.
 
-        Parameters
-        ---
-            debug: boolean
-                true if debug console logs should be displayed.
         """
 
         while not self.done:
@@ -180,11 +190,6 @@ class Simulator:
         Performs Gillespie process once.
         Increments self.step, or self.replicate if the current replicate ends.
         Calls self.end() if the simulation is done.
-
-        Parameters
-        ---
-            debug: boolean
-                true if debug console logs should be displayed.
         """
 
         self.update_frame()
@@ -219,10 +224,6 @@ class Simulator:
             4) we update time and the state of the system given the event that occurred;
             returns the patch that has been selected on completion
 
-        Parameters
-        ---
-            debug: boolean
-                true if debug console logs should be displayed.
         """
 
         self.update_rates()  # step 1
