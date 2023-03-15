@@ -163,10 +163,10 @@ $(document).ready(function() {
                 document.getElementsByName("connectivity")[0].value = parameters["connectivity"];
                 document.getElementsByName("rescue-effect")[0].value = parameters["rescue_effect"];
                 document.getElementsByName("stochasticity")[0].value = parameters["stochasticity"];
-            }))// Catch if error is thrown
+            }))
+            // Catch if error is thrown - show popup
             .catch(function(error) {
                 $("#loading-overlay").fadeOut(200);
-                console.log(error);
                 $("#popup_load-error").fadeIn(200).children("p").text(error);
             });
         })
