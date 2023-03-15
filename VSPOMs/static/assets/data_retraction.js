@@ -146,6 +146,23 @@ $(document).ready(function() {
                 "min_area" : parseInt(document.getElementsByName("random_min-area")[0].value),
                 "max_area" : parseInt(document.getElementsByName("random_max-area")[0].value)
             }
+            // Validate input fields
+            for (field in message["fields"]) {
+                if (isNaN(message["fields"][field]) || message["fields"][field] % 1 != 0) {
+                    invalidCreate("All fields must be filled.");
+                    return null;
+                }
+            }
+            if (message["fields"]["num"] < 0 || message["fields"]["num"] > 10000) {
+                invalidCreate("Number of patches must be between 0 and 10,000.");
+                return null;
+            } else if (message["fields"]["min_x"] > message["fields"]["max_x"] || message["fields"]["min_y"] > message["fields"]["max_y"]) {
+                invalidCreate("Minimum arena size cannot be larger than maximum.");
+                return null;
+            } else if (message["fields"]["min_area"] > message["fields"]["max_area"]) {
+                invalidCreate("Minimum patch area cannot be larger than the maximum.");
+                return null;
+            }
         }
         message = JSON.stringify(message);
 
@@ -224,4 +241,10 @@ function invalidSettings(message) {
     $("#error-popup").fadeIn(200).children("p").text(message);
     $("#button-run").attr("disabled", false);
     $("#button-run").children('p').text("Run Simulation");
+}
+// Raise error for invalid scenario creation parameters
+function invalidCreate(message) {
+    $("#loading-overlay").fadeOut(200);
+    $("#error-popup").children("h3").text("Failed to Create Scenario");
+    $("#error-popup").fadeIn(200).children("p").text(message);
 }
