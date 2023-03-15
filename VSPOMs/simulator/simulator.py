@@ -76,6 +76,9 @@ class Simulator:
 
         patch_dict: dict
             Stores data for displaying patch map.
+
+        debug: bool
+            whether sim info is printed to console
     """
 
     # pylint: disable=too-many-instance-attributes,too-many-public-methods
