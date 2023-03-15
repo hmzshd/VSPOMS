@@ -91,10 +91,22 @@ class Simulator:
         ---
             patches: list
                 a list of patch.py Patch objects to be simulated over.
+            dispersal_alpha: float
+                species specific dispersal constant, for dispersal kernel
+            area_exponent_b: float
+                for connectivity
+            species_specific_constant_y: float
+                for colonisation
+            species_specific_constant_u: float
+                for extinction
+            patch_area_effect_x: float
+                for extinction
             steps: int
-                number of steps to be completed in each replicate.
+                number of steps to be completed in each replicate. (defaults to 100)
             replicates: int
-                number of replicate simulations to complete.
+                number of replicate simulations to complete. (defaults to 1)
+                debug: boolean
+                if true sim will print information to console, used for debugging. (defaults to False
         """
 
         # list of patches, list of events.
