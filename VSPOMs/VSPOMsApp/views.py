@@ -407,9 +407,12 @@ def post_create(request):
     # Read Scenario
     if data["command"] == "load":
         address = 'media/' + data["address"]
-        patch_list = parse_csv(address)[0]
-        scenario_settings = parse_csv(address)[1]
-        scaling_factor = parse_csv(address)[2]
+        try:
+            patch_list = parse_csv(address)[0]
+            scenario_settings = parse_csv(address)[1]
+            scaling_factor = parse_csv(address)[2]
+        except (ValueError, UnicodeDecodeError) as e:
+            return JsonResponse({"error": str(e)}, status=500)
 
         patches = pd.DataFrame.from_dict(patch_list)
         random_patch_source = json.dumps({
@@ -470,9 +473,9 @@ def post_create(request):
             # "stochasticity": 0
         })
 
-    return JsonResponse(
-        {"patch_source": json.loads(random_patch_source),
-         "parameters": json.loads(parameters)
-         },
+    return JsonResponse({
+            "patch_source": json.loads(random_patch_source),
+            "parameters": json.loads(parameters)
+        },
         status=200
     )

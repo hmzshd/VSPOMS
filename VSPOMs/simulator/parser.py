@@ -5,7 +5,9 @@ The parser for the sim, parse_csv, which takes in a csv file,
 validates it, throws an error if need be using row_error_investigator to find the
 invalid data and raise_value_error to raise the correct error.
 If no errors, it returns the setting for the simulation,
-and a dictionary corresponding to the patches
+and a dictionary corresponding to the patches.
+See sim_calling_example.txt for example on how to call simulator
+with the settings dict returned by the parser.
 """
 
 # pylint: disable=line-too-long
@@ -249,7 +251,7 @@ def raise_value_error(case_value, row, line_number, item, column):
         case 1:
             error_string = f"Error parsing CSV - may be " \
                            f"an issue with column headings, first heading must be " \
-                           f"'a' or 'x' - case and space insensitive. \nError Details:\nItem: {item} Column " \
+                           f"'a' or 'x' - case and space insensitive. Error Details:\nItem: {item} Column " \
                            f"Number: {column}, " \
                            f"Line Number: {line_number}\nRow: {row}"
 
