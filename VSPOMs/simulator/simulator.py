@@ -175,10 +175,6 @@ class Simulator:
         """
         Performs self.replicates full simulations with self.steps steps.
 
-        Parameters
-        ---
-            debug: boolean
-                true if debug console logs should be displayed.
         """
 
         while not self.done:
@@ -192,11 +188,6 @@ class Simulator:
         Performs Gillespie process once.
         Increments self.step, or self.replicate if the current replicate ends.
         Calls self.end() if the simulation is done.
-
-        Parameters
-        ---
-            debug: boolean
-                true if debug console logs should be displayed.
         """
 
         self.update_frame()
@@ -231,10 +222,6 @@ class Simulator:
             4) we update time and the state of the system given the event that occurred;
             returns the patch that has been selected on completion
 
-        Parameters
-        ---
-            debug: boolean
-                true if debug console logs should be displayed.
         """
 
         self.update_rates()  # step 1
