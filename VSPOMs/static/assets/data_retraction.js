@@ -55,9 +55,9 @@ $(document).ready(function() {
                 const graph3Layout = JSON.parse(text).graph3.layout;
                 const graph4Data = JSON.parse(text).graph4.data;
                 const graph4Layout = JSON.parse(text).graph4.layout;
-                const x = JSON.parse(text).turnovers.statuses;
-                const y = JSON.parse(text).turnovers.x_coords;
-                const status = JSON.parse(text).turnovers.y_coords;
+                const x = JSON.parse(text).turnovers.x_coords;
+                const y = JSON.parse(text).turnovers.y_coords;
+                const status = JSON.parse(text).turnovers.statuses;
                 const steps = JSON.parse(text).steps;
                 const replicates = JSON.parse(text).replicates;
                 const dataTable = Bokeh.documents[0].get_model_by_name("vspoms").data_source;
@@ -73,9 +73,9 @@ $(document).ready(function() {
                         let mapy = dataTable.data["y"][j];
                         if (mapx == x[i] && mapy == y[i]) {
                             if (status[i] != true) {
-                                dataTable.data["color"][j] = "green";
-                            } else {
                                 dataTable.data["color"][j] = "red";
+                            } else {
+                                dataTable.data["color"][j] = "green";
                             }
                         }
                     }

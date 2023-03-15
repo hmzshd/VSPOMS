@@ -289,13 +289,11 @@ def post_patches(request):
     patch_list = []
     for i in range(len(patch_data["x"])):
         patch_list.append(Patch(
+            colour_to_status(patch_data["color"][i]),
             patch_data["x"][i],
             patch_data["y"][i],
-            colour_to_status(patch_data["color"][i]),
             math.pi * ((patch_data["size"][i]/patch_data["scaling"][i]) ** 2)
         ))
-
-    print(patch_data)
 
     # Run simulation
     simulation = Simulator(patch_list,
