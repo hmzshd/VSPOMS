@@ -409,11 +409,17 @@ h2.parameter_heading {
     float: left;
     transition: all 0.1s ease-in-out;
 }
-.function_box:hover, .visualise_box:hover {
+.function_box:hover {
     box-shadow: 0 0 4px gray;
 }
 .visualise_box {
     height: 100%;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+}
+.visualise_box img {
+    height: 200px;
 }
 #box_dispersal-kernel-function, #box_colonization-probability-function, #box_patch-extinction-probability-function, #box_connectivity-function,
 #box_stochasticity-function {
@@ -432,6 +438,7 @@ h2.parameter_heading {
 }
 .disabled_function:hover, .disabled_function input:hover {
     cursor: not-allowed;
+    box-shadow: none;
 }
 .function_box .equation {
     font-size: 26px;
