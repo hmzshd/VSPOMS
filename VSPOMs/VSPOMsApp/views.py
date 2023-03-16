@@ -18,6 +18,8 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.conf import settings
 
+# pylint: disable=line-too-long
+
 # necessary to wrap this in try except due to the location of manage.py
 try:
     from simulator.patch import Patch
@@ -36,6 +38,7 @@ def index(request):
 
     # Prepare Data
     patch_list = parse_csv('media/demo.csv')[0]
+    scenario_settings = parse_csv('media/demo.csv')[1]
     scaling_factor = parse_csv('media/demo.csv')[2]
     patches = pd.DataFrame.from_dict(patch_list)
     graph_df = pd.DataFrame(columns=[
@@ -230,7 +233,8 @@ def index(request):
         'bokeh_div': div,
         'table': table,
         'graphs': graphs,
-        'media_files': media_files
+        'media_files': media_files,
+        'scenario_settings' : scenario_settings
     }
 
     return render(request, 'VSPOMs/index.html', context=context_dict)
@@ -276,7 +280,7 @@ def post_patches(request):
 
     Args:
         request: JSON request
-    
+
     Returns:
         JsonResponses with either success or error message.
     """
@@ -297,11 +301,11 @@ def post_patches(request):
 
     # Run simulation
     simulation = Simulator(patch_list,
-                           dispersal_alpha=float(data["dispersal_kernel"]),
-                           area_exponent_b=float(data["connectivity"]),
-                           species_specific_constant_y=float(data["colonization_probability"]),
-                           species_specific_constant_u=float(data["patch_extinction_probability_u"]),
-                           patch_area_effect_x=float(data["patch_extinction_probability_x"]),
+                           species_specific_dispersal_constant=float(data["species_specific_dispersal_constant"]),
+                           area_exponent_connectivity_b=float(data["area_exponent_connectivity_b"]),
+                           species_specific_constant_colonisation_y=float(data["species_specific_constant_colonisation_y"]),
+                           species_specific_extinction_constant_u=float(data["species_specific_extinction_constant_u"]),
+                           patch_area_effect_extinction_x=float(data["patch_area_effect_extinction_x"]),
                            steps=int(data["steps"]),
                            replicates=int(data["replicates"])
                            )
@@ -389,7 +393,7 @@ def generate_patch_list_random(num, min_x, max_x, min_y, max_y, min_area, max_ar
 
 def post_create(request):
     """
-    Catches request from ajax and determines the requested action 
+    Catches request from ajax and determines the requested action
     then provides the appropriate patch data and settings
 
     Args:
@@ -425,11 +429,11 @@ def post_create(request):
         print(patches["x_coords"])
 
         parameters = json.dumps({
-            "dispersal_kernel": scenario_settings["dispersal_alpha"],
-            "connectivity": scenario_settings["area_exponent_b"],
-            "colonization_probability": scenario_settings["species_specific_constant_y"],
-            "patch_extinction_probability_u": scenario_settings["species_specific_constant_u"],
-            "patch_extinction_probability_x": scenario_settings["patch_area_effect_x"],
+            "species_specific_dispersal_constant": scenario_settings["species_specific_dispersal_constant"],
+            "area_exponent_connectivity_b": scenario_settings["area_exponent_connectivity_b"],
+            "species_specific_constant_colonisation_y": scenario_settings["species_specific_constant_colonisation_y"],
+            "species_specific_extinction_constant_u": scenario_settings["species_specific_extinction_constant_u"],
+            "patch_area_effect_extinction_x": scenario_settings["patch_area_effect_extinction_x"],
             "rescue_effect": random.uniform(0, 10),
             "stochasticity": random.uniform(0, 10)
         })
@@ -464,11 +468,11 @@ def post_create(request):
         param_y = 3  # not sure if this is suitable
 
         parameters = json.dumps({
-            "dispersal_kernel": param_a,  # a
-            "connectivity": param_b,  # b
-            "colonization_probability": param_y,  # y
-            "patch_extinction_probability_u": param_u,  # u
-            "patch_extinction_probability_x": param_x,  # x
+            "species_specific_dispersal_constant": param_a,  # a
+            "area_exponent_connectivity_b": param_b,  # b
+            "species_specific_constant_colonisation_y": param_y,  # y
+            "species_specific_extinction_constant_u": param_u,  # u
+            "patch_area_effect_extinction_x": param_x,  # x
             # "rescue_effect": 0,
             # "stochasticity": 0
         })

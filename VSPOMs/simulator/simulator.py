@@ -58,11 +58,11 @@ class Simulator:
         done: boolean
             true if the full simulation has been completed.
 
-        dispersal_alpha: float
-        area_exponent_b: float
-        species_specific_constant_y: float
-        species_specific_constant_u: float
-        patch_area_effect_x: float
+        species_specific_dispersal_constant: float
+        area_exponent_connectivity_b: float
+        species_specific_constant_colonisation_y: float
+        species_specific_extinction_constant_u: float
+        patch_area_effect_extinction_x: float
             Above are simulation constants.
 
         total_colonisation_rate: float
@@ -87,7 +87,7 @@ class Simulator:
     # pylint: disable=too-many-instance-attributes,too-many-public-methods
 
     # Initialises Simulator.
-    def __init__(self, patches, dispersal_alpha, area_exponent_b, species_specific_constant_y, species_specific_constant_u, patch_area_effect_x, steps=100, replicates=1, debug=False):
+    def __init__(self, patches, species_specific_dispersal_constant, area_exponent_connectivity_b, species_specific_constant_colonisation_y, species_specific_extinction_constant_u, patch_area_effect_extinction_x, steps=100, replicates=1, debug=False):
         """
         Initialises Simulator object.
 
@@ -97,6 +97,16 @@ class Simulator:
         ---
             patches: list
                 a list of patch.py Patch objects to be simulated over.
+            species_specific_dispersal_constant: float
+                species specific dispersal constant, for dispersal kernel
+            area_exponent_connectivity_b: float
+                for connectivity
+            species_specific_constant_colonisation_y: float
+                for colonisation
+            species_specific_extinction_constant_u: float
+                for extinction
+            patch_area_effect_extinction_x: float
+                for extinction
             steps: int
                 number of steps to be completed in each replicate.
             replicates: int
@@ -120,11 +130,13 @@ class Simulator:
         self.done = False
 
         # simulation constants
-        self.dispersal_alpha = dispersal_alpha  # Species specific dispersal constant, for dispersal kernel.
-        self.area_exponent_b = area_exponent_b  # for connectivity.
-        self.species_specific_constant_y = species_specific_constant_y  # for colonisation.
-        self.species_specific_constant_u = species_specific_constant_u  # for extinction.
-        self.patch_area_effect_x = patch_area_effect_x  # for extinction.
+        # names of variables taken from documentation pdf and
+        # powerpoint.
+        self.species_specific_dispersal_constant = species_specific_dispersal_constant
+        self.area_exponent_connectivity_b = area_exponent_connectivity_b
+        self.species_specific_constant_colonisation_y = species_specific_constant_colonisation_y
+        self.species_specific_extinction_constant_u = species_specific_extinction_constant_u
+        self.patch_area_effect_extinction_x = patch_area_effect_extinction_x
 
         # simulation variables
         self.total_colonisation_rate = 0
@@ -413,7 +425,7 @@ class Simulator:
             dispersal kernel
         """
 
-        return math.exp((-self.dispersal_alpha) * patch_i.distance(patch_j))
+        return math.exp((-self.species_specific_dispersal_constant) * patch_i.distance(patch_j))
 
     def connectivity(self, patch_i):
         """
@@ -430,7 +442,7 @@ class Simulator:
         for patch_j in self.patches:
             if patch_j != patch_i:
                 connectivity_total += int(patch_j.is_occupied()) * self.dispersal_kernel(patch_i, patch_j) * (
-                        patch_j.get_area() ** self.area_exponent_b)
+                        patch_j.get_area() ** self.area_exponent_connectivity_b)
         return connectivity_total
 
     def colonization(self, patch_i):
@@ -446,7 +458,7 @@ class Simulator:
 
         if patch_i.is_occupied():
             return 0.0
-        return 1 - math.exp(-self.species_specific_constant_y * self.connectivity(patch_i))
+        return 1 - math.exp(-self.species_specific_constant_colonisation_y * self.connectivity(patch_i))
 
     def extinction(self, patch_i):
         """
@@ -460,7 +472,7 @@ class Simulator:
         """
 
         if patch_i.is_occupied():
-            extinction_value = self.species_specific_constant_u / (patch_i.get_area() ** self.patch_area_effect_x)
+            extinction_value = self.species_specific_extinction_constant_u / (patch_i.get_area() ** self.patch_area_effect_extinction_x)
             if extinction_value > 1:
                 return 1
             return extinction_value

@@ -21,14 +21,32 @@ SIMULATOR_DIR = BASE_DIR.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-k*4p=1h4u*d(g2qsg8pntxmj)1rbpiocsy9rt8p-x&i9h07hy)'
+# getting secret key
+# key used located in dir above jh04-main folder,
+# first line gets that dir
+parent_dir = d = Path(__file__).resolve().parents[3]
+
+# REMOVE BEFORE DEPLOY
+# ensure secret key is deployed securely - this is
+# necessary as I was having trouble making the CI/CD
+# play nicely with environment variables
+# not ideal - but necessary due to time constraints.
+# once again - IF YOU ARE USING THIS PROJECT
+# REMOVE THE TRY EXCEPT BEFORE DEPLOYING
+try:
+    key_file = os.path.join(d, 'keys.pub')
+    with open(key_file) as f:
+        SECRET_KEY = f.read()
+except FileNotFoundError:
+    SECRET_KEY = 'django-insecure-k*4p=1h4u*d(g2qsg8pntxmj)1rbpiocsy9rt8p-x&i9h07hy)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['vspoms.mvls.gla.ac.uk', # remote
+                 '130.209.75.37', # remote
+                 'localhost',
+                 '127.0.0.1']
 
 # Application definition
 
@@ -78,7 +96,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'VSPOMs.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -88,7 +105,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -108,7 +124,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -120,7 +135,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
@@ -130,10 +144,13 @@ STATICFILES_DIRS = [STATIC_DIR, ]
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
 
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-X_FRAME_OPTIONS = 'SAMEORIGIN'
+X_FRAME_OPTIONS = 'DENY'
+
+# deployment settings
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True

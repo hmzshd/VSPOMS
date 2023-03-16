@@ -18,10 +18,8 @@ import csv
 # necessary to wrap this in try except due to the location of manage.py
 try:
     from simulator.float_checker import is_float
-    from simulator.patch import Patch
 except ModuleNotFoundError:
     from float_checker import is_float
-    from patch import Patch
 
 
 def parse_csv(filename):
@@ -49,9 +47,9 @@ def parse_csv(filename):
             settings: dict
                 dictionary containing the settings for the sim
                 keys:
-                    "dispersal_alpha", "area_exponent_b",
-                    "species_specific_constant_y" ,"species_specific_constant_u",
-                    "patch_area_effect_x"
+                    "species_specific_dispersal_constant", "area_exponent_connectivity_b",
+                    "species_specific_constant_colonisation_y" ,"species_specific_extinction_constant_u",
+                    "patch_area_effect_extinction_x"
             scaling_factor: float
                 factor the radiuses have been scaled by - so that frontend
                 can scale them back down when creating the simulator
@@ -153,11 +151,11 @@ def parse_csv(filename):
                 # path to take if settings unread
                 else:
                     try:
-                        settings["dispersal_alpha"] = float(row[0])
-                        settings["area_exponent_b"] = float(row[1])
-                        settings["species_specific_constant_y"] = float(row[2])
-                        settings["species_specific_constant_u"] = float(row[3])
-                        settings["patch_area_effect_x"] = float(row[4])
+                        settings["species_specific_dispersal_constant"] = float(row[0])
+                        settings["area_exponent_connectivity_b"] = float(row[1])
+                        settings["species_specific_constant_colonisation_y"] = float(row[2])
+                        settings["species_specific_extinction_constant_u"] = float(row[3])
+                        settings["patch_area_effect_extinction_x"] = float(row[4])
                         settings_read = True
                     except ValueError:
                         # similar to above - we only care about the 0-4th els
@@ -268,4 +266,3 @@ def raise_value_error(case_value, row, line_number, item, column):
                             Line Number: {line_number}, Given item: {row[3]}"""
 
     raise ValueError(error_string)
-

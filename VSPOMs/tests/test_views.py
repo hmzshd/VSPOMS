@@ -97,11 +97,11 @@ class ViewsTestCase(TestCase):
                 "size": [1.0, 2.0, 3.0],
                 "scaling": [1.0, 1.0, 1.0]
             },
-            "dispersal_kernel": 0.5,
-            "connectivity": 0.6,
-            "colonization_probability": 0.7,
-            "patch_extinction_probability_u": 0.8,
-            "patch_extinction_probability_x": 0.9,
+            "species_specific_dispersal_constant": 0.5,
+            "area_exponent_connectivity_b": 0.6,
+            "species_specific_constant_colonisation_y": 0.7,
+            "species_specific_extinction_constant_u": 0.8,
+            "patch_area_effect_extinction_x": 0.9,
             "steps": 100,
             "replicates": 1
         }
