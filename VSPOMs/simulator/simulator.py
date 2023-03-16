@@ -350,8 +350,6 @@ class Simulator:
 
         self.calculate_turnover_events()
 
-        self.print_turnover_graph_data()
-
         self.done = True
         print('End.')
 
@@ -549,11 +547,8 @@ class Simulator:
 
         for replicate in range(self.replicates + 1):
             replicate_slice = self.data.loc[(replicate, slice(None))]['time']
-            # print(f'    {str(replicate)}')
-            # print(replicate_slice)
             loop_step = plot_range
             for time in replicate_slice:
-                # print(f'loop_step: {loop_step}, time: {time}')
                 if time <= loop_step:
                     self.turnover_frame.loc[(replicate, loop_step)] += 1
                 else:
