@@ -17,7 +17,7 @@ $(document).ready(function(){
     $("#button-settings").click(function() {openSettings();});
     // On "Save parameters" click
     $("#button-save-parameters").click(function() {openSimulate();});
-    $("#popup_load-error").children("button").click(function() {$("#popup_load-error").fadeOut(200)})
+    $("#error-popup").children("button").click(function() {$("#error-popup").fadeOut(200)});
 
     // Keydown events
     let p0=false;let p1=false;let p2=false;let p3=false;
