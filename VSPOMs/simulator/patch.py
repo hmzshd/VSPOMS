@@ -7,7 +7,6 @@ Classes:
 
 # pylint: disable=line-too-long
 
-from math import pi
 import math
 # necessary to wrap this in try except due to the location of manage.py
 try:

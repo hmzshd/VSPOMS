@@ -18,6 +18,8 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.conf import settings
 
+# pylint: disable=line-too-long
+
 # necessary to wrap this in try except due to the location of manage.py
 try:
     from simulator.patch import Patch
@@ -278,7 +280,7 @@ def post_patches(request):
 
     Args:
         request: JSON request
-    
+
     Returns:
         JsonResponses with either success or error message.
     """
@@ -393,7 +395,7 @@ def generate_patch_list_random(num, min_x, max_x, min_y, max_y, min_area, max_ar
 
 def post_create(request):
     """
-    Catches request from ajax and determines the requested action 
+    Catches request from ajax and determines the requested action
     then provides the appropriate patch data and settings
 
     Args:
