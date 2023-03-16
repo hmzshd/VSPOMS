@@ -42,7 +42,7 @@ django-tests:
     - export PYTHONPATH="$PYTHONPATH:."
     - python -c "import sys;print(sys.path)"
     - cd VSPOMs
-    - python manage.py test VSPOMsApp/tests
+    - python manage.py test tests
   coverage: '/(?i)total.*? (100(?:.0+)?%|[1-9]?\d(?:.\d+)?%)$/'
   artifacts:
     when: always

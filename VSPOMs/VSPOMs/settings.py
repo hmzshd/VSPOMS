@@ -164,4 +164,5 @@ NOSE_ARGS = [
     '--cover-xml',
     '--with-xunit',
     '--xunit-file=nosetests.xml',
+    '--cover-package=simulator'
 ]
