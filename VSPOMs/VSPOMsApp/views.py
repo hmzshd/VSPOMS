@@ -110,7 +110,7 @@ def index(request):
         size="size",
         name="vspoms"
     )
-    columns = [TableColumn(field='size', title='size')]
+    columns = [TableColumn(field='size', title='Radius')]
     table = DataTable(
         source=size_source,
         columns=columns,
