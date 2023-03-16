@@ -41,7 +41,7 @@ except FileNotFoundError:
     SECRET_KEY = 'django-insecure-k*4p=1h4u*d(g2qsg8pntxmj)1rbpiocsy9rt8p-x&i9h07hy)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['vspoms.mvls.gla.ac.uk', # remote
                  '130.209.75.37', # remote
