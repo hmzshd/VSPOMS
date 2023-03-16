@@ -98,6 +98,8 @@
 
     <div class="choose-scenario-box">
         <h2>Choose a Scenario</h2>
+        <!-- <br>
+        -->
 
         <div class="scenario-list">
             {% for file in media_files %}
@@ -109,6 +111,14 @@
                 </a>
             </li>
             {% endfor %}
+        </div>
+
+        <div class="scale-option">
+            <a>Scale-up small patches (area < 113)</a>
+            <label class="slider-button">
+                <input type="checkbox" name="scaling">
+                <span class="slider"></span>
+            </label>
         </div>
 
     </div>

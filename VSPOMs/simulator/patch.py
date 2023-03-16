@@ -7,7 +7,7 @@ Classes:
 
 # pylint: disable=line-too-long
 
-import math
+from math import sqrt
 # necessary to wrap this in try except due to the location of manage.py
 try:
     from simulator.events import ColonisationEvent, ExtinctionEvent
@@ -75,7 +75,7 @@ class Patch:
         i_coords = self.get_coords()
         j_coords = patch_j.get_coords()
 
-        return math.sqrt((i_coords[0] - j_coords[0]) ** 2 + (i_coords[1] - j_coords[1]) ** 2)
+        return sqrt((i_coords[0] - j_coords[0]) ** 2 + (i_coords[1] - j_coords[1]) ** 2)
 
     def create_events(self):
         """
