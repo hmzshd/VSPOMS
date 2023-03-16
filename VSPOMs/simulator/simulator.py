@@ -15,7 +15,7 @@ Should output:
 Classes:
     Simulator
 """
-
+import copy
 # pylint: disable=line-too-long
 
 import math
@@ -24,6 +24,8 @@ from itertools import accumulate
 from bisect import bisect
 import pandas
 from numpy.random import exponential
+from events import DeadScenarioEvent
+from patch import Patch
 
 try:
     from events import DeadScenarioEvent
@@ -108,7 +110,7 @@ class Simulator:
         self.events = []
 
         # patch list backup for reset during setup.
-        self.patches_backup = list(patches)
+        self.patches_backup = copy.deepcopy(self.patches)
 
         # number of steps and replicates.
         self.steps = steps
@@ -316,7 +318,7 @@ class Simulator:
             Updates proportion occupied patches and area.
         """
 
-        self.patches = list(self.patches_backup)
+        self.patches = copy.deepcopy(self.patches_backup)
         self.time = 0
 
         self.events = []
