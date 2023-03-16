@@ -37,8 +37,8 @@ $(document).ready(function() {
             return null;
         } else if (replicates > 100) {
             invalidSettings("Number of Replicates must be at most 100");
-        } else if (isNaN(simulation_speed)) {
-            invalidSettings("Time between Steps must be a number.");
+        } else if (isNaN(simulation_speed) || simulation_speed < 0) {
+            invalidSettings("Time between Steps must be a positive number.");
             return null;
         }
         
