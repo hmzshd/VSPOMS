@@ -76,7 +76,7 @@ def parse_csv(filename, scaling=True):
         radiuses = []
         settings = dict()
         first_column_headings = set(('a', 'x',))
-        valid_status_set = set((0, 1))
+        valid_status_set = set(('0', '1'))
         settings_read = False
 
         # the following vars are needed to check if we need to
@@ -129,11 +129,14 @@ def parse_csv(filename, scaling=True):
                             smallest_radius_seen = radius
                             scaling_factor = min_radius / smallest_radius_seen
 
-                        status_int = int(row[3])
+                        status_string = row[3]
+                        status_string.strip()
                         # validating patch status
-                        if status_int not in valid_status_set:
+                        if status_string not in valid_status_set:
                             raise_value_error(4, row, line_number, row[3], 3)
+                            continue
 
+                        status_int = int(status_string)
                         # converting to bool
                         if status_int == 0:
                             status = False
@@ -177,8 +180,8 @@ def parse_csv(filename, scaling=True):
 
     # if scaling factor is 1 - it's not been changed, therefore
     # we do not need to scale up the radiuses to send to frontend.
-    # print(scaling_factor)
-    if scaling_factor != 1.0:
+    # we also don't bother scaling if it's a very small factor
+    if scaling_factor <= 1.08:
         radiuses_scaled = [radius * scaling_factor for radius in radiuses]
         patch_dict = {"x_coords": x_coords, "y_coords": y_coords,
                       "radiuses": radiuses_scaled, "statuses": statuses}
