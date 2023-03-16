@@ -34,10 +34,6 @@ try:
     with open(key_file) as f:
         SECRET_KEY = f.read()
 except FileNotFoundError:
-    print("can't find file")
-    SECRET_KEY = os.environ["SECRET_KEY"]
-except KeyError:
-    print("can't find file or environment var")
     SECRET_KEY = 'django-insecure-k*4p=1h4u*d(g2qsg8pntxmj)1rbpiocsy9rt8p-x&i9h07hy)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
