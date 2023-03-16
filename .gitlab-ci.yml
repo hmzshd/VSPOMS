@@ -27,9 +27,7 @@ migrations:
       - docker
   script:
     - cd VSPOMs
-    - bokeh sampledata
     - python3 manage.py makemigrations
-    # - python3 manage.py makemigrations myapp
     - python3 manage.py migrate
     - python3 manage.py check
 
@@ -43,7 +41,6 @@ django-tests:
     - ls -l
     - export PYTHONPATH="$PYTHONPATH:."
     - python -c "import sys;print(sys.path)"
-    - bokeh sampledata
     - cd VSPOMs
     - python manage.py test
 
