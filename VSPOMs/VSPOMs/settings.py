@@ -151,6 +151,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 X_FRAME_OPTIONS = 'DENY'
 
-# deployment settings
+# deployment settings - set to False in deployment
+# until SSL is implemented
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
