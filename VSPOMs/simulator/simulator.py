@@ -24,8 +24,6 @@ from itertools import accumulate
 from bisect import bisect
 import pandas
 from numpy.random import exponential
-from events import DeadScenarioEvent
-from patch import Patch
 
 try:
     from events import DeadScenarioEvent
