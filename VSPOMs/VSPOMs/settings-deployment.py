@@ -21,14 +21,20 @@ SIMULATOR_DIR = BASE_DIR.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-k*4p=1h4u*d(g2qsg8pntxmj)1rbpiocsy9rt8p-x&i9h07hy)'
+# getting secret key
+# key used located in dir above jh04-main folder,
+# first line gets that dir
+parent_dir = d = Path(__file__).resolve().parents[3]
+key_file = os.path.join(d, 'keys.pub')
+with open(key_file) as f:
+    SECRET_KEY = f.read()
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['vspoms.mvls.gla.ac.uk', # remote
+                 '130.209.75.37', # remote
+                 'localhost',
+                 '127.0.0.1']
 
 # Application definition
 
@@ -42,7 +48,6 @@ INSTALLED_APPS = [
     'VSPOMsApp.apps.VSPOMsAppConfig',
     'django_plotly_dash.apps.DjangoPlotlyDashConfig',
     'dpd_static_support',
-    'django_nose',
 ]
 
 MIDDLEWARE = [
@@ -134,17 +139,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 X_FRAME_OPTIONS = 'DENY'
 
-# deployment settings - set to False in deployment
-# until SSL is implemented
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-NOSE_ARGS = [
-    '--with-coverage',
-    '--cover-package=VSPOMsApp',
-    '--cover-xml',
-    '--with-xunit',
-    '--xunit-file=nosetests.xml',
-    '--cover-package=simulator'
-]
+# deployment settings
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
