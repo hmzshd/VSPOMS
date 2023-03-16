@@ -24,3 +24,5 @@ tenacity>=6.2.0
 django-plotly-dash==2.1.3
 dpd-static-support==0.0.5
 whitenoise==6.3.0
+django-nose>=1.4.7
+coverage>=7.1.0
