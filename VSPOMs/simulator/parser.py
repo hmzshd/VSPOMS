@@ -18,10 +18,8 @@ import csv
 # necessary to wrap this in try except due to the location of manage.py
 try:
     from simulator.float_checker import is_float
-    from simulator.patch import Patch
 except ModuleNotFoundError:
     from float_checker import is_float
-    from patch import Patch
 
 
 def parse_csv(filename):
@@ -268,4 +266,3 @@ def raise_value_error(case_value, row, line_number, item, column):
                             Line Number: {line_number}, Given item: {row[3]}"""
 
     raise ValueError(error_string)
-
