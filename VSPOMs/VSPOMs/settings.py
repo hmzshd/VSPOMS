@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'VSPOMsApp.apps.VSPOMsAppConfig',
     'django_plotly_dash.apps.DjangoPlotlyDashConfig',
     'dpd_static_support',
+    'django_nose',
 ]
 
 MIDDLEWARE = [
@@ -155,3 +156,12 @@ X_FRAME_OPTIONS = 'DENY'
 # until SSL is implemented
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-package=VSPOMsApp',
+    '--cover-xml',
+    '--with-xunit',
+    '--xunit-file=nosetests.xml',
+]

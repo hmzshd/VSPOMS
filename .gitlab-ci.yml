@@ -42,7 +42,15 @@ django-tests:
     - export PYTHONPATH="$PYTHONPATH:."
     - python -c "import sys;print(sys.path)"
     - cd VSPOMs
-    - python manage.py test
+    - python manage.py test VSPOMsApp/tests
+  coverage: '/(?i)total.*? (100(?:.0+)?%|[1-9]?\d(?:.\d+)?%)$/'
+  artifacts:
+    when: always
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: VSPOMs/coverage.xml
+      junit: VSPOMs/nosetests.xml
 
 lint:
   stage: lint
