@@ -21,32 +21,14 @@ SIMULATOR_DIR = BASE_DIR.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
-# getting secret key
-# key used located in dir above jh04-main folder,
-# first line gets that dir
-parent_dir = d = Path(__file__).resolve().parents[3]
-
-# REMOVE BEFORE DEPLOY
-# ensure secret key is deployed securely - this is
-# necessary as I was having trouble making the CI/CD
-# play nicely with environment variables
-# not ideal - but necessary due to time constraints.
-# once again - IF YOU ARE USING THIS PROJECT
-# REMOVE THE TRY EXCEPT BEFORE DEPLOYING
-try:
-    key_file = os.path.join(d, 'keys.pub')
-    with open(key_file) as f:
-        SECRET_KEY = f.read()
-except FileNotFoundError:
-    SECRET_KEY = 'django-insecure-k*4p=1h4u*d(g2qsg8pntxmj)1rbpiocsy9rt8p-x&i9h07hy)'
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'django-insecure-k*4p=1h4u*d(g2qsg8pntxmj)1rbpiocsy9rt8p-x&i9h07hy)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['vspoms.mvls.gla.ac.uk', # remote
-                 '130.209.75.37', # remote
-                 'localhost',
-                 '127.0.0.1']
+ALLOWED_HOSTS = []
+
 
 # Application definition
 
