@@ -26,9 +26,13 @@ SIMULATOR_DIR = BASE_DIR.parent
 # first line gets that dir
 parent_dir = d = Path(__file__).resolve().parents[3]
 
-# try except for those who don't yet have the secret key -
-# will be removed before full deploy, only to make CI/CD
-# play nice for now!
+# REMOVE BEFORE DEPLOY
+# ensure secret key is deployed securely - this is
+# necessary as I was having trouble making the CI/CD
+# play nicely with environment variables
+# not ideal - but necessary due to time constraints.
+# once again - IF YOU ARE USING THIS PROJECT
+# REMOVE THE TRY EXCEPT BEFORE DEPLOYING
 try:
     key_file = os.path.join(d, 'keys.pub')
     with open(key_file) as f:
