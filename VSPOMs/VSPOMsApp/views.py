@@ -110,7 +110,7 @@ def index(request):
         size="size",
         name="vspoms"
     )
-    columns = [TableColumn(field='size', title='size')]
+    columns = [TableColumn(field='size', title='Radius')]
     table = DataTable(
         source=size_source,
         columns=columns,
@@ -411,10 +411,12 @@ def post_create(request):
     # Read Scenario
     if data["command"] == "load":
         address = 'media/' + data["address"]
+        scaling = data["scaling"]
         try:
-            patch_list = parse_csv(address)[0]
-            scenario_settings = parse_csv(address)[1]
-            scaling_factor = parse_csv(address)[2]
+            parsed_file = parse_csv(address, scaling)
+            patch_list = parsed_file[0]
+            scenario_settings = parsed_file[1]
+            scaling_factor = parsed_file[2]
         except (ValueError, UnicodeDecodeError) as e:
             return JsonResponse({"error": str(e)}, status=500)
 

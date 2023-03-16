@@ -238,7 +238,7 @@ section.panel#loading-panel {
     position: fixed;
     z-index: 1001;
     background-color: rgba(28, 42, 58, 0.6);
-    border: 1px solid #1C2A3A;
+    border: 1px solid #CC2525;
     border-radius: 10px;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -249,7 +249,7 @@ section.panel#loading-panel {
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 10px 20px 20px 20px;
-    box-shadow: 0 0 4px gray;
+    box-shadow: 0 0 6px #CC2525;
     transition: all 0.1s ease-in-out;
 }
 #error-popup:hover {
@@ -522,7 +522,7 @@ section.panel#create-panel h2 {
     margin-right: 10px;
 }
 .scenario-list {
-    height: calc(100% - 80px);
+    height: calc(100% - 160px);
     overflow-y: scroll;
 }
 .scenario-list li {
@@ -555,6 +555,58 @@ section.panel#create-panel h2 {
     filter: brightness(1.1);
     transform: scale(1.03);
     cursor: pointer;
+}
+/* Scale-up option */
+.scale-option {
+    height: 40px;
+    margin: 20px 0 0 0;
+    line-height: 34px;
+    display: flex;
+    justify-content: center;
+}
+.scale-option a {
+    font-size: 20px;
+    margin-right: 12px;
+}
+/* Toggle switch */
+.slider-button {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+.slider-button input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.slider-button span {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color:#CC2525;
+    border-radius: 34px;
+    transition: 0.2s ease-in-out;
+}
+.slider-button span:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    border-radius: 50%;
+    transition: 0.2s ease-in-out;
+}
+.slider-button input:checked + span {
+    background-color:#1DB099;
+}
+.slider-button input:checked + span:before {
+    transform: translateX(26px);
 }
 /* "Generate a Random Scenario" panel */
 .random-scenario-box {
