@@ -22,7 +22,7 @@ except ModuleNotFoundError:
     from float_checker import is_float
 
 
-def parse_csv(filename):
+def parse_csv(filename, scaling=True):
     """
     Function to parse a CSV file.
 
@@ -32,6 +32,8 @@ def parse_csv(filename):
 
     Parameters
         ---
+            scaling: bool
+                whether to apply scaling or not, defaults to true
             filename: string
                 filename of csv file to parse_csv
 
@@ -123,7 +125,7 @@ def parse_csv(filename):
                         area = float(row[2])
                         radius = sqrt(area / pi)
 
-                        if radius < smallest_radius_seen:
+                        if radius < smallest_radius_seen and scaling:
                             smallest_radius_seen = radius
                             scaling_factor = min_radius / smallest_radius_seen
 
