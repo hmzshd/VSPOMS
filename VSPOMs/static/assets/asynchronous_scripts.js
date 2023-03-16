@@ -130,12 +130,13 @@ $(document).ready(function() {
         const loading = !this.dataset.file;
         // Load scenario if specified
         if (!loading) {
-            message["command"] = "load"
+            message["command"] = "load";
             message["address"] = this.dataset.file;
+            message["scaling"] = document.getElementsByName("scaling")[0].checked;
         }
         // Otherwise create random scenario
         else {
-            message["command"] = "random"
+            message["command"] = "random";
             // Get random scenario fields from input boxes
             message["fields"] = {
                 "num" : parseInt(document.getElementsByName("random_num")[0].value),
