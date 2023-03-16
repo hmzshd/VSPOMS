@@ -63,3 +63,10 @@ class ExtinctionEvent(Event):
     def update_probability(self):
         """sets probability using patch's extinction function in context of the simulation."""
         self.probability = self.patch.get_extinction_value()
+
+
+class DeadScenarioEvent(Event):
+
+    def update_probability(self):
+        """sets probability to arbitrarily high number"""
+        self.probability = float(9999999999999999999999999999)
