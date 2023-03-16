@@ -35,6 +35,9 @@ try:
         SECRET_KEY = f.read()
 except FileNotFoundError:
     SECRET_KEY = 'django-insecure-k*4p=1h4u*d(g2qsg8pntxmj)1rbpiocsy9rt8p-x&i9h07hy)'
+key_file = os.path.join(d, 'keys.pub')
+with open(key_file) as f:
+    SECRET_KEY = f.read()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
