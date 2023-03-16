@@ -8,7 +8,10 @@ These simulations can be visualised in the form of animations and graphs.
 ## Installation
 TO-DO: This section
 
-complex - used this link https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-ubuntu-22-04
+Deployment is complex I used this link https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-ubuntu-22-04
+
+## WARNING
+Please remove the try except in settings.py before deploying.
 
 ## Authors and acknowledgment
 VSPOMS is developed by:
