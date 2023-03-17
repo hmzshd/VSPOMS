@@ -320,12 +320,10 @@ def post_patches(request):
     graphs = {
         'graph1': '',
         'graph2': '',
-        'graph4':''
     }
     graph_labels = [
         "proportion occupied patches",
         "proportion occupied area",
-        "extinction"
     ]
 
     for idx, graph in enumerate(graphs.keys()):
@@ -364,6 +362,21 @@ def post_patches(request):
         height=400,
     )
     graphs["graph3"] = fig_turnover.to_json()
+
+    fig_replicate = px.line(
+        graph_df[:data["steps"]],
+        x='time',
+        y='proportion surviving replicates',
+        width=1000,
+        height=600,
+    )
+    fig_replicate.update_traces(line_width=1)
+    fig_replicate.update_layout(
+        autosize=False,
+        width=500,
+        height=400,
+    )
+    graphs["graph4"] = fig_replicate.to_json()
     turnovers = json.dumps(simulation.get_turnovers())
     replicates = json.dumps(simulation.replicates + 1)
 
