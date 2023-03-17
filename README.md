@@ -50,3 +50,5 @@ Creative Commons Attribution-NonCommercial 4.0 International License.
 
 ## Project status
 This project is currently under development.
+
+Our version as of the 17th of March, 2023 is working and has been deployed!
