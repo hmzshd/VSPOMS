@@ -267,6 +267,10 @@
             <h2 class="parameter_heading">Dispersal Kernel</h2>
             <div class="equation">$$K_{ij} = \text{exp}(-\bbox[#F5A9AD, 6px]{a} \times d_{ij})$$</div>
             <p><a class="parameter_label" style="background-color: #F5A9AD;">\(a\)</a> = <input type="number" id="dispersal-kernel-input" name="dispersal-kernel" placeholder="Enter value..." value="{{ scenario_settings.species_specific_dispersal_constant }}"></p>
+            <div class="parameter-tooltip">
+                <a>?</a>
+                <span>Describes the probability distribution of dispersal distances between occupied and unoccupied patches. Dispersal probabilities enter into the calculation of the connectivity of each patch patches.</span>
+            </div>
         </div>
         <div class="visualise_box" id="box_dispersal-kernel-graph">
             <img id="" src="{% static 'assets/graphs/dispersal-kernal_function.png' %}" alt="Dispersal kernal function graph">
@@ -278,6 +282,10 @@
             <h2 class="parameter_heading">Colonisation Probability</h2>
             <div class="equation">$$C_{i}(t) = 1 - \text{exp}(-\bbox[#90F5AA, 6px]{y} \times S_{i}(t))$$</div>
             <p><a class="parameter_label" style="background-color: #90F5AA;">\(y\)</a> = <input type="number" id="colonization-probability-input" name="colonization-probability" placeholder="Enter value..." value="{{ scenario_settings.species_specific_constant_colonisation_y }}"></p>
+            <div class="parameter-tooltip">
+                <a>?</a>
+                <span>Describes the probability of a patch being colonized given the connectivity of the patch.</span>
+            </div>
         </div>
         <div class="visualise_box" id="box_colonization-probability-graph">
             <img id="" src="{% static 'assets/graphs/colonisation_function.png' %}" alt="Colonisation function graph">
@@ -292,6 +300,10 @@
                 <a class="parameter_label" style="background-color: #9DD1F5;">\(u\)</a> = <input type="number" id="patch-extinction-probability-u-input" name="patch-extinction-probability-u" placeholder="Enter value..." value="{{ scenario_settings.species_specific_extinction_constant_u }}">,
                 <a class="parameter_label" style="background-color: #F5E0C1;">\(x\)</a> = <input type="number" id="patch-extinction-probability-x-input" name="patch-extinction-probability-a" placeholder="Enter value..." value="{{ scenario_settings.patch_area_effect_extinction_x }}">
             </p>
+            <div class="parameter-tooltip">
+                <a>?</a>
+                <span>The probability of a population going extinct at a particular location within a habitat or landscape. Uses the reciprocal patch area along with the coefficients to determine a patches probability of going extinct without accounting for the rescue effect.</span>
+            </div>
         </div>
         <div class="visualise_box" id="box_patch-extinction-probability-graph">
             <img id="" src="{% static 'assets/graphs/extinction_function.png' %}" alt="Extinction function graph">
@@ -303,11 +315,19 @@
             <h2 class="parameter_heading">Connectivity Function</h2>
             <div class="equation">$$S_{i}(t) = \sum_{j=1,j \neq i}^{n}(p_{j}(t) \times k_{j}(d_{ij}) \times A_{j}^{\bbox[#CBA9F5, 3px]{b}})$$</div>
             <p><a class="parameter_label" style="background-color: #CBA9F5;">\(b\)</a> = <input type="number" id="connectivity-input" name="connectivity" placeholder="Enter value..." value="{{ scenario_settings.area_exponent_connectivity_b }}"></p>
+            <div class="parameter-tooltip">
+                <a>?</a>
+                <span>A measure of the degree to which different areas within a landscape are connected to one another, based on the probability of an organism moving between them.</span>
+            </div>
         </div>
         <div class="function_box disabled_function" id="box_rescue-effect-function">
             <h2 class="parameter_heading">Extinction Probability with Rescue Effect</h2>
             <div class="equation">$$E_{i}(t) = E_{i}(1-C_{i}(t))^{\bbox[#DEF5A4, 3px]{r}}$$</div>
             <p><a class="parameter_label" style="background-color: #DEF5A4;">\(r\)</a> = <input disabled type="number" id="rescue-effect-input" name="rescue-effect" placeholder="Enter value..." value=""></p>
+            <div class="parameter-tooltip">
+                <a>?</a>
+                <span>Describes how immigration of individuals from nearby populations can help to rescue a population that is declining or at risk of extinction. Well-connected patches have a lower probability of going extinct compared to patches that are isolated from the rest of the network.</span>
+            </div>
         </div>
     </div>
 
@@ -315,6 +335,10 @@
         <div class="function_box disabled_function" id="box_stochasticity-function">
             <h2 class="parameter_heading">Stochasticity</h2>
             <p><a class="parameter_label" style="background-color: #F5A69E;">\(ss\)</a> = <input disabled type="number" id="stochasticity-input" name="stochasticity" placeholder="Enter value..." value=""></p>
+            <div class="parameter-tooltip">
+                <a>?</a>
+                <span>Allows for correlation of extinction events on “local” patches, so if an extinction event occurs for the ith patch, all other occupied patches considered local are also rendered extinct.</span>
+            </div>
         </div>
     </div>
 

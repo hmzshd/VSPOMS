@@ -408,9 +408,50 @@ h2.parameter_heading {
     margin-left: 0;
     float: left;
     transition: all 0.1s ease-in-out;
+    position: relative;
 }
 .function_box:hover {
     box-shadow: 0 0 4px gray;
+}
+/* Tooltips "(?)" */
+.parameter-tooltip {
+    position: absolute;
+    width: 27px;
+    height: 27px;
+    top: 10px;
+    right: 10px;
+    border: 2px solid #1C2A3A;
+    border-radius: 50%;
+    transition: 0.1s ease-in-out;
+}
+.parameter-tooltip:hover {
+    transform: scale(1.1);
+    background-color: #1C2A3A;
+    cursor: pointer;
+}
+.parameter-tooltip:hover a {
+    color: white;
+}
+.parameter-tooltip a {
+    font-weight: bold;
+    color: #1C2A3A;
+    margin-left: 8px;
+}
+.parameter-tooltip span {
+    display: none;
+    width: 350px;
+    height: auto;
+    background-color: #1C2A3A;
+    color: white;
+    border-radius: 10px 0 10px 10px;
+    position: absolute;
+    padding: 20px;
+    top: 16px;
+    left: 8px;
+    transform: translateX(-100%);
+}
+.parameter-tooltip:hover span {
+    display: block;
 }
 .visualise_box {
     height: 100%;
