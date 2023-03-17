@@ -189,6 +189,9 @@ def parse_csv(filename, scaling=True):
     else:
         patch_dict = {"x_coords": x_coords, "y_coords": y_coords,
                       "radiuses": radiuses, "statuses": statuses}
+        # ensure scaling is set to 1.0 if check not passed - e.g in
+        # case where scaling factor = 1.0000001
+        scaling_factor = 1.0
 
     return patch_dict, settings, scaling_factor
 
