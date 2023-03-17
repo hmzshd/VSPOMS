@@ -18,6 +18,9 @@ $(document).ready(function(){
     // On "Save parameters" click
     $("#button-save-parameters").click(function() {openSimulate();});
     $("#error-popup").children("button").click(function() {$("#error-popup").fadeOut(200)});
+    // Open/Close Credits Page
+    $("#open-credits").click(function() {$("#credits-page").fadeIn(200)});
+    $("#credits-page").children("button").click(function() {$("#credits-page").fadeOut(200)});
 
     // Keydown events
     let p0=false;let p1=false;let p2=false;let p3=false;
