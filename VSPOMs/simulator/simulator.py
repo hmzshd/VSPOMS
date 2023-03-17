@@ -146,15 +146,7 @@ class Simulator:
         self.time = 0
 
         # pandas dataframe to store results
-        index_array = []
-        for i in range(replicates):
-            for j in range(steps + 1):
-                index_array.append((i, j))
-
-        self.data = pandas.DataFrame(0, columns=[
-            "time", "proportion occupied patches",
-            "proportion occupied area", "extinction"],
-            index=pandas.MultiIndex.from_tuples(index_array, names=('replicates', 'steps')))
+        self.generate_frame()
 
         # frame to store number of turnover events over time
         index_array = []
@@ -181,6 +173,9 @@ class Simulator:
         # colonised or going extinct.
         self.patch_dict = None
 
+        # list to store step of replicate extinctions
+        self.extinction_times = []
+
         if debug:
             self.debug = True
         else:
@@ -198,6 +193,9 @@ class Simulator:
             debug: boolean
                 true if debug console logs should be displayed.
         """
+
+        self.setup()
+        self.extinction_times = []
 
         while not self.done:
             self.step()
@@ -353,6 +351,11 @@ class Simulator:
         """
 
         self.setup()
+
+        # reset frame
+        self.generate_frame()
+
+        self.extinction_times = []
         self.done = False
         self.completed_steps = 0
         self.completed_replicates = 0
@@ -360,6 +363,7 @@ class Simulator:
     def end(self):
         """Ends current simulation run"""
 
+        self.update_frame_proportion_replicates()
         self.calculate_turnover_events()
 
         self.done = True
@@ -398,19 +402,28 @@ class Simulator:
             #     print(patch)
 
         total = float(cum_weights[-1])
-        if total <= 0.0:
+        if total <= 0.0: # scenario is extinct in this replicate
             """
             print(f"dying on step number: {self.completed_steps}")
             for patch in self.patches:
                 print(patch)
             """
-            # print('extinctionextinctionextinctionextinctionextinctionextinctionextinctionextinctionextinction')
             self.replicate_extinct = True
+            self.update_extinction_times()
+
             return DeadScenarioEvent(self.dead_patch)
-            # raise ValueError('Total of weights must be greater than zero')
 
         upper = length - 1
         return self.events[bisect(cum_weights, random.random() * total, 0, upper)]
+
+    def update_extinction_times(self):
+        ext_in_list = False
+        for extinction_time in self.extinction_times:
+            if extinction_time[0] == self.completed_replicates:
+                ext_in_list = True
+
+        if ext_in_list == False:
+            self.extinction_times.append((self.completed_replicates, self.completed_steps))
 
     def dispersal_kernel(self, patch_i, patch_j):
         """
@@ -568,6 +581,18 @@ class Simulator:
                                        -int(math.floor(math.log10(abs(loop_step + plot_range)/100))))
                     self.turnover_frame.loc[(replicate, loop_step)] += 1
 
+    def update_frame_proportion_replicates(self):
+        # print(self.extinction_times)
+        for extinction_step in self.extinction_times:
+            # for row_num in range(self.steps - step):
+            # print(f'  at  {rep},{extinction_step[1]}')
+            for row_num in range(extinction_step[1], self.steps + 1):
+                self.data.at[(0, row_num), 'proportion surviving replicates'] -= 1.0
+
+        for row_num in range(self.steps + 1):
+            self.data.at[(0, row_num), 'proportion surviving replicates'] = \
+                self.data.at[(0, row_num), 'proportion surviving replicates'] / (self.replicates + 1)
+
     def print_status(self):
         """Temp debug function to observe changes."""
 
@@ -597,8 +622,11 @@ class Simulator:
         Adds current data to frame self.data.
         """
 
+        # print(f'({self.completed_replicates},{self.completed_steps})')
+        # print(f'    {self.time},{self.proportion_occupied_patches},{self.proportion_occupied_area},{0}')
+
         self.data.loc[(self.completed_replicates, self.completed_steps)] = \
-            (self.time, self.proportion_occupied_patches, self.proportion_occupied_area, self.total_extinction_rate)
+            (self.time, self.proportion_occupied_patches, self.proportion_occupied_area, self.replicates + 1)
 
     def update_patch_lists(self, patch):
         """
@@ -607,6 +635,20 @@ class Simulator:
         self.x_coords.append(patch.x_coord)
         self.y_coords.append(patch.y_coord)
         self.statuses.append(patch.status)
+
+    def generate_frame(self):
+        index_array = []
+        for i in range(self.replicates + 1):
+            for j in range(self.steps + 1):
+                index_array.append((i, j))
+
+        self.data = pandas.DataFrame(0, columns=[
+            "time", "proportion occupied patches",
+            "proportion occupied area", "proportion surviving replicates"],
+                                     index=pandas.MultiIndex.from_tuples(index_array, names=('replicates', 'steps')))
+
+        for step in range(self.steps + 1):
+            self.data.at[(0, step), 'proportion surviving replicates'] = self.replicates + 1
 
     def generate_dict(self):
         """Generates patch coord, status dict."""
