@@ -6,12 +6,11 @@ This site enables users to simualate scenarios (either uploaded or randomly gene
 These simulations can be visualised in the form of animations and graphs.
 
 ## Installation
-TO-DO: This section
+Project can be accessed from vspoms.mvls.gla.ac.uk - though only on the Glasgow University network. If you wish to install yourself clone the project and run as you would a usual django app. Ensure you install requirements.
 
-Deployment is complex I used this link https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-ubuntu-22-04
-
-## WARNING
-Please remove the try except in settings.py before deploying.
+## Deployment
+Somewhat complex. Running on a Glasgow University server, using nginx>gunicorn>django. Followed the following guide:
+https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-22-04
 
 ## Authors and acknowledgment
 VSPOMS is developed by:
