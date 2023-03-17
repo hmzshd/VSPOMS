@@ -127,7 +127,7 @@ class ViewsTestCase(TestCase):
         # prepare file to be loaded
         load = {
             "command": "load",
-            "address": "bigdan.csv",
+            "address": "demo.csv",
             "scaling": "False"
         }
 
