@@ -332,16 +332,14 @@ def post_patches(request):
             x='time',
             y=graph_labels[idx],
             color='replicates',
-            width=1000,
-            height=600,
         )
 
         # Attribute adjustments
         fig.update_traces(line_width=1)
         fig.update_layout(
             autosize=False,
-            width=500,
-            height=400,
+            width=550,
+            height=450,
         )
         graphs[graph] = fig.to_json()
 
@@ -352,14 +350,12 @@ def post_patches(request):
             x='time',
             y='turnovers',
             color='replicates',
-            width=1000,
-            height=600,
         )
     fig_turnover.update_traces(line_width=1)
     fig_turnover.update_layout(
         autosize=False,
-        width=500,
-        height=400,
+        width=550,
+        height=450,
     )
     graphs["graph3"] = fig_turnover.to_json()
 
@@ -367,14 +363,12 @@ def post_patches(request):
         graph_df[:data["steps"]],
         x='time',
         y='proportion surviving replicates',
-        width=1000,
-        height=600,
     )
     fig_replicate.update_traces(line_width=1)
     fig_replicate.update_layout(
         autosize=False,
-        width=500,
-        height=400,
+        width=550,
+        height=450,
     )
     graphs["graph4"] = fig_replicate.to_json()
     turnovers = json.dumps(simulation.get_turnovers())
