@@ -181,7 +181,7 @@ def parse_csv(filename, scaling=True):
     # if scaling factor is 1 - it's not been changed, therefore
     # we do not need to scale up the radiuses to send to frontend.
     # we also don't bother scaling if it's a very small factor
-    if scaling_factor <= 1.08:
+    if scaling_factor >= 1.08:
         radiuses_scaled = [radius * scaling_factor for radius in radiuses]
         patch_dict = {"x_coords": x_coords, "y_coords": y_coords,
                       "radiuses": radiuses_scaled, "statuses": statuses}
