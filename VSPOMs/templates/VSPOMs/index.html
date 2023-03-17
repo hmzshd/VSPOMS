@@ -22,7 +22,8 @@
 
 
      <!-- MathJax -->
-     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/config/TeX-MML-AM_CHTML.js"></script>
 
     <!-- Bokeh Links -->
     <script src="https://cdn.bokeh.org/bokeh/release/bokeh-3.0.0.min.js" crossorigin="anonymous"></script>
@@ -266,7 +267,14 @@
         <div class="function_box" id="box_dispersal-kernel-function">
             <h2 class="parameter_heading">Dispersal Kernel</h2>
             <div class="equation">$$K_{ij} = \text{exp}(-\bbox[#F5A9AD, 6px]{a} \times d_{ij})$$</div>
-            <p><a class="parameter_label" style="background-color: #F5A9AD;">\(a\)</a> = <input type="number" id="dispersal-kernel-input" name="dispersal-kernel" placeholder="Enter value..." value="{{ scenario_settings.species_specific_dispersal_constant }}"></p>
+            <p>
+                <a class="parameter_label" style="background-color: #F5A9AD;">a<span>A parameter within the dispersal kernel that determines the rate at which the probability of dispersal decreases with distance.<br><br>A high value of alpha means that individuals are more likely to move shorter distances, while a low dispersal alpha means that individuals are more likely to move longer distances.</span></a> = 
+                <input type="number" id="dispersal-kernel-input" name="dispersal-kernel" placeholder="Enter value..." value="{{ scenario_settings.species_specific_dispersal_constant }}">
+            </p>
+            <div class="parameter-tooltip">
+                <a>i</a>
+                <span>Describes the probability distribution of dispersal distances between occupied and unoccupied patches.<br><br>Dispersal probabilities enter into the calculation of the connectivity of each patch patches.</span>
+            </div>
         </div>
         <div class="visualise_box" id="box_dispersal-kernel-graph">
             <img id="" src="{% static 'assets/graphs/dispersal-kernal_function.png' %}" alt="Dispersal kernal function graph">
@@ -277,7 +285,11 @@
         <div class="function_box" id="box_colonization-probability-function">
             <h2 class="parameter_heading">Colonisation Probability</h2>
             <div class="equation">$$C_{i}(t) = 1 - \text{exp}(-\bbox[#90F5AA, 6px]{y} \times S_{i}(t))$$</div>
-            <p><a class="parameter_label" style="background-color: #90F5AA;">\(y\)</a> = <input type="number" id="colonization-probability-input" name="colonization-probability" placeholder="Enter value..." value="{{ scenario_settings.species_specific_constant_colonisation_y }}"></p>
+            <p><a class="parameter_label" style="background-color: #90F5AA;">y<span>Represents the impact of connectivity on the probability of a colonization event. Larger values of y increase the probability of patches with smaller connectivity values being colonised.</span></a> = <input type="number" id="colonization-probability-input" name="colonization-probability" placeholder="Enter value..." value="{{ scenario_settings.species_specific_constant_colonisation_y }}"></p>
+            <div class="parameter-tooltip">
+                <a>i</a>
+                <span>Describes the probability of a patch being colonized given the connectivity of the patch.</span>
+            </div>
         </div>
         <div class="visualise_box" id="box_colonization-probability-graph">
             <img id="" src="{% static 'assets/graphs/colonisation_function.png' %}" alt="Colonisation function graph">
@@ -289,9 +301,13 @@
             <h2 class="parameter_heading">Patch Extinction Probability</h2>
             <div class="equation">$$E_{i} = \text{min}(1, {\bbox[#9DD1F5, 6px]{u} \over A_{i}^{\bbox[#F5E0C1, 3px]{x}}})$$</div>
             <p>
-                <a class="parameter_label" style="background-color: #9DD1F5;">\(u\)</a> = <input type="number" id="patch-extinction-probability-u-input" name="patch-extinction-probability-u" placeholder="Enter value..." value="{{ scenario_settings.species_specific_extinction_constant_u }}">,
-                <a class="parameter_label" style="background-color: #F5E0C1;">\(x\)</a> = <input type="number" id="patch-extinction-probability-x-input" name="patch-extinction-probability-a" placeholder="Enter value..." value="{{ scenario_settings.patch_area_effect_extinction_x }}">
+                <a class="parameter_label" style="background-color: #9DD1F5;">u<span>Reflects the vulnerability of a population to extinction.<br><br>A higher extinction coefficient indicates a greater vulnerability to extinction, meaning the baseline extinction probability of a patch is increased. The smaller a patch is, the more it is affected.</span></a> = <input type="number" id="patch-extinction-probability-u-input" name="patch-extinction-probability-u" placeholder="Enter value..." value="{{ scenario_settings.species_specific_extinction_constant_u }}">,
+                <a class="parameter_label" style="background-color: #F5E0C1;">x<span>Describes the scaling extinction risk with patch area. This value is used to scale the effect area has on reducing the probability of a patch going extinct.<br><br>Larger values of x will reduce the probability as area increases.</span></a> = <input type="number" id="patch-extinction-probability-x-input" name="patch-extinction-probability-a" placeholder="Enter value..." value="{{ scenario_settings.patch_area_effect_extinction_x }}">
             </p>
+            <div class="parameter-tooltip">
+                <a>i</a>
+                <span>The probability of a population going extinct within a particular patch. The probability is modelled proportional to the reciprocal of patch area.</span>
+            </div>
         </div>
         <div class="visualise_box" id="box_patch-extinction-probability-graph">
             <img id="" src="{% static 'assets/graphs/extinction_function.png' %}" alt="Extinction function graph">
@@ -302,19 +318,31 @@
         <div class="function_box" id="box_connectivity-function">
             <h2 class="parameter_heading">Connectivity Function</h2>
             <div class="equation">$$S_{i}(t) = \sum_{j=1,j \neq i}^{n}(p_{j}(t) \times k_{j}(d_{ij}) \times A_{j}^{\bbox[#CBA9F5, 3px]{b}})$$</div>
-            <p><a class="parameter_label" style="background-color: #CBA9F5;">\(b\)</a> = <input type="number" id="connectivity-input" name="connectivity" placeholder="Enter value..." value="{{ scenario_settings.area_exponent_connectivity_b }}"></p>
+            <p><a class="parameter_label" style="background-color: #CBA9F5;">b<span>Describes how influential the area of patch j is when calculating the connectivity of patch I.<br><br>Larger patches may be a source of a larger number of potential colonists that smaller patches.</span></a> = <input type="number" id="connectivity-input" name="connectivity" placeholder="Enter value..." value="{{ scenario_settings.area_exponent_connectivity_b }}"></p>
+            <div class="parameter-tooltip">
+                <a>i</a>
+                <span>A measure of the degree to which different areas within a landscape are connected to one another, based on the probability of an organism moving between them.</span>
+            </div>
         </div>
         <div class="function_box disabled_function" id="box_rescue-effect-function">
             <h2 class="parameter_heading">Extinction Probability with Rescue Effect</h2>
             <div class="equation">$$E_{i}(t) = E_{i}(1-C_{i}(t))^{\bbox[#DEF5A4, 3px]{r}}$$</div>
-            <p><a class="parameter_label" style="background-color: #DEF5A4;">\(r\)</a> = <input disabled type="number" id="rescue-effect-input" name="rescue-effect" placeholder="Enter value..." value=""></p>
+            <p><a class="parameter_label" style="background-color: #DEF5A4;">r</a> = <input disabled type="number" id="rescue-effect-input" name="rescue-effect" placeholder="Enter value..." value=""></p>
+            <div class="parameter-tooltip">
+                <a>i</a>
+                <span>Describes how immigration of individuals from nearby populations can help to rescue a population that is declining or at risk of extinction.<br><br>When the rescue effect is present, better connected patches have a lower probability of going extinct compared to patches that are isolated from the rest of the network.</span>
+            </div>
         </div>
     </div>
 
     <div class="box_row">
         <div class="function_box disabled_function" id="box_stochasticity-function">
             <h2 class="parameter_heading">Stochasticity</h2>
-            <p><a class="parameter_label" style="background-color: #F5A69E;">\(ss\)</a> = <input disabled type="number" id="stochasticity-input" name="stochasticity" placeholder="Enter value..." value=""></p>
+            <p><a class="parameter_label" style="background-color: #F5A69E;">ss</a> = <input disabled type="number" id="stochasticity-input" name="stochasticity" placeholder="Enter value..." value=""></p>
+            <div class="parameter-tooltip">
+                <a>i</a>
+                <span>Allows for correlation of local extinction events such that if an extinction event occurs for the ith patch, all other occupied patches within a defined buffer zone are also rendered extinct.</span>
+            </div>
         </div>
     </div>
 
