@@ -320,11 +320,9 @@ def post_patches(request):
     graphs = {
         'graph1': '',
         'graph2': '',
-        'graph3': '',
-        'graph4': ''
+        'graph4':''
     }
     graph_labels = [
-        "time",
         "proportion occupied patches",
         "proportion occupied area",
         "extinction"
@@ -348,6 +346,24 @@ def post_patches(request):
             height=400,
         )
         graphs[graph] = fig.to_json()
+
+    turnover_data = simulation.get_turnover_graph_data()
+    turnover_data = turnover_data.reset_index()
+    fig_turnover = px.line(
+            turnover_data,
+            x='time',
+            y='turnovers',
+            color='replicates',
+            width=1000,
+            height=600,
+        )
+    fig_turnover.update_traces(line_width=1)
+    fig_turnover.update_layout(
+        autosize=False,
+        width=500,
+        height=400,
+    )
+    graphs["graph3"] = fig_turnover.to_json()
     turnovers = json.dumps(simulation.get_turnovers())
     replicates = json.dumps(simulation.replicates + 1)
 
