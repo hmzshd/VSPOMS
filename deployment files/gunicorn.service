@@ -1,0 +1,21 @@
+# located at /etc/systemd/system/gunicorn.service
+# 1103557w is username
+
+[Unit]
+Description=gunicorn daemon
+Requires=gunicorn.socket
+After=network.target
+
+
+[Service]
+User=1103557w
+Group=www-data
+WorkingDirectory=/home/1103557w/project/jh04-main/VSPOMs/
+ExecStart=/home/1103557w/venv/jh-04/bin/gunicorn \
+          --access-logfile - \
+          --workers 3 \
+          --bind unix:/run/gunicorn.sock \
+          VSPOMs.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
