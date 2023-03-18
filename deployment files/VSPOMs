@@ -1,0 +1,35 @@
+# located at /etc/nginx/sites-available/
+# file does not have extension
+
+server {
+
+    listen   80;
+    listen   [::]:80;
+
+    server_name vspoms.mvls.gla.ac.uk;
+
+    return 301 https://$server_name$request_uri;
+
+}
+
+server {
+
+    listen   443 default_server ssl;
+
+
+    server_name vspoms.mvls.gla.ac.uk;
+    location = /favicon.ico {access_log off;log_not_found off;}
+
+    location /static/ {
+           root /home/1103557w/project/jh04-main/VSPOMs;
+    }
+
+    location / {
+          include proxy_params;
+          proxy_pass http://unix:/run/gunicorn.sock;
+   }
+
+    ssl_certificate      /etc/ssl/certs/vspoms_mvls_gla_ac_uk.pem;
+    ssl_certificate_key  /etc/ssl/private/private.key;
+
+}

@@ -26,7 +26,7 @@ SIMULATOR_DIR = BASE_DIR.parent
 # first line gets that dir
 parent_dir = d = Path(__file__).resolve().parents[3]
 key_file = os.path.join(d, 'keys.pub')
-with open(key_file) as f:
+with open(key_file, encoding="utf-8") as f:
     SECRET_KEY = f.read()
 
 DEBUG = False
@@ -140,5 +140,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 X_FRAME_OPTIONS = 'DENY'
 
 # deployment settings
-SESSION_COOKIE_SECURE = False
-CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+SECURE_SSL_REDIRECT = True
