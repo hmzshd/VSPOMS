@@ -26,8 +26,12 @@ SIMULATOR_DIR = BASE_DIR.parent
 # first line gets that dir
 parent_dir = d = Path(__file__).resolve().parents[3]
 key_file = os.path.join(d, 'keys.pub')
-with open(key_file, encoding="utf-8") as f:
+postgres_keyfile = os.path.join(d, 'postgres_password.txt')
+with open(key_file) as f:
     SECRET_KEY = f.read()
+with open(postgres_keyfile, encoding="us-ascii") as f:
+    postgres_password_with_newline = f.read()
+    postgres_password = postgres_password_with_newline.strip()
 
 DEBUG = False
 
@@ -89,8 +93,12 @@ WSGI_APPLICATION = 'VSPOMs.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'vspoms',
+        'USER': 'vspomsadmin',
+        'PASSWORD': postgres_password,
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -126,8 +134,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [STATIC_DIR, ]
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
