@@ -70,6 +70,7 @@ def index(request):
             animation_frame='step',
             width=1000,
             height=600,
+            line_shape='hv',
         )
 
         # Attribute adjustments
@@ -332,6 +333,7 @@ def post_patches(request):
             x='time',
             y=graph_labels[idx],
             color='replicates',
+            line_shape='hv',
         )
 
         # Attribute adjustments
@@ -340,6 +342,7 @@ def post_patches(request):
             autosize=False,
             width=550,
             height=450,
+            yaxis=dict(range=[0, 1]),
         )
         graphs[graph] = fig.to_json()
 
@@ -350,6 +353,7 @@ def post_patches(request):
             x='time',
             y='turnovers',
             color='replicates',
+            line_shape='hv',
         )
     fig_turnover.update_traces(line_width=1)
     fig_turnover.update_layout(
@@ -363,12 +367,14 @@ def post_patches(request):
         graph_df[:data["steps"]],
         x='time',
         y='proportion surviving replicates',
+        line_shape='hv',
     )
     fig_replicate.update_traces(line_width=1)
     fig_replicate.update_layout(
         autosize=False,
         width=550,
         height=450,
+        yaxis=dict(range=[0, 1.1]),
     )
     graphs["graph4"] = fig_replicate.to_json()
     turnovers = json.dumps(simulation.get_turnovers())
@@ -459,8 +465,8 @@ def post_create(request):
             "species_specific_constant_colonisation_y": scenario_settings["species_specific_constant_colonisation_y"],
             "species_specific_extinction_constant_u": scenario_settings["species_specific_extinction_constant_u"],
             "patch_area_effect_extinction_x": scenario_settings["patch_area_effect_extinction_x"],
-            "rescue_effect": random.uniform(0, 10),
-            "stochasticity": random.uniform(0, 10)
+            "rescue_effect": 0,
+            "stochasticity": 0
         })
 
 
@@ -498,8 +504,8 @@ def post_create(request):
             "species_specific_constant_colonisation_y": param_y,  # y
             "species_specific_extinction_constant_u": param_u,  # u
             "patch_area_effect_extinction_x": param_x,  # x
-            # "rescue_effect": 0,
-            # "stochasticity": 0
+            "rescue_effect": 0,
+            "stochasticity": 0
         })
 
     return JsonResponse({
