@@ -33,7 +33,7 @@ To upload a scenario to the app:
 ## Deployment
 Running on a Glasgow University server, using nginx>gunicorn>django.
 
-Followed [this guide](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-22-04).
+Followed [this guide](https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-ubuntu-22-04).
 
 ## Authors and acknowledgment
 VSPOMS is developed by:
