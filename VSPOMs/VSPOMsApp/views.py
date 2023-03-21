@@ -37,9 +37,10 @@ def index(request):
     """
 
     # Prepare Data
-    patch_list = parse_csv('media/demo.csv')[0]
-    scenario_settings = parse_csv('media/demo.csv')[1]
-    scaling_factor = parse_csv('media/demo.csv')[2]
+    parser_tuple = parse_csv('media/zanzibar.csv')
+    patch_list = parser_tuple[0]
+    scenario_settings = parser_tuple[1]
+    scaling_factor = parser_tuple[2]
     patches = pd.DataFrame.from_dict(patch_list)
     graph_df = pd.DataFrame(columns=[
         "time",
