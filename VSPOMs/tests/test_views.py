@@ -157,8 +157,8 @@ class ViewsTestCase(TestCase):
                 "max_x": 100,
                 "min_y": 0,
                 "max_y": 100,
-                "min_area": 10,
-                "max_area": 50
+                "min_radius": 10,
+                "max_radius": 50
             }
         }
 
