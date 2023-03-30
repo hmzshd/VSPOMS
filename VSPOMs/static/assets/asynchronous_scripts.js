@@ -144,8 +144,8 @@ $(document).ready(function() {
                 "max_x" : parseInt(document.getElementsByName("random_max-x")[0].value),
                 "min_y" : parseInt(document.getElementsByName("random_min-y")[0].value),
                 "max_y" : parseInt(document.getElementsByName("random_max-y")[0].value),
-                "min_area" : parseInt(document.getElementsByName("random_min-area")[0].value),
-                "max_area" : parseInt(document.getElementsByName("random_max-area")[0].value)
+                "min_radius" : parseInt(document.getElementsByName("random_min-radius")[0].value),
+                "max_radius" : parseInt(document.getElementsByName("random_max-radius")[0].value)
             }
             // Validate input fields
             for (field in message["fields"]) {
@@ -160,7 +160,7 @@ $(document).ready(function() {
             } else if (message["fields"]["min_x"] > message["fields"]["max_x"] || message["fields"]["min_y"] > message["fields"]["max_y"]) {
                 invalidCreate("Minimum arena size cannot be larger than maximum.");
                 return null;
-            } else if (message["fields"]["min_area"] > message["fields"]["max_area"]) {
+            } else if (message["fields"]["min_radius"] > message["fields"]["max_radius"]) {
                 invalidCreate("Minimum patch area cannot be larger than the maximum.");
                 return null;
             }

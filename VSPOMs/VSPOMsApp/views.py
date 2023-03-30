@@ -480,8 +480,8 @@ def post_create(request):
             fields["max_x"],
             fields["min_y"],
             fields["max_y"],
-            fields["min_area"],
-            fields["max_area"]
+            fields["min_radius"],
+            fields["max_radius"]
         )
 
         random_patch_source = json.dumps({
@@ -493,8 +493,8 @@ def post_create(request):
         })
 
         # Calculate scenario parameters
-        param_u = ((fields["min_area"] + fields["max_area"]) / 2) / 10
-        param_a = (((fields["max_x"] - fields["min_x"]) + (fields["max_y"] - fields["min_y"])) / 40) / 50
+        param_u = 10
+        param_a = 1
         param_x = 1
         param_b = 1
         param_y = 3  # not sure if this is suitable
@@ -505,8 +505,8 @@ def post_create(request):
             "species_specific_constant_colonisation_y": param_y,  # y
             "species_specific_extinction_constant_u": param_u,  # u
             "patch_area_effect_extinction_x": param_x,  # x
-            "rescue_effect": 0,
-            "stochasticity": 0
+            # "rescue_effect": 0,
+            # "stochasticity": 0
         })
 
     return JsonResponse({
